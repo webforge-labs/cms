@@ -1,0 +1,16 @@
+{
+    "name": "webforge/cms",
+    "require": {
+        "twig/twig": "^2.0@dev",
+        "silex/silex": "^2.0@dev",
+        "webforge/utils": "^1.0@dev"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Philipp Scheit",
+            "email": "p.scheit@ps-webforge.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
