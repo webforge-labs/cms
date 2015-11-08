@@ -10,8 +10,8 @@ class Injector {
   }
 
   public function injectTwig() {
-    $app->register(new Silex\Provider\TwigServiceProvider(), array(
-      'twig.path' => $this->root.'/Resources/tpl',
+    $this->app->register(new \Silex\Provider\TwigServiceProvider(), array(
+      'twig.path' => $this->root.'/../Resources/tpl',
     ));
   }
 

@@ -38,10 +38,13 @@ builder
 //  .addConfigured('js', 'json', { shimney: true})
   .addConfigured('js', 'lodash', { shimney: true })
   .addConfigured('js', 'hogan', { version: '3.0.2' })
-  .addConfigured('js', 'superagent' )
+  //.addConfigured('js', 'superagent' )
   .addConfigured('js', 'moment' )
   .addConfigured('fonts', 'font-awesome')
 ;
+
+builder.add('fonts', 'titilium')
+  .src('Resources/fonts/**/*');
 
 builder.add('js', 'app')
   .src('src/js/app/**/*.js')
@@ -78,4 +81,32 @@ gulp.task('watch', ['build'], function() {
   gulp.watch('src/js/lib/**/*.js', ['build']);
   gulp.watch('src/js/modules/**/*.js', ['build']);
   gulp.watch('src/js/config-*.js', ['build']);
+
+  gulp.watch('Resources/img/**/*', ['build']);
+});
+
+gulp.task('cucumber', function(done) {
+  var cukedZombie = require('cuked-zombie');
+  var files = [];
+
+  if (argv.filter) {
+    files.push('features/'+ argv.filter +'.feature');
+  }
+
+  var options = {
+    steps: 'tests/js/cucumber/bootstrap.js',
+    format: 'pretty'
+  }
+
+  if (argv.tags) {
+    options.tags = argv.tags;
+    files = ['features'];
+  }
+
+  var callback = function(error) {
+    // if we pass the error to gulp it will show a mega trace
+    done();
+  };
+
+  cukedZombie.runCucumber(files, options, callback);
 });

@@ -23,10 +23,25 @@
   </head>
 
   <body role="document">
-    
+    {%include 'default/navbar.html.twig' %}
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-8">
+          {%include 'default/tabs.html.twig' %}
+        </div>
+        <div class="col-xs-4" role="sidebar">
+          {%include 'default/sidebar.html.twig' %}
+        </div>
+      </div>
+    </div>
 
     {% block body %}{% endblock %}
 
-    
+   <script type="text/javascript">
+     require(['app/main'], function(main) {
+       main({{data|raw}});
+     });
+   </script>
   </body>
 </html>

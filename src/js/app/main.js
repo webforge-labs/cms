@@ -1,4 +1,4 @@
-define(['jquery', 'knockout', './MainModel', 'socket.io', 'modules/moment', 'bootstrap/button', 'bootstrap/transition', 'bootstrap/collapse'], function($, ko, MainModel, io, moment) {
+define(['jquery', 'knockout', 'bootstrap/button', 'bootstrap/transition', 'bootstrap/collapse'], function($, ko) {
 
   ko.bindingHandlers.moment = {
     init: function(element, valueAccessor) {
@@ -31,30 +31,7 @@ define(['jquery', 'knockout', './MainModel', 'socket.io', 'modules/moment', 'boo
   ko.virtualElements.allowedBindings.moment = true;
 
   return function(data) {
-    data.connected = false;
+    //ko.applyBindings(main);
 
-    var main = new MainModel({ }, data);
-    ko.applyBindings(main);
-
-    var socket = io(data.websocket);
-
-    socket.on('connect', function () {
-      main.connected(true);
-
-      socket.on('tickerupdate', function(data) {
-        main.tickerUpdate(data);
-      });
-    });
-
-    socket.on('disconnect', function() {
-      main.connected(false);
-    });
-    socket.on('error', function() {
-      main.connected(false);
-    });
-
-    socket.on('reconnect', function() {
-      main.connected(true);
-    });
   };
 });

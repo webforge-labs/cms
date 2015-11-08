@@ -1,6 +1,15 @@
 {
     "name": "webforge/cms",
+
+    "autoload": {
+        "psr-4": {
+            "": "src/php/",
+            "SymfonyStandard\\": "app/SymfonyStandard/"
+        }
+    },
     "require": {
+        "php": ">=5.4.0",
+        
         "twig/twig": "^2.0@dev",
         "silex/silex": "^2.0@dev",
         "webforge/utils": "^1.0@dev"
