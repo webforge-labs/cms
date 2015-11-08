@@ -1,13 +1,8 @@
-<ul class="nav nav-tabs">
-  <li role="presentation" class="active"><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-  <li role="presentation"><a href="#">Profile</a></li>
-  <li role="presentation"><a href="#">Messages</a></li>
+<ul class="nav nav-tabs" data-bind="foreach: openedTabs">
+  <li role="presentation" data-bind="css: {active: isActive() }"><a href="#" data-bind="text: label, click: $parent.select"></a></li>
 </ul>
 
-<div class="row tab-content m-t-md">
-  <div class="col-xs-12">
-    <img src="/assets/img/{{tapir}}.png" alt="Tapir" class="img-circle pull-left">
-    <h1 class="pull-left" style="margin-left: 40px">Howdy {{user.name}}</h1>
-    <div class="clearfix"></div>
-  </div>
+<!--ko foreach: loadedTabs -->
+<div class="tab-content m-t-md" data-bind="css: {active: isActive()}, visible: isActive, html: contents" role="tab-content">
 </div>
+<!-- /ko -->

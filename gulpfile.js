@@ -38,7 +38,7 @@ builder
 //  .addConfigured('js', 'json', { shimney: true})
   .addConfigured('js', 'lodash', { shimney: true })
   .addConfigured('js', 'hogan', { version: '3.0.2' })
-  //.addConfigured('js', 'superagent' )
+  .addConfigured('js', 'superagent' )
   .addConfigured('js', 'moment' )
   .addConfigured('fonts', 'font-awesome')
 ;

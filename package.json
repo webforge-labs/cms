@@ -31,10 +31,12 @@
     "superagent": "^1.4.0"
   },
   "devDependencies": {
+    "chai": "^3.4.1",
+    "cuked-zombie": "~2.1.0",
     "gulp": "^3.9.0",
     "gulp-hogan-compile": "^0.4.1",
+    "mocha": "^2.3.3",
     "webforge-js-builder": "^1.0.4",
-    "yargs": "^3.29.0",
-    "cuked-zombie": "~2.1.0"
+    "yargs": "^3.29.0"
   }
 }

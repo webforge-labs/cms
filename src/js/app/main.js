@@ -1,4 +1,4 @@
-define(['jquery', 'knockout', 'bootstrap/button', 'bootstrap/transition', 'bootstrap/collapse'], function($, ko) {
+define(['jquery', 'knockout', './MainModel', './TabModel', 'bootstrap/button', 'bootstrap/transition', 'bootstrap/collapse'], function($, ko, Main, Tab) {
 
   ko.bindingHandlers.moment = {
     init: function(element, valueAccessor) {
@@ -26,12 +26,31 @@ define(['jquery', 'knockout', 'bootstrap/button', 'bootstrap/transition', 'boots
 
       return ko.bindingHandlers.text.update(element, dateValueAccessor);
     }
-  };
-  
+  };  
   ko.virtualElements.allowedBindings.moment = true;
 
-  return function(data) {
-    //ko.applyBindings(main);
+  ko.bindingHandlers.cmsTab = {
+    init: function(element, valueAccessor, allBindingsAccessor, viewModel, context) {
+      var wrappedValueAccessor = function() {
+        return function(data, e) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
 
+          var tab = new Tab(valueAccessor());
+
+          viewModel.tabs.open.call(viewModel, tab, e);
+        };
+      };
+
+      // use original click binding
+      ko.bindingHandlers.click.init(element, wrappedValueAccessor, allBindingsAccessor, viewModel, context);
+   },
+   update: ko.bindingHandlers.click.update
+  };
+
+  return function(data) {
+    var main = new Main(data);
+
+    ko.applyBindings(main);
   };
 });

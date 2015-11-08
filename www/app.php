@@ -12,13 +12,6 @@ $webforge->injectTwig();
 
 $app->get('/', function () use ($app) {
   return $app['twig']->render('base.html.twig', array(
-    'tapir'=>'tapir-front-1',
-    'tapir'=>'tapire',
-
-    'user'=>array(
-      'name'=>'Imme'
-    ),
-
     'data'=>'{}',
 
     'sidebar'=>array(
@@ -36,17 +29,41 @@ $app->get('/', function () use ($app) {
         'Webseite'=>array(
           array(
             'label'=>'Seiten verwalten',
-            'tab'=>array()
+            'tab'=>array(
+              'label'=>'Seiten verwalten',
+              'id'=>'pages-list',
+              'url'=>'/cms/pages/list'
+            )
           )
         ),
         'Navigation'=>array(
           array(
             'label'=>'Hauptnavigation pflegen',
-            'tab'=>array()
+            'tab'=>array(
+              'label'=>'Hauptnavigation',
+              'id'=>'main-navigation',
+              'url'=>'/cms/navigation/main'
+            )
           )
         )
       )
     )
+  ));
+});
+
+$app->get('/cms/dashboard', function() use ($app) {
+  return $app['twig']->render('test/dashboard.html.twig', array(
+    'user'=>array(
+      'name'=>'Imme'
+    ),
+
+    'tapir'=>'tapire'
+  ));
+});
+
+$app->get('/cms/users/list', function() use ($app) {
+  return $app['twig']->render('test/users/list.html.twig', array(
+
   ));
 });
 

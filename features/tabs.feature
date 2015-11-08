@@ -10,4 +10,4 @@ Feature: tabs
     Then a tab with title "Benutzer verwalten" is added
 
     When I activate the tab "Benutzer verwalten"
-    Then the tab contains a headline "Benutzer verwalten"
+    Then the content from the active tab contains a headline "Benutzer verwalten"
