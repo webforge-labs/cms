@@ -34,6 +34,7 @@
     "gulp": "^3.9.0",
     "gulp-hogan-compile": "^0.4.1",
     "webforge-js-builder": "^1.0.4",
-    "yargs": "^3.29.0"
+    "yargs": "^3.29.0",
+    "cuked-zombie": "~2.1.0"
   }
 }

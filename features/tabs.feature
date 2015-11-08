@@ -1,0 +1,13 @@
+Feature: tabs
+  In order to manage all contents of the cms
+  As a user of the cms
+  I need to open, close and activate tabs
+
+  Scenario: Opening a tab through the right content
+    Given I am logged in as "petra.platzhalter@ps-webforge.net"
+
+    When I click on "Benutzer verwalten" in section "CMS" in the sidebar
+    Then a tab with title "Benutzer verwalten" is added
+
+    When I activate the tab "Benutzer verwalten"
+    Then the tab contains a headline "Benutzer verwalten"
