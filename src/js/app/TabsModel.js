@@ -34,6 +34,7 @@ define(['knockout', 'knockout-mapping', './KnockoutCollection', 'modules/dispatc
       return tab;
     };
 
+
     this.select = function(tab, e) {
       var activeTab = that.activeTab();
 
@@ -47,6 +48,19 @@ define(['knockout', 'knockout-mapping', './KnockoutCollection', 'modules/dispatc
       if (!tab.wasLoaded()) {
         loadContents(tab);
       }
+    };
+
+    this.close = function(tab, e) {
+      var activeTab = that.activeTab();
+
+      tab.deactivate();
+      
+      // if tab was active we have no active tab anymore
+      if (activeTab.id() === tab.id()) {
+        that.activeTab(undefined);
+      }
+
+      tabs.removeElement(tab);
     };
 
     this.add = function(tab) {

@@ -1,5 +1,10 @@
-<ul class="nav nav-tabs" data-bind="foreach: openedTabs">
-  <li role="presentation" data-bind="css: {active: isActive() }"><a href="#" data-bind="text: label, click: $parent.select"></a></li>
+<ul class="nav nav-tabs" role="tabs-nav" data-bind="foreach: openedTabs">
+  <li role="presentation" data-bind="css: {active: isActive() }">
+    <a href="#" data-bind="click: $parent.select">
+      <!-- ko text: label --><!--/ko-->
+      <button type="button" data-bind="click: $parent.close" class="close" role="close"><i class="fa fa-close"></i></button>
+    </a>
+  </li>
 </ul>
 
 <!--ko foreach: loadedTabs -->

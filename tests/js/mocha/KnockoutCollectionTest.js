@@ -72,4 +72,16 @@ describe('KnockoutCollection', function() {
     });
   });
 
+  describe('removeElement()', function() {
+    it("should remove from the collection by element", function() {
+      this.collection.add(this.item1);
+      this.collection.add(this.item2);
+      this.collection.add(this.item3);
+
+      this.collection.removeElement(this.item2);
+
+      expect(this.collection.toArray()).to.be.eql([this.item1, this.item3]);
+    });
+  });
+
 });

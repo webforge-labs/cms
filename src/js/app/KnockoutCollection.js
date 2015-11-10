@@ -42,6 +42,18 @@ define(['lodash', 'knockout'], function(_, ko) {
       return undefined;
     };
 
+    this.removeElement = function(item) {
+      var key = that.key(item);
+
+      var items = that.items();
+      for (var index = 0; index < items.length; index++) {
+        if (that.key(items[index]) == key) {
+          that.items.splice(index, 1);
+          return;
+        }
+      }
+    };
+
     this.toArray = function() {
       return that.items.slice();
     };

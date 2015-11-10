@@ -6,3 +6,4 @@ vendor/
 # composer.lock
 /www/assets
 /node_modules
+/files/cache/*

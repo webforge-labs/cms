@@ -37,12 +37,14 @@ module.exports = function() {
     }
   });
 
+  /*
   cukedZombie.Zombie.extend(function(browser) {
     browser.on('authenticate', function(authentication) {
-      authentication.username = 'tvs';
-      authentication.password = '1891';
+      authentication.username = 'user';
+      authentication.password = 'geheim';
     });
   });
+  */
 
   infected.World.prototype.init = function(Browser) {
     //Browser.dns.localhost('tvstt.laptop.ps-webforge.net');
