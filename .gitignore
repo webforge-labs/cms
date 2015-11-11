@@ -7,3 +7,5 @@ vendor/
 /www/assets
 /node_modules
 /files/cache/*
+/files/logs
+/etc/symfony/parameters.yml
