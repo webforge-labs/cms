@@ -1,4 +1,6 @@
 var gulp = require('gulp');
+var sass = require('gulp-sass');
+var fs = require('fs');
 
 var WebforgeBuilder = require('webforge-js-builder');
 var builder = new WebforgeBuilder(gulp, { root: __dirname, dest: "www/assets" });
@@ -71,10 +73,43 @@ gulp.task('images', ['clean'], function() {
     .pipe(gulp.dest(builder.config.dest+'/img'));
 });
 
-gulp.task('build', ['javascript', 'fonts', 'less', 'images'], function() {});
+var sassOptions = {
+  includePaths: [
+    './src/scss',
+    './node_modules/bootstrap-sass/assets/stylesheets',
+    './node_modules/font-awesome/scss'
+  ],
+
+  // this is a hack to have some selective components from bootstrap overriden without copying the whole bootstrap.scss with all its @imports
+  importer: function(url, prev, done) {
+    if (url.indexOf('bootstrap/') === 0) {
+      var component = url.substr('boostrap/'.length+1);
+      var file = __dirname+'/src/scss/bootstrap/_'+component+'.scss';
+      try {
+        var stats = fs.lstatSync(file);
+
+        if (stats.isFile()) {
+          return { file: file };
+        }
+      } catch (ex) {
+        // file does not exist
+      }
+    }
+
+    return sass.compiler.NULL; // do nothing
+  }
+};
+
+gulp.task('sass', function () {
+  gulp.src('src/scss/cms.scss')
+    .pipe(sass(sassOptions).on('error', sass.logError))
+    .pipe(gulp.dest(builder.config.dest+'/css'));
+});
+
+gulp.task('build', ['javascript', 'fonts', 'sass', 'images'], function() {});
 
 gulp.task('watch', ['build'], function() {
-  gulp.watch('src/less/**/*.less', ['build']);
+  gulp.watch('src/scss/**/*.scss', ['sass']);
   gulp.watch('Resources/tpl/**/*.mustache', ['build']);
   gulp.watch('node_modules/webforge-js-components/src/js/**/*', ['build']);
   gulp.watch('node_modules/webforge-js-components/Resources/tpl/**/*', ['build']);
