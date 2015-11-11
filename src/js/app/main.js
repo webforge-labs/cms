@@ -1,4 +1,4 @@
-define(['jquery', 'knockout', './MainModel', './TabModel', 'bootstrap/button', 'bootstrap/transition', 'bootstrap/collapse'], function($, ko, Main, Tab) {
+define(['jquery', 'knockout', './MainModel', './TabModel', 'bootstrap/button', 'bootstrap/transition', 'bootstrap/collapse', 'bootstrap/dropdown'], function($, ko, Main, Tab) {
 
   ko.bindingHandlers.moment = {
     init: function(element, valueAccessor) {

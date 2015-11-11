@@ -22,6 +22,9 @@ builder
         {
           name: "app/main"
         },
+        {
+          name: "app/login"
+        },
       ],
     }
   })

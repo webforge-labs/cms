@@ -1,0 +1,26 @@
+{
+  "namespace":"Webforge\\CmsBundle\\Entity",
+  "entities":[
+    {
+      "name":"User",
+      "fqn":"Webforge\\CmsBundle\\Entity\\User",
+      "singular":"user",
+      "plural":"users",
+      "tableName":"users",
+      "extends":"FOS\\UserBundle\\Model\\User",
+      "description":null,
+      "properties":{
+        "id":{
+          "name":"id",
+          "isEntityReference":false,
+          "type":"Id"
+        },
+        "displayName":{
+          "name":"displayName",
+          "isEntityReference":false,
+          "type":"String"
+        }
+      }
+    }
+  ]
+}

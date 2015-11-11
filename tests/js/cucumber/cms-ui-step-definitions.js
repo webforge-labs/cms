@@ -1,13 +1,33 @@
-module.exports = function(expect) {
+module.exports = function(expect, commons) {
   /* jshint expr:true */
-  var that = this;
 
-  this.Given(/^I am logged in as "([^"]*)"$/, function (email, callback) {
-    this.visitPage('/', function() {
-      this.waitForjQuery(function() {
-        callback();
+  this.Before(function(scenario) {
+    var world = this;
+
+    this.browser.on('loaded', function() {
+      world.waitForjQuery(function() {
+        world.context = world.css('body');
       });
     });
+    
+  });
+
+  this.When(/^I visit "([^"]*)"$/, function (url) {
+    return this.browser.visit(url);
+  });
+
+  this.Given(/^I am logged in as "([^"]*)"$/, function (email, callback) {
+    this.visitPage('/cms', callback);
+  });
+
+  this.Given(/^the alice fixtures were loaded:$/, {timeout: 10000}, function (string, callback) {
+    var fixtures = string.split(/\r?\n/g);
+
+    fixtures = fixtures.map(function(fixture) {
+      return commons.file('tests/files/alice/'+fixture+'.yml');
+    });
+
+    this.cli(['h4cc_alice_fixtures:load:files', '--env=dev', '--drop'].concat(fixtures), callback);
   });
 
   this.fn.findTab = function(label, options) {

@@ -22,7 +22,10 @@
         "jms/serializer-bundle": "^1.1@dev",
         "webmozart/json": "^1.1@dev",
         "jbroadway/urlify": "^1.0@dev",
-        "symfony/var-dumper": "^3.0@dev"
+        "symfony/var-dumper": "^3.0@dev",
+        "friendsofsymfony/user-bundle": "2.0.*",
+        "webforge/doctrine": "1.2.*",
+        "h4cc/alice-fixtures-bundle": "0.5.*"
     },
     "license": "MIT",
     "authors": [
@@ -31,7 +34,7 @@
             "email": "p.scheit@ps-webforge.com"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
 
     "extra": {
         "symfony-app-dir": "app",

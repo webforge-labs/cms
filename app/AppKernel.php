@@ -17,6 +17,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Webforge\CmsBundle\WebforgeCmsBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
@@ -24,7 +25,7 @@ class AppKernel extends Kernel
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             //$bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             //$bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
-            //$bundles[] = new h4cc\AliceFixturesBundle\h4ccAliceFixturesBundle();
+            $bundles[] = new h4cc\AliceFixturesBundle\h4ccAliceFixturesBundle();
             //$bundles[] = new Liip\FunctionalTestBundle\LiipFunctionalTestBundle();
         }
 

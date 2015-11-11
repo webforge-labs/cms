@@ -1,0 +1,13 @@
+# Installation
+
+## composer-packages
+
+ - doctrine/orm
+ - webforge/utils (DateTime)
+ - webforge/doctrine (for custom Doctrine DateTimeTypes)
+ - doctrine/doctrine-bundle (of course)
+ - jms/serializer-bundle
+
+## Structure
+
+This repository is like a local installation of the cms. The local installation should only provide configuration and environment for testing. You would install Webforge\Cms by installing the Webforge\CmsBundle. So developers be aware: **put everything into the bundle**.

@@ -1,0 +1,26 @@
+login:
+  headline: Zugang zum CMS
+
+layout:
+  title: MyTTT – Zugang
+
+username: Benutzername
+usernameoremail: Benutzername oder E-Mail-Adresse
+
+resetting:
+  request:
+    headline: "Neues Passwort anfordern"
+    submit: 'Absenden'
+
+  alreadyRequested: 
+    headline: Neues Passwort bereits angefordert
+    message: Du hast bereits ein neues Passwsort angefordert, überprüfe deine E-Mails.
+
+  checkEmail:
+    headline: Neues Passwort angefordert
+    message: Wir haben dir gerade eine E-Mail geschickt. Sie enthält einen Link, um dein Passwort zurückzusetzen.
+
+  reset:
+    headline: Neues Passwort setzen
+    submit: Passwort ändern
+    success: 'Dein Passwort wurde geändert'

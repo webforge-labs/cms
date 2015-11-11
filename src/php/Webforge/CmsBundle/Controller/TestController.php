@@ -53,7 +53,7 @@ class TestController extends CommonController {
   }
 
   /**
-   * @Route("/cms/dashboard", name="test_dashboard")
+   * @Route("/dashboard", name="test_dashboard")
    * @Method("GET")
    */
   public function dashboardAction() {
@@ -68,7 +68,7 @@ class TestController extends CommonController {
   }
 
   /**
-   * @Route("/cms/users/list", name="test_users_list")
+   * @Route("/users/list", name="test_users_list")
    * @Method("GET")
    */
   public function usersListAction() {

@@ -1,0 +1,15 @@
+{
+  "namespace": "Webforge\\CmsBundle\\Entity",
+
+  "entities": [
+    {
+      "name": "User",
+      "extends": "FOS\\UserBundle\\Model\\User",
+    
+      "properties": {
+        "id": { "type": "DefaultId" },
+        "displayName": { "type": "String" }
+      }
+    }
+  ]
+}

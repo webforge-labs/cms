@@ -1,3 +1,7 @@
 cms:
     resource: "@WebforgeCmsBundle/Controller"
+    prefix: /cms
     type:     annotation
+
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"

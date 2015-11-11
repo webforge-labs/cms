@@ -1,0 +1,16 @@
+{% trans_default_domain 'userbundle' %}
+
+<h2>{{ 'resetting.reset.headline'|trans }}</h2>
+<form action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_enctype(form) }} method="post" class="fos_user_resetting_reset">
+    <p>Das neue Passwort muss
+      <ul>
+        <li>mindestens 6 Zeichen enthalten</li>
+        <li>mindestens eine Zahl enthalten</li>
+        <li>große und kleine Buchstaben enthalten</li>
+      </ul>
+    </p>
+    {{ form_widget(form) }}
+    <div>
+        <input type="submit" class="btn btn-primary btn-block" value="{{ 'resetting.reset.submit'|trans }}" />
+    </div>
+</form>
