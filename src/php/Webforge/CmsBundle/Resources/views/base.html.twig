@@ -10,8 +10,7 @@
 
     <title>CMS</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="/assets/css/app.css" rel="stylesheet">
+    <link href="/assets/css/cms.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -23,15 +22,15 @@
   </head>
 
   <body role="document">
-    {%include 'default/navbar.html.twig' %}
+    {%include 'WebforgeCmsBundle:default:navbar.html.twig' %}
 
     <div class="container-fluid">
       <div class="row">
-        <div class="col-xs-8" data-bind="with: tabs">
-          {%include 'default/tabs.html.twig' %}
+        <div class="col-xs-9" data-bind="with: tabs">
+          {%include 'WebforgeCmsBundle:default:tabs.html.twig' %}
         </div>
-        <div class="col-xs-4" role="sidebar">
-          {%include 'default/sidebar.html.twig' %}
+        <div class="col-xs-3" role="sidebar">
+          {%include 'WebforgeCmsBundle:default:sidebar.html.twig' %}
         </div>
       </div>
     </div>
