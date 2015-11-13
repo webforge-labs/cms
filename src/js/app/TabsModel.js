@@ -1,4 +1,4 @@
-define(['knockout', 'knockout-mapping', './KnockoutCollection', 'modules/dispatcher'], function(ko, koMapping, KnockoutCollection, dispatcher) {
+define(['knockout', 'knockout-mapping', './KnockoutCollection', 'modules/dispatcher', 'amplify'], function(ko, koMapping, KnockoutCollection, dispatcher, amplify) {
 
   return function() {
     var that = this;
@@ -26,7 +26,7 @@ define(['knockout', 'knockout-mapping', './KnockoutCollection', 'modules/dispatc
 
     this.open = function(tab, e) {
       if (!tabs.contains(tab)) {
-        tabs.add(tab);
+        that.add(tab);
       } else {
         that.select(tab, e);
       }
@@ -44,10 +44,20 @@ define(['knockout', 'knockout-mapping', './KnockoutCollection', 'modules/dispatc
 
       tab.activate();
       that.activeTab(tab);
+      amplify.publish('cms.tabs.active', tab);
 
       if (!tab.wasLoaded()) {
         loadContents(tab);
       }
+    };
+
+    this.selectById = function(tabId) {
+      ko.utils.arrayForEach(that.openedTabs(), function(tab) {
+        if (tab.id() == tabId) {
+          that.select(tab);
+          return false;
+        }
+      });
     };
 
     this.close = function(tab, e) {
@@ -65,6 +75,7 @@ define(['knockout', 'knockout-mapping', './KnockoutCollection', 'modules/dispatc
 
     this.add = function(tab) {
       tabs.add(tab);
+      amplify.publish('cms.tabs.added', tab);
     };
   };
 });

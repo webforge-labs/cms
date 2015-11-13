@@ -1,4 +1,4 @@
-define(['knockout', 'knockout-mapping', './TabsModel', './TabModel'], function(ko, koMapping, Tabs, Tab) {
+define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'amplify'], function(ko, koMapping, Tabs, Tab, amplify) {
   
   return function(data) {
     var that = this;
@@ -14,9 +14,47 @@ define(['knockout', 'knockout-mapping', './TabsModel', './TabModel'], function(k
       label: 'Dashboard'
     });
 
-    this.tabs.add(dashboard);
-    this.tabs.select(dashboard);
-    
-  };
 
+    this.loadStoredTabs = function() {
+      that.tabs.add(dashboard);
+
+      var storedTabs = amplify.store('cms.tabs');
+
+      if (storedTabs) {
+        _.forEach(storedTabs, function(tabData) {
+          var tab = new Tab(tabData);
+          that.tabs.add(tab);
+        });
+      } else {
+        amplify.store('cms.tabs', {});
+      }
+
+      var storedActiveId = amplify.store('cms.tabs.active');
+      if (storedActiveId) {
+        that.tabs.selectById(storedActiveId);
+      } else {
+        that.tabs.select(dashboard);
+      }
+
+      amplify.subscribe('cms.tabs.added', function(tab) {
+        var storedTabs = amplify.store('cms.tabs'); // get current stored tabs (always)
+
+        storedTabs[tab.id()] = tab.serialize();
+
+        amplify.store('cms.tabs', storedTabs);
+      });
+
+      amplify.subscribe('cms.tabs.active', function(tab) {
+        amplify.store('cms.tabs.active', tab.id());
+      });
+    };
+
+    this.bindTo = function($element) {
+      if (!$element.length) {
+        throw new Error('you provided an empty jquery object in main.bindTo()');
+      }
+
+      ko.applyBindings(that, $element.get(0));
+    };
+  };
 });

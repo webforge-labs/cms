@@ -1,4 +1,4 @@
-define(['knockout', 'knockout-mapping', 'jquery'], function(ko, koMapping, $) {
+define(['knockout', 'knockout-mapping', 'jquery', 'modules/translator', 'amplify'], function(ko, koMapping, $, translator, amplify) {
   
   return function(data) {
     var that = this;
@@ -25,10 +25,11 @@ define(['knockout', 'knockout-mapping', 'jquery'], function(ko, koMapping, $) {
       that.contents(response.text);
       that.hasError(false);
       that.wasLoaded(true);
+      amplify.publish('cms.tabs.loaded', that, $('#'+that.id()));
     };
 
     this.contentLoadingError = function(response) {
-      that.contents('<div class="alert alert-danger" role="alert"><strong>Oh mist!</strong> Der Tab konnte nicht geladen werden.</div>');
+      that.contents('<div class="alert alert-danger" role="alert"><strong>'+translator.trans('errors.ohcrap', undefined, 'cms')+'</strong> '+translator.trans('errors.tabload', undefined, 'cms')+'</div>');
       that.hasError(true);
       that.wasLoaded(true);
     };
@@ -39,6 +40,14 @@ define(['knockout', 'knockout-mapping', 'jquery'], function(ko, koMapping, $) {
 
     this.activate = function() {
       that.isActive(true);
+    };
+
+    this.serialize = function() {
+      return {
+        id: that.id(),
+        label: that.label(),
+        url: that.url()
+      };
     };
   };
 });

@@ -50,7 +50,10 @@ define(['jquery', 'knockout', './MainModel', './TabModel', 'bootstrap/button', '
 
   return function(data) {
     var main = new Main(data);
+    define('modules/main', main);
 
     ko.applyBindings(main);
+
+    main.loadStoredTabs();
   };
 });
