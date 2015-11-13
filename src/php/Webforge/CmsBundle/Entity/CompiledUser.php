@@ -25,13 +25,22 @@ abstract class CompiledUser extends \FOS\UserBundle\Model\User {
   protected $id;
   
   /**
-   * displayName
+   * firstName
    * @var string
    * @ORM\Column
    * @Serializer\Expose
    * @Serializer\Type("string")
    */
-  protected $displayName;
+  protected $firstName;
+  
+  /**
+   * lastName
+   * @var string
+   * @ORM\Column
+   * @Serializer\Expose
+   * @Serializer\Type("string")
+   */
+  protected $lastName;
   
   public function __construct() {
     parent::__construct();
@@ -55,15 +64,30 @@ abstract class CompiledUser extends \FOS\UserBundle\Model\User {
   /**
    * @return string
    */
-  public function getDisplayName() {
-    return $this->displayName;
+  public function getFirstName() {
+    return $this->firstName;
   }
   
   /**
-   * @param string $displayName
+   * @param string $firstName
    */
-  public function setDisplayName($displayName) {
-    $this->displayName = $displayName;
+  public function setFirstName($firstName) {
+    $this->firstName = $firstName;
+    return $this;
+  }
+  
+  /**
+   * @return string
+   */
+  public function getLastName() {
+    return $this->lastName;
+  }
+  
+  /**
+   * @param string $lastName
+   */
+  public function setLastName($lastName) {
+    $this->lastName = $lastName;
     return $this;
   }
 }

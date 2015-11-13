@@ -15,10 +15,78 @@
           "isEntityReference":false,
           "type":"Id"
         },
-        "displayName":{
-          "name":"displayName",
+        "firstName":{
+          "name":"firstName",
           "isEntityReference":false,
           "type":"String"
+        },
+        "lastName":{
+          "name":"lastName",
+          "isEntityReference":false,
+          "type":"String"
+        }
+      }
+    },
+    {
+      "name":"NavigationNode",
+      "fqn":"Webforge\\CmsBundle\\Entity\\NavigationNode",
+      "singular":"navigation-node",
+      "plural":"navigation-nodes",
+      "tableName":"navigation_nodes",
+      "extends":null,
+      "description":null,
+      "properties":{
+        "id":{
+          "name":"id",
+          "isEntityReference":false,
+          "type":"Id"
+        },
+        "title":{
+          "name":"title",
+          "isEntityReference":false,
+          "type":"String"
+        },
+        "slug":{
+          "name":"slug",
+          "isEntityReference":false,
+          "type":"String"
+        },
+        "depth":{
+          "name":"depth",
+          "isEntityReference":false,
+          "type":"PositiveInteger"
+        },
+        "lft":{
+          "name":"lft",
+          "isEntityReference":false,
+          "type":"PositiveInteger"
+        },
+        "rgt":{
+          "name":"rgt",
+          "isEntityReference":false,
+          "type":"PositiveInteger"
+        },
+        "children":{
+          "name":"children",
+          "isEntityReference":true,
+          "type":"Webforge\\CmsBundle\\Entity\\NavigationNode",
+          "isCollection":true
+        },
+        "parent":{
+          "name":"parent",
+          "isEntityReference":true,
+          "type":"Webforge\\CmsBundle\\Entity\\NavigationNode",
+          "isCollection":false
+        },
+        "created":{
+          "name":"created",
+          "isEntityReference":false,
+          "type":"DateTime"
+        },
+        "updated":{
+          "name":"updated",
+          "isEntityReference":false,
+          "type":"DateTime"
         }
       }
     }

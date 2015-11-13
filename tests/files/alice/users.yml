@@ -1,7 +1,8 @@
 Webforge\CmsBundle\Entity\User:
   petra_platzhalter: 
     username: petraplatzhalter
-    displayName: Petra Platzhalter
+    firstName: Petra
+    lastName: Platzhalter
     email: petra.platzhalter@ps-webforge.net
     plainPassword: secret
     enabled: true

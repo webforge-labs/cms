@@ -5,3 +5,4 @@ services:
       arguments: []
       tags: 
         - { name: jms_serializer.subscribing_handler }
+        -  { name: h4cc_alice_fixtures.provider }

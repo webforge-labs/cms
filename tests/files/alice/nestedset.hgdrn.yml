@@ -1,0 +1,96 @@
+Webforge\CmsBundle\Entity\NavigationNode:
+  hgdrn_node_1:
+    title: Startseite
+    lft: 1
+    rgt: 24
+    depth: 0
+    slug: startseite
+    created: '<webforgeDateTimeBetween(''-10 hours'')>'
+  hgdrn_node_2:
+    title: Unternehmen
+    lft: 2
+    rgt: 3
+    depth: 1
+    slug: unternehmen
+    created: '<webforgeDateTimeBetween(''-10 hours'')>'
+    parent: '@hgdrn_node_1'
+  hgdrn_node_3:
+    title: Produkte
+    lft: 4
+    rgt: 5
+    depth: 1
+    slug: produkte
+    created: '<webforgeDateTimeBetween(''-10 hours'')>'
+    parent: '@hgdrn_node_1'
+  hgdrn_node_4:
+    title: Dienstleistungen
+    lft: 6
+    rgt: 7
+    depth: 1
+    slug: dienstleistungen
+    created: '<webforgeDateTimeBetween(''-10 hours'')>'
+    parent: '@hgdrn_node_1'
+  hgdrn_node_5:
+    title: Lösungen
+    lft: 8
+    rgt: 21
+    depth: 1
+    slug: losungen
+    created: '<webforgeDateTimeBetween(''-10 hours'')>'
+    parent: '@hgdrn_node_1'
+  hgdrn_node_6:
+    title: HMS
+    lft: 9
+    rgt: 10
+    depth: 2
+    slug: hms
+    created: '<webforgeDateTimeBetween(''-10 hours'')>'
+    parent: '@hgdrn_node_5'
+  hgdrn_node_7:
+    title: HTS
+    lft: 11
+    rgt: 12
+    depth: 2
+    slug: hts
+    created: '<webforgeDateTimeBetween(''-10 hours'')>'
+    parent: '@hgdrn_node_5'
+  hgdrn_node_8:
+    title: INT
+    lft: 13
+    rgt: 20
+    depth: 2
+    slug: int
+    created: '<webforgeDateTimeBetween(''-10 hours'')>'
+    parent: '@hgdrn_node_5'
+  hgdrn_node_9:
+    title: container
+    lft: 14
+    rgt: 15
+    depth: 3
+    slug: container
+    created: '<webforgeDateTimeBetween(''-10 hours'')>'
+    parent: '@hgdrn_node_8'
+  hgdrn_node_10:
+    title: model
+    lft: 16
+    rgt: 17
+    depth: 3
+    slug: model
+    created: '<webforgeDateTimeBetween(''-10 hours'')>'
+    parent: '@hgdrn_node_8'
+  hgdrn_node_11:
+    title: win
+    lft: 18
+    rgt: 19
+    depth: 3
+    slug: win
+    created: '<webforgeDateTimeBetween(''-10 hours'')>'
+    parent: '@hgdrn_node_8'
+  hgdrn_node_12:
+    title: Kunden
+    lft: 22
+    rgt: 23
+    depth: 1
+    slug: kunden
+    created: '<webforgeDateTimeBetween(''-10 hours'')>'
+    parent: '@hgdrn_node_1'

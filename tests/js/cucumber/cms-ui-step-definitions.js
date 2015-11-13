@@ -1,23 +1,28 @@
 module.exports = function(expect, commons) {
   /* jshint expr:true */
 
-  this.Before(function(scenario) {
+  expect = require('chai').expect;
+
+  this.When(/^I visit "([^"]*)"$/, function (url, callback) {
+    var world = this;
+    world.browser.visit(url, function() {
+      world.context = world.css('body').exists();
+      callback();
+    });
+  });
+
+  this.Given(/^I am logged in as "([^"]*)"$/, { timeout: 8000 }, function (email, callback) {
     var world = this;
 
-    this.browser.on('loaded', function() {
-      world.waitForjQuery(function() {
-        world.context = world.css('body');
-      });
+    this.browser.on('authenticate', function(authentication) {
+      authentication.username = email;
+      authentication.password = 'secret';
     });
-    
-  });
 
-  this.When(/^I visit "([^"]*)"$/, function (url) {
-    return this.browser.visit(url);
-  });
-
-  this.Given(/^I am logged in as "([^"]*)"$/, function (email, callback) {
-    this.visitPage('/cms', callback);
+    world.browser.visit('/cms', function() {
+      world.context = world.css('body').exists();
+      callback();
+    });
   });
 
   this.Given(/^the alice fixtures were loaded:$/, {timeout: 10000}, function (string, callback) {
@@ -88,5 +93,36 @@ module.exports = function(expect, commons) {
   this.Then(/^the content from the active tab contains a headline "([^"]*)"$/, function (headlineText, callback) {
     this.activeTabContent().css('h2:contains("'+headlineText+'")').exists();
     callback();
+  });
+
+  this.Then(/^I see "([^"]*)" as loggedin user$/, function (name) {
+    this.context.css('[role="username"]:contains("'+name+'")').exists();
+  });
+
+  this.Then(/^I should see the table with pages:$/, function (dataTable, callback) {
+    var nav = this.activeTabContent().css('.dd:first').exists();
+    var $ = this.browser.window.jQuery;
+
+    var nodes = [];
+    nav.get().find('.dd-item').each(function() {
+      var $li = $(this);
+
+      var indent = new Array($li.parents('.dd-list').length).join('--');
+
+      nodes.push({
+        title: indent+$li.find('.dd-handle:first').text()
+      })
+    });
+
+
+    try {
+      expect(nodes, delta).to.be.deep.equal(dataTable.hashes());
+      callback();
+    } catch (assertion) {
+      var jsondiff = require('json-diff');
+      var delta = jsondiff.diffString(assertion.expected, assertion.actual);
+      assertion.message = assertion.message + "\n" + delta;
+      throw assertion;
+    }
   });
 };

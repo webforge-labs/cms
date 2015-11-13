@@ -8,8 +8,31 @@
     
       "properties": {
         "id": { "type": "DefaultId" },
-        "displayName": { "type": "String" }
+        "firstName": { "type": "String" },
+        "lastName": { "type": "String" }
+      }
+    },
+
+    {
+      "name": "NavigationNode",
+
+      "properties": {
+        "id": { "type": "DefaultId" },
+
+        "title": { "type":"String", "i18n": true },
+        "slug": { "type":"String", "i18n": true },
+
+        "depth": { "type": "PositiveInteger" },
+        "lft": { "type": "PositiveInteger" },
+        "rgt": { "type": "PositiveInteger" },
+
+        "children": { "type": "Collection<NavigationNode>", "orderBy": {"lft": "ASC" } },
+        "parent": { "type": "NavigationNode", "nullable": true, "relation": "children" },
+
+        "created": { "type": "DateTime" },
+        "updated": { "type": "DateTime", "nullable": true }
       }
     }
+
   ]
 }

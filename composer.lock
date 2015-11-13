@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "83dab19161bf2476ebc3ab961fbf37b7",
-    "content-hash": "36fc977356d44072e66082016465be27",
+    "hash": "4b27f8c59dd268ca10413c5acd01863d",
+    "content-hash": "7699aa02915d93533bbbb55c7cac91d8",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2320,6 +2320,55 @@
             "time": "2015-10-29 23:23:02"
         },
         {
+            "name": "webforge/collections",
+            "version": "1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webforge-labs/webforge-collections.git",
+                "reference": "46f1182105ad42edbc25ba747d16d7dea499015b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webforge-labs/webforge-collections/zipball/46f1182105ad42edbc25ba747d16d7dea499015b",
+                "reference": "46f1182105ad42edbc25ba747d16d7dea499015b",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/collections": ">=1.2.0,<1.4.0"
+            },
+            "require-dev": {
+                "liip/rmt": "0.9.*",
+                "satooshi/php-coveralls": "dev-master",
+                "webforge/testplate": ">=1.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Webforge\\Collections": [
+                        "lib/",
+                        "tests/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Philipp Scheit",
+                    "email": "p.scheit@ps-webforge.com"
+                }
+            ],
+            "description": "Collection extensions based on Doctrine\\Common\\Collections",
+            "time": "2015-10-11 15:59:54"
+        },
+        {
             "name": "webforge/doctrine",
             "version": "dev-master",
             "source": {
@@ -2483,7 +2532,56 @@
             "time": "2015-11-07 16:34:17"
         }
     ],
-    "packages-dev": [],
+    "packages-dev": [
+        {
+            "name": "webforge/testdata-repository",
+            "version": "0.2.2-alpha",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webforge-labs/webforge-testdata-repository.git",
+                "reference": "b4b554ff9ec80ad0cb608f0b9cb611b267270616"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webforge-labs/webforge-testdata-repository/zipball/b4b554ff9ec80ad0cb608f0b9cb611b267270616",
+                "reference": "b4b554ff9ec80ad0cb608f0b9cb611b267270616",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "pscheit/psc-cms": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Webforge\\TestData": [
+                        "lib/",
+                        "tests/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Philipp Scheit",
+                    "email": "p.scheit@ps-webforge.com"
+                }
+            ],
+            "description": "A repository for data that you can use to fill your unit tests.",
+            "homepage": "http://github.com/pscheit/webforge-testdata-repository",
+            "keywords": [
+                "data",
+                "testdata",
+                "unit test"
+            ],
+            "time": "2013-04-25 11:00:27"
+        }
+    ],
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
@@ -2497,7 +2595,8 @@
         "jms/serializer-bundle": 20,
         "webmozart/json": 20,
         "jbroadway/urlify": 20,
-        "symfony/var-dumper": 20
+        "symfony/var-dumper": 20,
+        "webforge/collections": 0
     },
     "prefer-stable": false,
     "prefer-lowest": false,

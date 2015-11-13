@@ -15,4 +15,8 @@ use JMS\Serializer\Annotation AS Serializer;
  * @Serializer\ExclusionPolicy("all")
  */
 class User extends CompiledUser {
+
+  public function getDisplayName() {
+    return $this->getFirstName().' '.$this->getLastName();
+  }
 }

@@ -25,7 +25,11 @@
         "symfony/var-dumper": "^3.0@dev",
         "friendsofsymfony/user-bundle": "2.0.*",
         "webforge/doctrine": "1.2.*",
-        "h4cc/alice-fixtures-bundle": "0.5.*"
+        "h4cc/alice-fixtures-bundle": "0.5.*",
+        "webforge/collections": "1.0.*@stable"
+    },
+    "require-dev": {
+        "webforge/testdata-repository": "0.2.2-alpha"
     },
     "license": "MIT",
     "authors": [

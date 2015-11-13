@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var rename = require('gulp-rename');
 var sass = require('gulp-sass');
 var fs = require('fs');
 
@@ -44,7 +45,8 @@ builder
   .addConfigured('js', 'lodash', { shimney: true })
   .addConfigured('js', 'hogan', { version: '3.0.2' })
   .addConfigured('js', 'superagent', { shimney: true })
-  .addConfigured('js', 'moment' )
+  .addConfigured('js', 'moment')
+  .addConfigured('js', 'amplify', { shimney: true})
   .addConfigured('fonts', 'font-awesome')
 ;
 
@@ -70,6 +72,27 @@ builder.add('js', 'webforge-js-components-modules')
 builder.add('js', 'modules')
   .src('src/js/modules/**/*.js')
   .pipe(builder.dest, 'modules')
+
+// this could be generated from yml files with a gulp task (but not yet)
+builder.add('js', 'translations')
+  .src('src/php/Webforge/CmsBundle/Resources/js-translations/translations-compiled.json')
+  .pipe(builder.dest, 'WebforgeCmsBundle');
+
+builder.add('js', 'i18next')
+  .src('src/js/lib/i18next.amd-1.11.0.js')
+  .pipe(rename, 'i18next.js');
+
+builder.add('js', 'requirejs-text')
+  .src('src/js/lib/requirejs-text.js')
+  .pipe(rename, 'text.js');
+
+builder.add('js', 'requirejs-json')
+  .src('src/js/lib/requirejs-json.js')
+  .pipe(rename, 'json.js');
+
+builder.add('js', 'jquery-nestable')
+  .src('src/js/lib/jquery.nestable.js')
+  .pipe(rename, 'jquery-nestable.js');
 
 gulp.task('images', ['clean'], function() {
   gulp.src('Resources/img/**/*')
@@ -119,6 +142,7 @@ gulp.task('watch', ['build'], function() {
   gulp.watch('src/js/lib/**/*.js', ['build']);
   gulp.watch('src/js/modules/**/*.js', ['build']);
   gulp.watch('src/js/config-*.js', ['build']);
+  gulp.watch('src/php/Webforge/CmsBundle/Resources/js-translations/*.json', ['build']);
 
   gulp.watch('Resources/img/**/*', ['build']);
 });

@@ -47,4 +47,13 @@ class DateTimeHandler implements SubscribingHandlerInterface {
   public function deserializeDateTimeFromJson(JsonDeserializationVisitor $visitor, $json, array $type, Context $context) {
     return self::parse($json->date);
   }
+
+  public function webforgeDateTimeBetween($startDate = '-30 years', $endDate = 'now') {
+    return new DateTime(\Faker\Provider\DateTime::dateTimeBetween($startDate, $endDate));
+  }
+
+  public function webforgeDateTime($string) {
+    return new \Webforge\Common\DateTime\DateTime($string);
+  }
+
 }

@@ -15,6 +15,10 @@ class TestController extends CommonController {
     return $this->render('WebforgeCmsBundle::base.html.twig', array(
       'data'=>'{}',
 
+      'user'=>array(
+        'displayName'=>$this->getUser()->getDisplayName()
+      ),
+
       'sidebar'=>array(
         'groups'=>array(
           'CMS'=>array(
@@ -57,9 +61,12 @@ class TestController extends CommonController {
    * @Method("GET")
    */
   public function dashboardAction() {
+    $user = $this->getUser();
+
     return $this->render('WebforgeCmsBundle:test:dashboard.html.twig', array(
       'user'=>array(
-        'name'=>'Imme'
+        'firstName'=>$user->getFirstName(),
+        'lastName'=>$user->getLastName(),
       ),
  
       'tapir'=>'tapire',
@@ -73,5 +80,20 @@ class TestController extends CommonController {
    */
   public function usersListAction() {
     return $this->render('WebforgeCmsBundle:test:users/list.html.twig', array());
+  }
+
+  /**
+   * @Route("/pages/list", name="test_pages_list")
+   * @Method("GET")
+   */
+  public function pagesListAction() {
+    $navigationRepository = $this->getRepository('NavigationNode');
+
+    $data = array('navigation'=>$navigationRepository->getRootNode()->exportWithChildren());
+
+    return $this->render('WebforgeCmsBundle:test:navigation-nodes/list.html.twig', array(
+      'tabId'=>'pages-list',
+      'data'=>json_encode($data, JSON_PRETTY_PRINT)
+    ));
   }
 }

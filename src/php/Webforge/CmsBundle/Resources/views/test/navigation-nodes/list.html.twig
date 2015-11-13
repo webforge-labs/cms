@@ -1,0 +1,26 @@
+<div class="navigation-panel" data-bind="with: navigation">
+  <h2>Seiten</h2>
+
+  <script type="text/html" id="navigation-node-template">
+    <li class="dd-item" data-bind="attr: {'data-id': id }">
+      <div class="btn btn-default btn-block dd-handle" data-bind="text: title"></div>
+      <!-- ko if: children().length -->
+      <ol class="dd-list" data-bind="template: { name: 'navigation-node-template', foreach: children }">
+      </ol>
+      <!-- /ko -->
+    </li>
+  </script>
+
+  <div class="dd">
+    <ol class="dd-list root-list" data-bind="template: { name: 'navigation-node-template', foreach: navigation }">
+    </ol>
+  </div>
+
+  <p class="m-t-md"><button type="button" data-bind="click: save" class="btn btn-primary">Speichern</button></p>
+
+  <script type="text/javascript">
+  require(['app/navigation', 'modules/main'], function(controller, main) {
+    controller({{data|raw}}, main, $('#{{tabId}}').find('.navigation-panel'));
+  });
+  </script>
+</div>
