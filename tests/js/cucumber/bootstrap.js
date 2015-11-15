@@ -32,7 +32,7 @@ module.exports = function() {
   var infected = cukedZombie.infect(cucumberStep, {
     world: require('../world-config'),
     steps: {
-      arguments: [chai.expect, commons],
+      arguments: [chai.expect, commons, require('../test-fn-utils.js')],
       dir: __dirname
     }
   });

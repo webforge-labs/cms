@@ -1,17 +1,8 @@
-var expect = require('chai').expect;
-var path = require('path');
-var requirejs = require('requirejs');
+var boot = require('./bootstrap');
+var expect = boot.expect;
 
-requirejs.config({
-  nodeRequire: require,
-  baseUrl: path.resolve(__dirname+'/../../../www/assets/js'),
-  paths: {
-    'app': path.resolve(__dirname+'/../../../src/js/app'),
-  }
-});
-
-var KnockoutCollection = requirejs('app/KnockoutCollection');
-var koMapping = requirejs('knockout-mapping');
+var KnockoutCollection = boot.requirejs('app/KnockoutCollection');
+var koMapping = boot.requirejs('knockout-mapping');
 
 describe('KnockoutCollection', function() {
   beforeEach(function() {
