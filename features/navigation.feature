@@ -29,3 +29,29 @@ Feature: navigation
     | ------model        |  
     | ------win          |  
     | --Kunden           |  
+
+    When I press the delete-button from "INT"
+
+    And I should see the table with pages:
+    | title              |  
+    | Startseite         |  
+    | --Unternehmen      |  
+    | --Produkte         |  
+    | --Dienstleistungen |  
+    | --Lösungen         |  
+    | ----HMS            |  
+    | ----HTS            |  
+    | --Kunden           |  
+
+    When I press "Speichern"
+    And I reload the tab
+
+    Then I should see the table with pages:
+    | title              |  
+    | Startseite         |  
+    | --Unternehmen      |  
+    | --Produkte         |  
+    | --Dienstleistungen |  
+    | ----HMS            |  
+    | ----HTS            |  
+    | --Kunden           |  

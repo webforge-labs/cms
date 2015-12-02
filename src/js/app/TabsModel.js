@@ -34,7 +34,6 @@ define(['knockout', 'knockout-mapping', './KnockoutCollection', 'modules/dispatc
       return tab;
     };
 
-
     this.select = function(tab, e) {
       var activeTab = that.activeTab();
 
@@ -71,11 +70,19 @@ define(['knockout', 'knockout-mapping', './KnockoutCollection', 'modules/dispatc
       }
 
       tabs.removeElement(tab);
+      amplify.publish('cms.tabs.closed', tab);
     };
 
     this.add = function(tab) {
       tabs.add(tab);
       amplify.publish('cms.tabs.added', tab);
+    };
+
+    this.reload = function() {
+      var tab = that.activeTab();
+
+      tab.reset();
+      loadContents(tab);
     };
   };
 });

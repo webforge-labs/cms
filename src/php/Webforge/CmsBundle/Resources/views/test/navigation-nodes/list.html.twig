@@ -3,7 +3,14 @@
 
   <script type="text/html" id="navigation-node-template">
     <li class="dd-item" data-bind="attr: {'data-id': id }">
-      <div class="btn btn-default btn-block dd-handle" data-bind="text: title"></div>
+    <div class="dd-handle btn btn-default btn-block">
+      <span data-bind="text: title"></span>
+      <div class="btn-group dd-nodrag">
+        <button type="button" role="edit" class="btn btn-primary"><i class="fa fa-pencil"></i></button>
+        <button data-bind="click: $root.navigation.remove" type="button" role="delete" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+      </div>
+    </div>
+
       <!-- ko if: children().length -->
       <ol class="dd-list" data-bind="template: { name: 'navigation-node-template', foreach: children }">
       </ol>

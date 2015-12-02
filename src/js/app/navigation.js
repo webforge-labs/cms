@@ -3,21 +3,45 @@ define(['knockout', 'knockout-mapping', 'jquery-nestable'], function(ko, koMappi
   var NavigationWidget = function(data, $tab) {
     var that = this;
 
-    koMapping.fromJS(data, {}, this);
+    var nodes = {};
+
+    var idKey = function(data) {
+      return ko.unwrap(data.id);
+    };
+
+    var mapping = {
+      navigation: {
+        key: idKey,
+        create: function(options) {
+          var node = koMapping.fromJS(options.data, {children: this});
+
+          nodes[node.id()] = node;
+          return node;
+        }
+      }
+    };
+
+    koMapping.fromJS(data, mapping, this);
 
     var nestedOptions = {
-      //listNodeName: 'ol',
-      //itemNodeName: 'li',
-      //listClass: 'dd-list',
       expandBtnHTML: '',
       collapseBtnHTML: '',
-      maxDepth: 20,
-      //placeClass: 'ui-state-highlight ui-corner-all'
+      maxDepth: 20
     };
 
     var $dd = $tab.find('.dd');
 
     $dd.nestable(nestedOptions);
+
+    this.remove = function(node, e) {
+      if (node.parent) {
+        var parent = nodes[node.parent.id()];
+
+        parent.children.mappedRemove(function(id) {
+          return id === node.id();
+        });
+      }
+    };
 
     this.serialize = function() {
       var data, depth = 0, list = $dd.data('nestable');

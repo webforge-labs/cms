@@ -38,7 +38,7 @@ builder
 
   .addConfigured('js', 'bootstrap')
   .addConfigured('js', 'jquery')
-  .addConfigured('js', 'knockout')
+  .addConfigured('js', 'knockout', { debug: isDevelopment })
   .addConfigured('js', 'knockoutMapping')
 //  .addConfigured('js', 'cookie-monster', { shimney: true })
 //  .addConfigured('js', 'json', { shimney: true})

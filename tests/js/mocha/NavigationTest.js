@@ -1,8 +1,8 @@
 var boot = require('./bootstrap');
 var expect = boot.expect;
-var koMapping = boot.requirejs('knockout-mapping');
 var cukedZombie = require('cuked-zombie');
 var _ = require('lodash');
+var Dragger = require('../dragger');
 
 describe('Navigation', function() {
   before(function(done) { // execute once
@@ -64,7 +64,6 @@ describe('Navigation', function() {
   it('should serialize the fixture', function () {
     //https://github.com/webforge-labs/webforge-testdata-repository/blob/master/lib/Webforge/TestData/NestedSet/Hgdrn.php
     var navigation = this.koMain().navigation;
-
     var nodes = flat(navigation.serialize());
 
 /*
@@ -77,8 +76,8 @@ describe('Navigation', function() {
 6      HTS
 7      INT
 8         container
-9          model
-10          win
+9         model
+10        win
 11   Kunden
 */
 
@@ -89,6 +88,20 @@ describe('Navigation', function() {
     expect(nodes[8]).to.have.property('title', 'container');
     expect(nodes[8]).to.have.property('depth', 3);
     expect(nodes[11]).to.have.property('depth', 1);
+  });
+
+  it.skip("should serialize the right parent if nodes are moved by mouse", function() {
+    var navigation = this.koMain().navigation;
+    
+    // move container to Lösungen
+    // 
+    // this is not possible because elements aren't drawed in zombie (looks like this)
+    var dragger = new Dragger(this.getjQuery(), this.browser.window);
+    var containerItem = this.css('.dd-item:has(.btn:contains("container"))').exists().get();
+
+    dragger.simulateDrag(containerItem, { dx: 0, dy: -100});
+
+    var nodes = flat(navigation.serialize());
   });
 
 });

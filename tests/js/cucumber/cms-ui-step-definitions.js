@@ -1,5 +1,7 @@
-module.exports = function(expect, commons) {
+module.exports = function(expect, commons, fn) {
   /* jshint expr:true */
+
+  this.fn = fn;
 
   expect = require('chai').expect;
 
@@ -58,6 +60,12 @@ module.exports = function(expect, commons) {
     this.findTab(label, { shouldExist: false });
   });
 
+  this.When(/^I reload the tab$/, function (callback) {
+    var amplify = this.browser.window.require('amplify');
+    amplify.publish('cms.tabs.reload');
+    callback();
+  });
+
   this.When(/^I click on "([^"]*)" in section "([^"]*)" in the sidebar$/, function (link, section, callback) {
     var $a = this.findSidebarLink(link, section).get();
     
@@ -67,6 +75,13 @@ module.exports = function(expect, commons) {
   this.Then(/^the content from the active tab contains a headline "([^"]*)"$/, function (headlineText, callback) {
     this.activeTabContent().css('h2:contains("'+headlineText+'")').exists();
     callback();
+  });
+
+  this.When(/^I press "([^"]*)"$/, function (text, callback) {
+    this.util.pressButton(
+      this.util.textButton(text),
+      callback
+    );
   });
 
   this.Then(/^I see "([^"]*)" as loggedin user$/, function (name) {
@@ -84,7 +99,7 @@ module.exports = function(expect, commons) {
       var indent = new Array($li.parents('.dd-list').length).join('--');
 
       nodes.push({
-        title: indent+$li.find('.dd-handle:first').text()
+        title: indent+$li.find('.dd-handle:first > span').text()
       })
     });
 
@@ -98,5 +113,12 @@ module.exports = function(expect, commons) {
       assertion.message = assertion.message + "\n" + delta;
       throw assertion;
     }
+  });
+
+  this.When(/^I press the delete\-button from "([^"]*)"$/, function (arg1, callback) {
+    // note that the first nav item might contain in .dd-item the text from arg1 (because the text is contained in the children nested somewhere)
+    var button = this.activeTabContent().css('.dd-item .dd-handle:has(span:contains("'+arg1+'")) .btn[role=delete]').exists().get();
+
+    this.util.pressButton(button, callback);
   });
 };

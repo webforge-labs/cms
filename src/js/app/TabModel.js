@@ -21,6 +21,11 @@ define(['knockout', 'knockout-mapping', 'jquery', 'modules/translator', 'amplify
       this.contents = ko.observable('<i class="fa fa-spinner"></i>');
     }
 
+    this.reset = function() {
+      that.wasLoaded(false);
+      that.hasError(false);
+    }
+
     this.contentLoaded = function(response) {
       that.contents(response.text);
       that.hasError(false);

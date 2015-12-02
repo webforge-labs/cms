@@ -44,8 +44,22 @@ define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'amplify'],
         amplify.store('cms.tabs', storedTabs);
       });
 
+      amplify.subscribe('cms.tabs.closed', function(tab) {
+        var storedTabs = amplify.store('cms.tabs'); // get current stored tabs (always)
+
+        if (storedTabs[tab.id()]) {
+          delete storedTabs[tab.id()];
+          amplify.store('cms.tabs', storedTabs);
+        }
+      });
+
       amplify.subscribe('cms.tabs.active', function(tab) {
         amplify.store('cms.tabs.active', tab.id());
+      });
+
+      amplify.subscribe('cms.tabs.reload', function(tab) {
+        console.log('reloading tabs');
+        that.tabs.reload();
       });
     };
 
