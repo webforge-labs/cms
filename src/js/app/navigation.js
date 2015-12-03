@@ -43,7 +43,7 @@ define(['knockout', 'knockout-mapping', 'jquery-nestable'], function(ko, koMappi
       }
     };
 
-    this.serialize = function() {
+    this.serializeStructure = function() {
       var data, depth = 0, list = $dd.data('nestable');
 
       var step  = function(level, depth, parent) {
@@ -52,7 +52,12 @@ define(['knockout', 'knockout-mapping', 'jquery-nestable'], function(ko, koMappi
         items.each(function() {
           var $li   = $(this);
           var item = koMapping.toJS(ko.dataFor($li.get(0)));
-          item.parent = parent;
+          
+          // simplify parent (without parent children because json cannot convert circular references)
+          item.parent = parent ? {
+            id: parent.id
+          } : null;
+
           var sub  = $li.children(list.options.listNodeName);
           
           if (sub.length) {
@@ -70,8 +75,30 @@ define(['knockout', 'knockout-mapping', 'jquery-nestable'], function(ko, koMappi
       return data;
     };
 
+    this.serialize = function() {
+      var flat = [];
+
+      var DFS = function (node, parent, depth) {
+
+        flat.push({
+          id: node.id(),
+          parent: parent ? parent.id() : null,
+          title: node.title(),
+          depth: depth
+        });
+
+        ko.utils.arrayForEach(node.children(), function(childNode) {
+          DFS(childNode, node, depth+1);
+        });
+      };
+
+      DFS(that.navigation, null, 0);
+
+      return flat;
+    };
+
     this.save = function() {
-      console.log(that.serialize());
+      console.log(JSON.stringify(that.serialize(), null, 2));
     }
   };
 

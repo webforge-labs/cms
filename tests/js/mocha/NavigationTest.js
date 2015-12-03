@@ -37,34 +37,10 @@ describe('Navigation', function() {
     });
   });
 
-  var flat = function(serializedNavigation) {
-    var flatNodes = [];
-
-    var DFS = function (nav, parent, depth) {
-      nav.forEach(function(node) {
-        flatNodes.push({
-          title: node.title,
-          parent: node.parent ? node.parent.title : undefined,
-          depth: depth
-        });
-
-        if (node.children.length) {
-          DFS(node.children, node, depth+1);
-        }
-      });
-    };
-
-    expect(serializedNavigation).to.be.a('Array').and.to.have.length(1);
-
-    DFS(serializedNavigation, null, 0);
-
-    return flatNodes;
-  };
-
   it('should serialize the fixture', function () {
     //https://github.com/webforge-labs/webforge-testdata-repository/blob/master/lib/Webforge/TestData/NestedSet/Hgdrn.php
     var navigation = this.koMain().navigation;
-    var nodes = flat(navigation.serialize());
+    var nodes = navigation.serialize();
 
 /*
 0  Startseite
@@ -84,8 +60,11 @@ describe('Navigation', function() {
     expect(nodes).to.have.length(12);
 
     expect(nodes[0]).to.have.property('title', 'Startseite');
+    expect(nodes[0]).to.have.property('parent', null);
     expect(nodes[4]).to.have.property('title', 'Lösungen');
+    expect(nodes[4]).to.have.property('parent', nodes[0].id);
     expect(nodes[8]).to.have.property('title', 'container');
+    expect(nodes[8]).to.have.property('parent', nodes[7].id);
     expect(nodes[8]).to.have.property('depth', 3);
     expect(nodes[11]).to.have.property('depth', 1);
   });
@@ -101,7 +80,7 @@ describe('Navigation', function() {
 
     dragger.simulateDrag(containerItem, { dx: 0, dy: -100});
 
-    var nodes = flat(navigation.serialize());
+    var nodes = navigation.serialize();
   });
 
 });
