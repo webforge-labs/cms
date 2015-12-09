@@ -11,8 +11,6 @@
         "php": ">=5.4.0",
         
         "doctrine/orm": ">=2.2.3,<2.5",
-        "twig/twig": "^2.0@dev",
-        "silex/silex": "^2.0@dev",
         "webforge/utils": "^1.0@dev",
         "symfony/symfony": "2.7.*",
         "doctrine/doctrine-bundle": "^1.6@dev",
@@ -22,7 +20,7 @@
         "jms/serializer-bundle": "^1.1@dev",
         "webmozart/json": "^1.1@dev",
         "jbroadway/urlify": "^1.0@dev",
-        "symfony/var-dumper": "^3.0@dev",
+        "symfony/var-dumper": "2.7.*@stable",
         "friendsofsymfony/user-bundle": "2.0.*",
         "webforge/doctrine": "1.2.*",
         "h4cc/alice-fixtures-bundle": "0.5.*",
@@ -42,6 +40,9 @@
 
     "extra": {
         "symfony-app-dir": "app",
-        "symfony-web-dir": "www"
+        "symfony-web-dir": "www",
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
     }
 }
