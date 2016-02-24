@@ -76,7 +76,7 @@ define(['knockout', 'knockout-mapping', 'jquery-nestable'], function(ko, koMappi
     };
 
     this.serialize = function() {
-      var flat = [];
+      var flat = [], guid = 1;
 
       var DFS = function (node, parent, depth) {
 
@@ -84,8 +84,11 @@ define(['knockout', 'knockout-mapping', 'jquery-nestable'], function(ko, koMappi
           id: node.id(),
           parent: parent ? parent.id() : null,
           title: node.title(),
-          depth: depth
+          depth: depth,
+          guid: 'node-guid-'+guid
         });
+
+        guid++;
 
         ko.utils.arrayForEach(node.children(), function(childNode) {
           DFS(childNode, node, depth+1);

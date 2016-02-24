@@ -1,4 +1,4 @@
-define(['knockout', 'knockout-mapping', './KnockoutCollection', 'modules/dispatcher', 'amplify'], function(ko, koMapping, KnockoutCollection, dispatcher, amplify) {
+define(['knockout', 'knockout-mapping', 'knockout-collection', 'modules/dispatcher', 'amplify'], function(ko, koMapping, KnockoutCollection, dispatcher, amplify) {
 
   return function() {
     var that = this;

@@ -59,6 +59,10 @@ describe('Navigation', function() {
 
     expect(nodes).to.have.length(12);
 
+    nodes.forEach(function(node) {
+      expect(node).to.have.property('guid');
+    });
+
     expect(nodes[0]).to.have.property('title', 'Startseite');
     expect(nodes[0]).to.have.property('parent', null);
     expect(nodes[4]).to.have.property('title', 'Lösungen');

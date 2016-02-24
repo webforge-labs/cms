@@ -2,7 +2,7 @@
   "name": "webforge-cms",
   "version": "1.0.0",
   "description": "",
-  "main": "gulpfile.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "gulp build",
@@ -24,12 +24,16 @@
     "hogan.js": "^3.0.2",
     "jquery": "^2.1.4",
     "knockout": "^3.3.0",
+    "knockout-collection": "^1.0.0",
     "knockout-mapping": "^2.5.0",
     "moment": "^2.10.6",
     "requirejs": "^2.1.20",
-    "shimney-amplify": "^1.1.2-build.3",
-    "shimney-lodash": "^3.10.1",
-    "shimney-superagent": "^1.4.0",
+    "requirejs-text": "^2.0.12",
+    "shimney-amplify": "^1.1.2-build.4",
+    "shimney-jquery": "^1.8.3-build.2",
+    "shimney-lodash": "^3.10.1-build.2",
+    "shimney-requirejs-json": "^1.0.3",
+    "shimney-superagent": "^1.4.0-build.2",
     "superagent": "^1.4.0",
     "webforge-js-components": "^1.0.6"
   },
@@ -42,7 +46,7 @@
     "gulp-sass": "^2.1.0",
     "json-diff": "^0.3.1",
     "mocha": "^2.3.3",
-    "webforge-js-builder": "^1.0.4",
+    "webforge-js-builder": "^1.1.3",
     "yargs": "^3.29.0"
   }
 }

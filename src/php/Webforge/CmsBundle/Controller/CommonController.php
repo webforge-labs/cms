@@ -5,6 +5,8 @@ namespace Webforge\CmsBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Webforge\Common\ClassUtil;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Webmozart\Json\JsonDecoder;
 
 class CommonController extends Controller {
 
@@ -18,7 +20,23 @@ class CommonController extends Controller {
     }
   }
 
+  protected function getEntityFQN($name) {
+    return ClassUtil::expandNamespace($name, 'Webforge\CmsBundle\Entity');
+  }
+
   protected function getRepository($name) {
-    return $this->em->getRepository(ClassUtil::expandNamespace($name, 'Webforge\CmsBundle\Entity'));
+    return $this->em->getRepository($this->getEntityFQN($name));
+  }
+
+  protected function retrieveJsonBody(Request $request) {
+    $body = (string) $request->getContents();
+
+    $json = new JsonDecoder();
+
+    try {
+      return $json->decode($body);
+    } catch (\Exception $e) {
+      throw new BadRequestHttpException('Invalid json message received.', 0, $e);
+    }
   }
 }

@@ -39,4 +39,12 @@ class NavigationNode extends CompiledNavigationNode {
       )
     );
   }
+
+  public function generateSlugs() {
+
+  }
+
+  public function isNew() {
+    return $this->id <= 0;
+  }
 }

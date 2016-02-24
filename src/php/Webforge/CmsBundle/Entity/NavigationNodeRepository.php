@@ -35,4 +35,20 @@ class NavigationNodeRepository extends \Doctrine\ORM\EntityRepository {
     return $qb->getQuery()->getSingleResult();
   }
 
+  /**
+   * Returns all Nodes (not filtered in any way)
+   * 
+   * @return array
+   */
+  public function findAllNodes() {
+    $qb = $this->createQueryBuilder('node');
+    /*
+    $qb->addSelect('page');
+    $qb->leftJoin('node.page', 'page');
+    */
+    
+    $query = $qb->getQuery();
+    
+    return $query->getResult();
+  }
 }
