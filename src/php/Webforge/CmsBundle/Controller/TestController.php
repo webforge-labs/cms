@@ -96,4 +96,12 @@ class TestController extends CommonController {
       'data'=>json_encode($data, JSON_PRETTY_PRINT)
     ));
   }
+
+  /**
+   * @Route("/prototypes/layout-manager", name="test_prototypes_layout_manager")
+   * @Method("GET")
+   */
+  public function protoLayoutManagerAction() {
+    return $this->render('WebforgeCmsBundle:test/prototypes:layout-manager.html.twig', array());
+  }
 }

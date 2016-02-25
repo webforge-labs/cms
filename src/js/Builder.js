@@ -8,7 +8,7 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
 
   var cmsDir = require('path').resolve(__dirname, '..', '..');
 
-  this.jsBuilder = new WebforgeBuilder(gulp, { root: rootDir, dest: "www/assets", moduleSearchPaths: [cmsDir] }, require);
+  this.jsBuilder = new WebforgeBuilder(gulp, { root: rootDir, dest: "www/assets", moduleSearchPaths: [cmsDir] }, rootRequire);
 
   this.configure = function() {
     var builder = that.jsBuilder;
@@ -80,6 +80,10 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
     builder.add('js', 'requirejs-json')
       .src(cmsDir+'/src/js/lib/requirejs-json.js')
       .pipe(rename, 'json.js');
+
+    builder.add('js', 'knockout-dragdrop')
+      .src(builder.resolveModule('knockout-dragdrop')+'/knockout.dragdrop.js')
+      .pipe(rename, 'knockout-dragdrop.js');
 
     builder.add('js', 'jquery-nestable')
       .src(cmsDir+'/src/js/lib/jquery.nestable.js')
