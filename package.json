@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "chai": "^3.4.1",
-    "cuked-zombie": "~2.1.1",
+    "cuked-zombie": "~3.0.1",
     "gulp": "^3.9.0",
     "gulp-hogan-compile": "^0.4.1",
     "gulp-rename": "^1.2.2",
