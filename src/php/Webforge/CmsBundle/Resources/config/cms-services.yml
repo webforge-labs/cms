@@ -1,8 +1,4 @@
 services:
-    # hook the datetime handler into jms serializer to convert through frontend and backend
-    datetimehandler:
-      class:      Webforge\CmsBundle\DateTimeHandler
-      arguments: []
-      tags: 
-        - { name: jms_serializer.subscribing_handler }
-        -  { name: h4cc_alice_fixtures.provider }
+    # please not that the datetime handler is loaded from the dependency injection extension, because we cannot load from
+    #imports:
+    #  - { resource: '../../vendor/webforge/symfony/Resources/config/services.yml' }

@@ -24,7 +24,8 @@
         "friendsofsymfony/user-bundle": "2.0.*",
         "webforge/doctrine": "1.2.*",
         "h4cc/alice-fixtures-bundle": "0.5.*",
-        "webforge/collections": "1.0.*@stable"
+        "webforge/collections": "1.0.*@stable",
+        "webforge/symfony": "1.0.*@stable"
     },
     "require-dev": {
         "webforge/testdata-repository": "0.2.2-alpha"

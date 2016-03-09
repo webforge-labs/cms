@@ -15,6 +15,7 @@ class WebforgeCmsExtension extends Extension {
       new FileLocator(__DIR__.'/../Resources/config')
     );
 
+    $loader->load($container->getParameter('root_directory').'/vendor/webforge/symfony/Resources/config/services.yml');
     $loader->load('cms-services.yml');
   }
 }
