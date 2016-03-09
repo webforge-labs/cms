@@ -1,0 +1,6 @@
+
+#cms:
+#  resource: "@WebforgeCmsBundle/Controller/ACommonCMSControllerWhichIsntCreatedYet"
+#  prefix: /cms
+#  type:     annotation
+

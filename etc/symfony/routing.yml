@@ -1,14 +1,7 @@
-home:
-  path: /
-  defaults:
-      _controller: FrameworkBundle:Redirect:urlRedirect
-      path: /cms
-      permanent: true  
-
 cms:
-    resource: "@WebforgeCmsBundle/Controller"
-    prefix: /cms
-    type:     annotation
+  resource: "@WebforgeCmsBundle/Resources/config/routing/all.yml"
 
-fos_user:
-    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+testing:
+  resource: "@WebforgeCmsBundle/Controller/TestController.php"
+  prefix:   /cms
+  type:     annotation
