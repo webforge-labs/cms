@@ -48,9 +48,9 @@ class GulpBuilderTest extends \PHPUnit_Framework_TestCase {
 
     $test('js/WebforgeCmsBundle/translations-compiled.json');
 
-    $test('js/app/main.js');
+    $test('js/cms/main.js');
 
-    $test('css/project.css');
+    $test('css/webforge-cms.css');
 
     $test('js/text.js');
     $test('js/json.js');

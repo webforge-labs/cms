@@ -63,6 +63,11 @@ define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'amplify'],
       });
     };
 
+    this.createContext = function(name, model, $context) {
+      that[name] = model;
+      return that.bindTo($context);
+    };
+
     this.bindTo = function($element) {
       if (!$element.length) {
         throw new Error('you provided an empty jquery object in main.bindTo()');

@@ -8,7 +8,8 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
 
   var cmsDir = require('path').resolve(__dirname, '..', '..');
 
-  this.jsBuilder = new WebforgeBuilder(gulp, { root: rootDir, dest: "www/assets", moduleSearchPaths: [cmsDir] }, rootRequire);
+  // we pass "our" require here on purpose (but i have forgotten why)
+  this.jsBuilder = new WebforgeBuilder(gulp, { root: rootDir, dest: "www/assets", moduleSearchPaths: [cmsDir] }, require);
 
   this.configure = function() {
     var builder = that.jsBuilder;
@@ -25,15 +26,15 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
 
           modules: [
             {
-              name: "app/main"
+              name: "cms/main"
             },
             {
-              name: "app/login"
+              name: "cms/login"
             },
           ],
         }
       })
-    //  .registerTask('templates', { path: 'app/Resources/tpl' })
+    //  .registerTask('templates', { path: 'cms/Resources/tpl' })
       .addConfigured('js', 'bootstrap')
       .addConfigured('js', 'jquery')
       .addConfigured('js', 'knockout', { debug: isDevelopment })
@@ -56,9 +57,9 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
     builder.add('fonts', 'titilium')
       .src(cmsDir+'/Resources/fonts/**/*');
 
-    builder.add('js', 'app')
-      .src(cmsDir+'/src/js/app/**/*.js')
-      .pipe(builder.dest, 'app')
+    builder.add('js', 'cms')
+      .src(cmsDir+'/src/js/cms/**/*.js')
+      .pipe(builder.dest, 'cms')
 
     builder.add('js', 'modules')
       .src(cmsDir+'/src/js/modules/**/*.js')
