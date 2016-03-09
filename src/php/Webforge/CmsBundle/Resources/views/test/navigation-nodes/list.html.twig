@@ -26,7 +26,7 @@
   <p class="m-t-md"><button type="button" data-bind="click: save" class="btn btn-primary">Speichern</button></p>
 
   <script type="text/javascript">
-  require(['app/navigation', 'modules/main'], function(controller, main) {
+  require(['cms/navigation', 'modules/main'], function(controller, main) {
     controller({{data|raw}}, main, $('#{{tabId}}').find('.navigation-panel'));
   });
   </script>

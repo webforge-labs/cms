@@ -5,7 +5,7 @@
 
    {% block requirejs %}
    <script type="text/javascript">
-     require(['app/main'], function(main) {
+     require(['cms/main'], function(main) {
        main({{data|raw}});
      });
    </script>
