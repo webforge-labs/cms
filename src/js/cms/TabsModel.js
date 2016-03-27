@@ -1,4 +1,4 @@
-define(['knockout', 'knockout-mapping', 'knockout-collection', 'modules/dispatcher', 'amplify'], function(ko, koMapping, KnockoutCollection, dispatcher, amplify) {
+define(['knockout', 'knockout-mapping', 'knockout-collection', 'cms/modules/dispatcher', 'amplify'], function(ko, koMapping, KnockoutCollection, dispatcher, amplify) {
 
   return function() {
     var that = this;
@@ -41,6 +41,9 @@ define(['knockout', 'knockout-mapping', 'knockout-collection', 'modules/dispatch
         activeTab.deactivate();
       }
 
+      // get the tab that is already attached, to avoid duplicate objects
+      tab = tabs.get(tab.id());
+
       tab.activate();
       that.activeTab(tab);
       amplify.publish('cms.tabs.active', tab);
@@ -65,7 +68,7 @@ define(['knockout', 'knockout-mapping', 'knockout-collection', 'modules/dispatch
       tab.deactivate();
       
       // if tab was active we have no active tab anymore
-      if (activeTab.id() === tab.id()) {
+      if (activeTab && activeTab.id() === tab.id()) {
         that.activeTab(undefined);
       }
 

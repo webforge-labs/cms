@@ -1,4 +1,4 @@
-define(['knockout', 'knockout-mapping', 'jquery', 'modules/translator', 'amplify'], function(ko, koMapping, $, translator, amplify) {
+define(['knockout', 'knockout-mapping', 'jquery', 'cms/modules/translator', 'amplify'], function(ko, koMapping, $, translator, amplify) {
   
   return function(data) {
     var that = this;
