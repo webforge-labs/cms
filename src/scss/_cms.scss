@@ -14,3 +14,6 @@ $spacer-y:                   $spacer;
 // http://v4-alpha.getbootstrap.com/components/utilities/#margin
 @import 'cms/spacing';
 @import 'cms/nestable';
+
+// copied from https://github.com/eternicode/bootstrap-datepicker/blob/master/dist/css/datepicker3.css
+@import 'vendor/datepicker3';

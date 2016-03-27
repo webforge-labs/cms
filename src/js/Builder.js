@@ -11,6 +11,8 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
   // we pass "our" require here on purpose (but i have forgotten why)
   this.jsBuilder = new WebforgeBuilder(gulp, { root: rootDir, dest: "www/assets", moduleSearchPaths: [cmsDir] }, require);
 
+  this.mainTasks = ['javascript', 'fonts', 'sass', 'images'];
+
   this.configure = function() {
     var builder = that.jsBuilder;
 
@@ -89,6 +91,14 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
     builder.add('js', 'jquery-nestable')
       .src(cmsDir+'/src/js/lib/jquery.nestable.js')
       .pipe(rename, 'jquery-nestable.js');
+    
+    builder.add('js', 'notify')
+      .src(builder.resolveModule('bootstrap-notify')+'/bootstrap-notify.js')
+      .pipe(rename, 'bootstrap-notify.js');
+
+    builder.add('js', 'datepicker')
+      .src(builder.resolveModule('bootstrap-datepicker')+'/bootstrap-datepicker.js')
+      .pipe(rename, 'bootstrap-datepicker.js');
 
     gulp.task('images', ['clean'], function() {
       return gulp.src(cmsDir+'/Resources/img/**/*')
@@ -105,7 +115,7 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
       // this is a hack to have some selective components from bootstrap overriden without copying the whole bootstrap.scss with all its @imports
       importer: function(url, prev, done) {
         if (url.indexOf('bootstrap/') === 0) {
-          var component = url.substr('boostrap/'.length+1);
+          var component = url.substr('bootstrap/'.length+1);
           var file = cmsDir+'/src/scss/bootstrap/_'+component+'.scss';
           try {
             var stats = fs.lstatSync(file);
@@ -122,7 +132,7 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
       }
     };
 
-    gulp.task('sass', ['clean'], function() {
+    var sassTask = function() {
       try {
         return gulp.src('src/scss/*.scss')
         .pipe(
@@ -133,12 +143,15 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
       } catch (exc) {
         console.log(exc);
       }
-    });
+    };
 
-    gulp.task('build', ['javascript', 'fonts', 'sass', 'images'], function() {});
+    gulp.task('sass', ['clean'], sassTask);
+    gulp.task('sass-only', [], sassTask);
+
+    gulp.task('build', this.mainTasks, function() {});
 
     gulp.task('watch', ['build'], function() {
-      gulp.watch('src/scss/**/*.scss', ['sass']);
+      gulp.watch('src/scss/**/*.scss', ['sass-only']);
       gulp.watch('Resources/tpl/**/*.mustache', ['build']);
       gulp.watch('node_modules/webforge-js-components/src/js/**/*', ['build']);
       gulp.watch('node_modules/webforge-js-components/Resources/tpl/**/*', ['build']);

@@ -58,7 +58,6 @@ define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'amplify'],
       });
 
       amplify.subscribe('cms.tabs.reload', function(tab) {
-        console.log('reloading tabs');
         that.tabs.reload();
       });
     };
