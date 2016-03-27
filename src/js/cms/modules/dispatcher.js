@@ -3,16 +3,22 @@ define(['superagent', 'jquery', 'lodash'], function(request, $, _) {
   var Dispatcher = function() {
     var that = this;
 
-    this.send = function(method, url, body, accept) {
+    this.send = function(method, url, body, accept, withRequest) {
       var d = $.Deferred();
 
       if (_.isArray(url)) {
         url = '/'+url.join('/');
       }
 
-      request(method, url)
+      var req = request(method, url)
+        .accept(accept || 'json');
+
+      if (withRequest) {
+        withRequest(req);
+      }
+
+      req
         .send(body)
-        .accept(accept || 'json')
         .end(function(err, response) {
           if (response.ok) {
             d.resolve(response);
