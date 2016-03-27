@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Webforge\Common\ClassUtil;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Webmozart\Json\JsonDecoder;
+use Symfony\Component\HttpFoundation\Request;
 
 class CommonController extends Controller {
 
@@ -29,7 +30,7 @@ class CommonController extends Controller {
   }
 
   protected function retrieveJsonBody(Request $request) {
-    $body = (string) $request->getContents();
+    $body = (string) $request->getContent();
 
     $json = new JsonDecoder();
 
