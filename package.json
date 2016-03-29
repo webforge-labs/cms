@@ -1,6 +1,6 @@
 {
   "name": "webforge-cms",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -39,7 +39,6 @@
     "superagent": "^1.4.0",
     "webforge-js-components": "^1.0.7",
     "bootstrap-datepicker": "^1.6.0",
-
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.1.0",
     "gulp-hogan-compile": "^0.4.1",
