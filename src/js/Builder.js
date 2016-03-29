@@ -11,7 +11,24 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
   // we pass "our" require here on purpose (but i have forgotten why)
   this.jsBuilder = new WebforgeBuilder(gulp, { root: rootDir, dest: "www/assets", moduleSearchPaths: [cmsDir] }, require);
 
+  this.jsNamespaces = [];
   this.mainTasks = ['javascript', 'fonts', 'sass', 'images'];
+  this.requirejs = {
+    mainConfigFile: cmsDir+'/src/js/config.js', // adds some paths here. But notice: baseUrl will be overriden anyway through this config
+
+    paths: [],
+    modules: [
+      {
+        name: "cms/main"
+      },
+      {
+        name: "cms/login"
+      },
+      {
+        name: "cms/navigation"
+      }
+    ]
+  };
 
   this.configure = function() {
     var builder = that.jsBuilder;
@@ -20,22 +37,7 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
       .registerTask('clean')
       .registerTask('fonts')
       .registerTask('requirejs-config', { file: isDevelopment ? cmsDir+'/src/js/config-dev.js' : cmsDir+'/src/js/config.js'} )
-      .registerTask('javascript', {
-        combine: !isDevelopment,
-        requirejs: {
-          
-          mainConfigFile: cmsDir+'/src/js/config.js', // adds some paths here. But notice: baseUrl will be overriden anyway through this config
-
-          modules: [
-            {
-              name: "cms/main"
-            },
-            {
-              name: "cms/login"
-            },
-          ],
-        }
-      })
+      .registerTask('javascript', { combine: !isDevelopment, requirejs: that.requirejs })
     //  .registerTask('templates', { path: 'cms/Resources/tpl' })
       .addConfigured('js', 'bootstrap')
       .addConfigured('js', 'jquery')
@@ -63,9 +65,11 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
       .src(cmsDir+'/src/js/cms/**/*.js')
       .pipe(builder.dest, 'cms')
 
-    builder.add('js', 'modules')
-      .src(cmsDir+'/src/js/modules/**/*.js')
-      .pipe(builder.dest, 'modules')
+    that.jsNamespaces.forEach(function(ns) {
+      builder.add('js', ns.name)
+        .src(ns.dir+'/**/*.js')
+        .pipe(builder.dest, ns.name)
+    });
 
     // this could be generated from yml files with a gulp task (but not yet)
     builder.add('js', 'translations')
@@ -163,4 +167,11 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
       gulp.watch('Resources/img/**/*', ['build']);
     });
   };
+
+  this.addJsNamespace = function(name, dir) {
+    this.jsNamespaces.push({
+      name: name,
+      dir: dir
+    });
+  }
 };

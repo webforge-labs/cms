@@ -1,9 +1,10 @@
 {
     "name": "webforge/cms",
+    "description": "A cms written in knockoutjs and twitter-bootstrap on top of symfony",
 
     "autoload": {
         "psr-4": {
-            "": "src/php/",
+            "Webforge\\": "src/php/",
             "SymfonyStandard\\": "app/SymfonyStandard/"
         }
     },
