@@ -3,9 +3,9 @@
     "description": "A cms written in knockoutjs and twitter-bootstrap on top of symfony",
 
     "autoload": {
-        "psr-4": {
-            "Webforge\\": "src/php/",
-            "SymfonyStandard\\": "app/SymfonyStandard/"
+        "psr-0": {
+            "Webforge\\CmsBundle": "src/php/",
+            "Webforge\\Testing": "src/php/"
         }
     },
     "require": {
