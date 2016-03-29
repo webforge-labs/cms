@@ -29,7 +29,7 @@
     "knockout-dragdrop": "^2.4.4",
     "knockout-mapping": "^2.5.0",
     "moment": "^2.10.6",
-    "requirejs": "^2.1.20",
+    "requirejs": "~2.2.0",
     "requirejs-text": "^2.0.12",
     "shimney-amplify": "^1.1.2-build.4",
     "shimney-jquery": "^1.8.3-build.2",

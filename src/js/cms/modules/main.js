@@ -1,0 +1,1 @@
+// this file isnt used, its just to fake an empty module that represents cms/modules/main

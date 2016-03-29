@@ -20,7 +20,8 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
     paths: [],
     modules: [
       {
-        name: "cms/main"
+        name: "cms/main",
+        include: []
       },
       {
         name: "cms/login"
@@ -173,6 +174,13 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
     this.jsNamespaces.push({
       name: name,
       dir: dir
+    });
+  };
+
+  this.addTabModule = function(name) {
+    that.requirejs.modules.push({ 
+      name: name,
+      exclude: ['cms/main'] // because these are already loaded from the cms itself
     });
   }
 };
