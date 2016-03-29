@@ -2,7 +2,7 @@
   "name": "webforge-cms",
   "version": "1.0.1",
   "description": "",
-  "main": "Gulpfile.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "gulp build",
@@ -37,19 +37,20 @@
     "shimney-requirejs-json": "^1.0.3",
     "shimney-superagent": "^1.4.0-build.2",
     "superagent": "^1.4.0",
-    "webforge-js-components": "^1.0.7"
+    "webforge-js-components": "^1.0.7",
+    "bootstrap-datepicker": "^1.6.0",
+
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.1.0",
+    "gulp-hogan-compile": "^0.4.1",
+    "webforge-js-builder": "~1.1.4"
   },
   "devDependencies": {
-    "bootstrap-datepicker": "^1.6.0",
     "chai": "^3.4.1",
     "cuked-zombie": "~3.0.1",
     "gulp": "^3.9.0",
-    "gulp-hogan-compile": "^0.4.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^2.1.0",
     "json-diff": "^0.3.1",
     "mocha": "^2.3.3",
-    "webforge-js-builder": "~1.1.4",
     "yargs": "^3.29.0"
   }
 }

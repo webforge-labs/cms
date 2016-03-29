@@ -1,4 +1,5 @@
 module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
+  // put all dependencies here to dependencies not to dev-depenendencies (because other projects will use the builder)
   var rename = require('gulp-rename');
   var sass = require('gulp-sass');
   var fs = require('fs');
