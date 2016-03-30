@@ -42,7 +42,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.1.0",
     "gulp-hogan-compile": "^0.4.1",
-    "webforge-js-builder": "~1.1.4"
+    "webforge-js-builder": "~1.1.5"
   },
   "devDependencies": {
     "chai": "^3.4.1",
