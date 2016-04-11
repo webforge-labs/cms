@@ -1,6 +1,3 @@
-
-#cms:
-#  resource: "@WebforgeCmsBundle/Controller/ACommonCMSControllerWhichIsntCreatedYet"
-#  prefix: /cms
-#  type:     annotation
-
+cms_media:
+  resource: "@WebforgeCmsBundle/Controller/MediaController.php"
+  type:     annotation

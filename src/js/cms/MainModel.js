@@ -1,4 +1,4 @@
-define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'amplify'], function(ko, koMapping, Tabs, Tab, amplify) {
+define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'amplify', 'bootstrap-notify'], function(ko, koMapping, Tabs, Tab, amplify, notify) {
   
   return function(data) {
     var that = this;
@@ -62,6 +62,21 @@ define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'amplify'],
       });
     };
 
+    this.onAjaxError = function(response) {
+      var info = "";
+
+      if (response.error && response.error.message) {
+        info += "Technischer Fehler: "+response.error.message;
+      }
+
+      $.notify({
+        message: "Oh mist. Hier ist was schief gegangen. "+info
+      },{
+        delay: 0,
+        type: 'danger'
+      });
+    };
+
     this.createContext = function(name, model, $context) {
       that[name] = model;
       return that.bindTo($context);
@@ -71,6 +86,8 @@ define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'amplify'],
       if (!$element.length) {
         throw new Error('you provided an empty jquery object in main.bindTo()');
       }
+
+      amplify.subscribe('cms.ajax.error', that.onAjaxError);
 
       ko.applyBindings(that, $element.get(0));
     };

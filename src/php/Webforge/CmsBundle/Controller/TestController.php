@@ -98,10 +98,18 @@ class TestController extends CommonController {
   }
 
   /**
-   * @Route("/prototypes/layout-manager", name="test_prototypes_layout_manager")
+   * @Route("/prototypes/layout-manager")
    * @Method("GET")
    */
   public function protoLayoutManagerAction() {
     return $this->render('WebforgeCmsBundle:test/prototypes:layout-manager.html.twig', array());
+  }
+
+  /**
+   * @Route("/prototypes/file-manager")
+   * @Method("GET")
+   */
+  public function protoFileManagerAction() {
+    return $this->render('WebforgeCmsBundle:test/prototypes:file-manager.html.twig', array());
   }
 }

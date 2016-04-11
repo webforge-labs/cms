@@ -1,0 +1,10 @@
+<div data-bind="foreach: files">
+  <a data-bind="attr: { href: url }" target="_blank" class="thumbnail">
+    <img data-bind="attr: {src: thumbnails.xs.url}" alt=""/>
+  </a>
+</div>
+<div class="alert alert-info" data-bind="visible: processing">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <strong><i class="fa fa-spinner fa-spin"></i> Warte kurz..</strong> Ich kopiere gerade die Dateien ins CMS 
+</div>
+<button type="button" data-bind="click: chooseWithDropbox" class="btn btn-large btn-block btn-primary">Aus der Dropbox hinzufügen</button>
