@@ -49,6 +49,7 @@ class Kernel extends SymfonyKernel
             new \Webforge\CmsBundle\WebforgeCmsBundle(),
             new \JMS\SerializerBundle\JMSSerializerBundle(),
             new \FOS\UserBundle\FOSUserBundle(),
+            new \Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
@@ -57,7 +58,7 @@ class Kernel extends SymfonyKernel
             //$bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             //$bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
             $bundles[] = new \h4cc\AliceFixturesBundle\h4ccAliceFixturesBundle();
-            //$bundles[] = new Liip\FunctionalTestBundle\LiipFunctionalTestBundle();
+            $bundles[] = new \Liip\FunctionalTestBundle\LiipFunctionalTestBundle();
         }
 
         return $bundles;

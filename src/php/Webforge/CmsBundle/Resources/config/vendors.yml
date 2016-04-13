@@ -1,0 +1,9 @@
+knp_gaufrette:
+  adapters:
+    local_files:
+      safe_local:
+        directory:  %root_directory%/files/media
+        create:     true
+  filesystems:
+    cms_media:
+      adapter: local_files
