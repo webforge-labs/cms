@@ -4,16 +4,13 @@
   <div class="container-fluid">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">File-Manager</h3>
+        <h3 class="panel-title">Datei-Verwaltung</h3>
       </div>
       <div class="panel-body">
 
       <div class="btn-group">
-        <a class="btn btn-default"><i class="fa fa-upload"></i> Upload</a>
-        <a class="btn btn-default"><i class="fa fa-file"></i> New File</a>
-        <a data-bind="click: newFolder" class="btn btn-default"><i class="fa fa-folder-close"></i> New folder</a>
-        <a class="btn btn-default"><i class="fa fa-refresh"></i> Refresh</a>
-        <a class="btn btn-default"><i class="fa fa-remove-circle"></i> Clear Messages</a>
+        <a data-bind="click: addFilesFromDropbox" class="btn btn-default"><i class="fa fa-dropbox"></i> Dateien hinzufügen</a>
+        <a data-bind="click: newFolder" class="btn btn-default"><i class="fa fa-folder"></i> Neuer Ordner</a>
       </div>
 
       <ol class="breadcrumb m-t-1" data-bind="foreach: breadcrumbs">
@@ -24,6 +21,7 @@
       <table class="table table-hover table-condensed">
         <tbody data-bind="foreach: sortedItems">
           <tr>
+            <td><input type="checkbox" data-bind="checked: $parent.selection, checkedValue: $data"></td>
             <td><span class="fa" data-bind="css: { 'fa-folder': isDirectory, 'fa-file': isFile }"></span> <a href="#" data-bind="click: $parent.clickItem, text: label"></a></td>
           </tr>
         </tbody>
@@ -33,13 +31,14 @@
       <div class="well">No items in this folder</div>
       <!--/ko-->
 
-      <!-- footnote -->
-      <ul id="footnote" class="list-inline">
-        <li><i class="fa fa-pencil"></i> Edit</li>
-        <li><i class="fa fa-arrow-right"></i> Move / Rename</li>
-        <li><i class="fa fa-remove"></i> Remove</li>
+      <ul class="list-inline">
+        <!--ko if: hasSelection() -->
+        <!--
+        <li><a href="#" data-bind="click: moveItems"><i class="fa fa-arrow-right"></i> Verschieben / Umbenennen</a></li>
+        -->
+        <li><a class="text-danger" href="#" data-bind="click: removeItems"><i class="fa fa-trash"></i> Löschen</a></li>
+        <!--/ko-->
       </ul>
-
       </div>
     </div>
   </div>
@@ -51,27 +50,27 @@
    require(['cms/FileManager/ns', 'jquery'], function(FileManager, $) {
      var model = new FileManager.Manager({
        root: {
-         label: 'home',
+         name: 'home',
          type: 'ROOT',
          items: [
            {
-             label: '2016-03-27',
+             name: '2016-03-27',
              type: 'directory',
              items: [
                {
-                 'label': 'Foto 27.03.16, 16 14 18.jpg'
+                 'name': 'Foto 27.03.16, 16 14 18.jpg'
                },
                {
-                 'label': 'Foto 27.03.16, 16 14 21 (1).jpg'
+                 'name': 'Foto 27.03.16, 16 14 21 (1).jpg'
                },
                {
-                 'label': 'Foto 27.03.16, 16 14 21.jpg'
+                 'name': 'Foto 27.03.16, 16 14 21.jpg'
                },
                {
-                 'label': 'Foto 27.03.16, 16 14 54.jpg'
+                 'name': 'Foto 27.03.16, 16 14 54.jpg'
                },
                {
-                 'label': 'Neuer Ordner',
+                 'name': 'Neuer Ordner',
                  'type': 'directory',
                  'items': []
                }

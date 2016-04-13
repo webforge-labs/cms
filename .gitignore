@@ -10,3 +10,4 @@ composer.phar
 /files/logs
 /etc/symfony/parameters.yml
 /src/js/admin/config.js
+/files/media

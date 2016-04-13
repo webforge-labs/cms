@@ -30,12 +30,16 @@ class CommonController extends Controller {
   }
 
   protected function retrieveJsonBody(Request $request) {
-    $body = (string) $request->getContent();
+    $body = $request->getContent();
+
+    if (is_array($body) || is_object($body)) {
+      return $body;
+    }
 
     $json = new JsonDecoder();
 
     try {
-      return $json->decode($body);
+      return $json->decode((string) $body);
     } catch (\Exception $e) {
       throw new BadRequestHttpException('Invalid json message received.', 0, $e);
     }
