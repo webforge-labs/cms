@@ -5,8 +5,25 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
      var that = this;
 
      this.removeFile = function(item) {
-       alert('upsi daisy, das geht noch nicht');
-       console.log('dispatching removal of: '+item.name());
+       that.batch.push(ko.unwrap(item.key));
+     };
+
+     this.beginRemoveBatch = function() {
+       that.batch = [];
+     };
+
+     this.commitRemoveBatch = function(processing) {
+       if (that.batch.length) {
+         processing(true);
+         return dispatcher.send('DELETE', '/cms/media', { keys: that.batch }, 'json')
+          .done(function(response) {
+             processing(false);
+           })
+          .fail(function(err, response) {
+             processing(false);
+             amplify.publish('cms.ajax.error', response);
+          });
+       }
      };
    };
 
@@ -44,6 +61,14 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
 
      this.isFile = ko.computed(function() {
        return that.type() === 'file';
+     });
+
+     this.isImage = ko.computed(function() {
+       if (!that.isFile()) return false;
+
+       var mime = ko.unwrap(that.mimeType);
+
+       return mime && mime.indexOf('image/') === 0;
      });
 
      this.isDirectory = ko.computed(function() {
@@ -177,16 +202,19 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
      };
 
      this.removeItems = function() {
-       var selection = that.selection();
-       var items = that.currentItem().items; // reference to koArray
+       var selection = that.selection().slice();
 
        if (selection.length) {
+         that.sync.beginRemoveBatch();
+
          ko.utils.arrayForEach(selection, function(item) {
            that.removeItem(item);
-           items.remove(item);
          });
 
-         that.selection.removeAll();
+         that.sync.commitRemoveBatch(that.processing)
+           .done(function(response) {
+             koMapping.fromJS(response.body, mapping, that);
+           });
        }
      };
 

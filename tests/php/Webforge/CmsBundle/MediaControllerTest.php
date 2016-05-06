@@ -47,6 +47,38 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
     ;
   }
 
+  public function testImageBatchDeleting() {
+    $client = self::makeClient($this->credentials['petra']);
+
+    // we will have a database after this, that is prefilled with players and clubs and should sync with all entities meeting
+    $this->loadAliceFixtures(
+      array(
+        'users'
+      ),
+      $client
+    );
+
+    $filesystem = $this->getContainer()->get('knp_gaufrette.filesystem_map')->get('cms_media');
+    $filesystem->write('test-image.png', $GLOBALS['env']['root']->sub('Resources/img/')->getFile('tapire.png')->getContents(), $overwrite = true);
+    $filesystem->write('something/test-image2.png', $GLOBALS['env']['root']->sub('Resources/img/')->getFile('mini-single.png')->getContents(), $overwrite = true);
+
+    $json = $this->parseJSON(<<<'JSON'
+{
+  "keys": ["test-image.png", "something/test-image2.png"]
+}
+JSON
+    );
+
+    $this->sendJsonRequest($client, 'DELETE', '/cms/media', $json);
+    $this->assertJsonResponse(200, $client)
+      ->property('root')
+        ->property('type', 'ROOT')->end()
+        ->property('items')->isArray();
+
+    $this->assertFalse($filesystem->has('test-image.png'));
+    $this->assertFalse($filesystem->has('something/test-image2.png'));
+  }
+
   private function getDropboxFiles() {
     // normally link is something like: https://dl.dropboxusercontent.com/1/view/hhkjprs3c7kxk98/Theo%20Family/2016-04-07%20Besuch%20Judith%2C%20Martin%20und%20Marlene/DSC03281.JPG
     $json = $this->parseJSON(<<<'JSON'

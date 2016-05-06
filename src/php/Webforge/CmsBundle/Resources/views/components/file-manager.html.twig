@@ -49,10 +49,10 @@
   <div class="row" data-bind="foreach: chosenFiles.items">
     <div class="col-xs-3">
       <a data-bind="attr: { href: url }" target="_blank" class="thumbnail">
-        <!-- ko if: thumbnails -->
+        <!-- ko if: isImage() -->
         <img data-bind="attr: {src: thumbnails.xs.url}" alt=""/>
         <!-- /ko -->
-        <!-- ko ifnot: thumbnails -->
+        <!-- ko ifnot: isImage() -->
         <i class="fa fa-file fa-4x"></i>
         <!-- /ko -->
       </a>

@@ -41,4 +41,21 @@ class MediaController extends CommonController {
 
     return $response;
   }
+
+  /**
+   * @Route("/media")
+   * @Method("DELETE")
+   */
+  public function batchDeleteMediaAction(Request $request) {
+    $user = $this->getUser();
+    $json = $this->retrieveJsonBody($request);
+
+    $filesystem = $this->get('knp_gaufrette.filesystem_map')->get('cms_media');
+
+    foreach ($json->keys as $key) {
+      $filesystem->delete($key);
+    }
+
+    return $this->indexAction();
+  }
 }
