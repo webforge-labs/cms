@@ -1,4 +1,32 @@
 services:
-    # please not that the datetime handler is loaded from the dependency injection extension, because we cannot load from
-    #imports:
-    #  - { resource: '../../vendor/webforge/symfony/Resources/config/services.yml' }
+  # please not that the datetime handler is loaded from the dependency injection extension, because we cannot load from
+  #imports:
+  #  - { resource: '../../vendor/webforge/symfony/Resources/config/services.yml' }
+
+  webforge.liip_imagine.binary.loader.stream.cms_media:
+    class: "%liip_imagine.binary.loader.stream.class%"
+    arguments:
+      - 'gaufrette://cms_media/'
+    tags:
+      - { name: 'liip_imagine.binary.loader', loader: 'stream.cms_media' }
+
+
+  dc:
+    class: Webforge\Doctrine\Entities
+    arguments: ["@doctrine.orm.entity_manager", "%entities_namespace%"]
+
+  webforge.serialization.gaufrette_binary_handler:
+    class:      Webforge\CmsBundle\Serialization\GaufretteBinaryHandler
+    arguments: ['@knp_gaufrette.filesystem_map', 'cms_media', '@liip_imagine.cache.manager', ['xs']]
+    tags: 
+      - { name: jms_serializer.handler, direction: 'serialization', format: 'json', type: 'WebforgeGaufretteBinary', method: 'serialize' }
+#    tags: 
+#      - { name: jms_serializer.event_listener, event: serializer.post_serialize, class: WebforgeGaufretteBinary }
+
+  webforge.serialization.special_types_listener:
+    class:      Webforge\CmsBundle\Serialization\SpecialTypesListener
+    arguments:
+      - { Webforge\CmsBundle\Model\GaufretteFileInterface: WebforgeGaufretteBinary }
+    tags: 
+      - { name: jms_serializer.event_listener, event: serializer.pre_serialize }
+

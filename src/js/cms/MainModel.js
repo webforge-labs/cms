@@ -1,11 +1,14 @@
-define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'amplify', 'bootstrap-notify'], function(ko, koMapping, Tabs, Tab, amplify, notify) {
+define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'cms/FileManager/ns', 'cms/modules/dispatcher', 'amplify', 'bootstrap-notify', 'bootstrap/modal', 'cms/ko-bindings/invisible'], function(ko, koMapping, Tabs, Tab, FileManager, dispatcher, amplify, notify, bsModal) {
   
   return function(data) {
     var that = this;
 
+    this.loading = ko.observable(true);
+
     koMapping.fromJS(data, {ignore:[]}, this);
 
     this.tabs = new Tabs();
+    this.fileManager = ko.observable();
 
     var dashboard = new Tab({
       id: 'dashboard',
@@ -62,6 +65,27 @@ define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'amplify', 
       });
     };
 
+    this.openFileManager = function(options) {
+      // @TODO spin something
+      dispatcher.send('GET', '/cms/media')
+        .done(function(response) {
+          if (!that.fileManager()) {
+            var fileManager = new FileManager.Manager(response.body);
+            that.fileManager(fileManager);
+          } else {
+            that.fileManager().refreshData(response.body);
+          }
+
+          that.fileManager().reset(options);
+      
+          var $modal = $('#file-manager-modal');
+          $modal.modal({'show': true});
+
+        }).fail(function(err, response) {
+          amplify.publish('cms.ajax.error', response);
+        });
+    }
+
     this.onAjaxError = function(response) {
       var info = "";
 
@@ -75,6 +99,10 @@ define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'amplify', 
         delay: 0,
         type: 'danger'
       });
+    };
+
+    this.loaded = function() {
+      that.loading(false);
     };
 
     this.createContext = function(name, model, $context) {

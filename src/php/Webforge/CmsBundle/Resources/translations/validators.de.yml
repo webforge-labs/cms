@@ -1,0 +1,43 @@
+registration:
+  salutation: Bitte wähle eine Anrede.
+  firstName: Bitte gebe deinen Namen an.
+  lastName: Bitte gebe deinen Nachnamen an.
+  email: Bitte gebe deine E-Mail-Adresse an.
+  privacy: Bitte akzeptiere die Datenschutz-Bedingungen.
+  email_unique: Diese E-Mail-Adresse wurde bereits registriert.
+
+address:
+  street: Gebe deine Straße mit Hausnummer an.
+  zip: Gebe deine Postleitzahl an.
+  city: Gebe deinen Wohnort an.
+  phone: Gebe deine Telefonnummer an.
+
+# CMS STUFF
+user:
+  email: Geben sie eine E-Mail-Adresse an.
+  username: Geben sie einen Benutzernamen an.
+  username_regexp: "Geben sie einen Benutzernamen nur aus Zahlen, Buchstaben, . und _ bestehend an."
+
+  password:
+    tooShortMessage: 'Dein Passwort muss mindestens {{length}} Zeichen lang sein.'
+    missingLettersMessage: 'Dein Password muss mindestens einen Buchstaben enthalten.'
+    requireCaseDiffMessage: 'Dein Password muss große und kleine Buchstaben enthalten.'
+    missingNumbersMessage: 'Dein Password muss mindestens eine Zahl enthalten.'
+
+images:
+  error: Bilder konnten nicht validiert werden
+
+news:
+  published: Geben sie ein Veröffentlichungs-Datum an.
+  public: "Geben sie an, ob die News öffentlich sichtbar oder unsichtbar sein soll."
+  intern: "Geben sie an, ob die News für Teilnehmer sichtbar oder unsichtbar sein soll."
+  deal: "Geben sie an, ob dies ein Partnerangebot sein soll."
+
+image-teaser:
+  linkLabel: Geben sie eine Beschriftung für den weiterlesen-Link an.
+  headline: "Geben sie eine Überschrift für den Teaser an."
+  text: "Geben sie einen Text für den Teaser an."
+
+page-content:
+  headline: "Geben sie eine Überschrift für den Inhalt an."
+  text: "Geben sie einen Text für den Inhalt an."

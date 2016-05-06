@@ -47,6 +47,7 @@ class Kernel extends SymfonyKernel
             new \Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new \Webforge\CmsBundle\WebforgeCmsBundle(),
+            new \Liip\ImagineBundle\LiipImagineBundle(),
             new \JMS\SerializerBundle\JMSSerializerBundle(),
             new \FOS\UserBundle\FOSUserBundle(),
             new \Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),

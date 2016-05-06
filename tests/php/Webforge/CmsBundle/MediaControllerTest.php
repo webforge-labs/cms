@@ -6,7 +6,7 @@ use Symfony\Component\Process\Process;
 
 class MediaControllerTest extends \Webforge\Testing\WebTestCase {
   
-  public function testPutLineup() {
+  public function testImagesAndOtherStuffSaving() {
     $client = self::makeClient($this->credentials['petra']);
 
     // we will have a database after this, that is prefilled with players and clubs and should sync with all entities meeting
@@ -37,6 +37,8 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
             ->property('items')->isArray()
               ->key(0)
                 ->property('name', 'DSC03281.JPG')->end()
+                ->property('url')->is($this->logicalNot($this->isEmpty()))->end()
+                ->property('thumbnails')->isObject()->end()
                 ->property('key', '2016-03-27/DSC03281.JPG')->end()
               ->end()
             ->end()

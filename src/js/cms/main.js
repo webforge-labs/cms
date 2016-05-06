@@ -7,5 +7,6 @@ define(['jquery', 'knockout', './MainModel', './ko-bindings/cms-tab', './ko-bind
     ko.applyBindings(main);
 
     main.loadStoredTabs();
+    main.loaded();
   };
 });

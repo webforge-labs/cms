@@ -12,5 +12,13 @@ abstract class Item {
     $this->type = $type;
   }
 
-  abstract public function export();
+  abstract public function export(array $options);
+
+  public function getName() {
+    return $this->name;
+  }
+
+  public function getType() {
+    return $this->type;
+  }
 }

@@ -22,19 +22,11 @@ module.exports = function(expect, commons, fn) {
     });
 
     world.browser.visit('/cms', function() {
-      world.context = world.css('body').exists();
-      callback();
+      //world.waitForjQuery(function() {
+        world.context = world.css('body').exists();
+        callback();
+      //});
     });
-  });
-
-  this.Given(/^the alice fixtures were loaded:$/, {timeout: 10000}, function (string, callback) {
-    var fixtures = string.split(/\r?\n/g);
-
-    fixtures = fixtures.map(function(fixture) {
-      return commons.file('tests/files/alice/'+fixture+'.yml');
-    });
-
-    this.cli(['h4cc_alice_fixtures:load:files', '--env=dev', '--drop'].concat(fixtures), callback);
   });
 
   this.Then(/^a tab with title "([^"]*)" is added$/, function (label, callback) {
@@ -43,7 +35,13 @@ module.exports = function(expect, commons, fn) {
   });
 
   this.When(/^I (activate|select) the tab "([^"]*)"$/, function (nulll, label, callback) {
-    this.util.clickLink(this.findTabLink(label).get(), callback);
+    var world = this;
+    world.test = true;
+    this.util.clickLink(this.findTabLink(label).get(), function() {
+      world.context = world.activeTabContent();
+      console.log('assign context to world');
+      callback();
+    });
   });
 
   this.When(/^I goto the tab "([^"]*)" in section "([^"]*)" in the sidebar$/, function (label, section, callback) {
@@ -80,6 +78,13 @@ module.exports = function(expect, commons, fn) {
   this.When(/^I press "([^"]*)"$/, function (text, callback) {
     this.util.pressButton(
       this.util.textButton(text),
+      callback
+    );
+  });
+
+  this.When(/^I click (?:on\s+)?"([^"]*)" in context$/, function (text, callback) {
+    this.util.clickLink(
+      this.context.css('a:contains("'+text+'")').exists().get(),
       callback
     );
   });

@@ -30,7 +30,7 @@ class WebTestCase extends LiipWebTestCase {
     return $objects;
   }
 
-  protected function sendJsonRequest($client, $method, $url, $json) {
+  protected function sendJsonRequest($client, $method, $url, $json = NULL) {
     return $client->request(
       $method,
       $url,

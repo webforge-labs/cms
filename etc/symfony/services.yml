@@ -9,10 +9,6 @@ services:
         factory_class: "Webforge\\Common\\DateTime\\DateTime"
         factory_method: now
 
-#    dc:
-#        class: ClickTT\AppBundle\Doctrine
-#        arguments: ["@doctrine.orm.entity_manager", "%entities_namespace%"]
-
 #    graph:
 #        class: MyTTT\Ticker\Graph
 #        arguments: ["@jms_serializer"]

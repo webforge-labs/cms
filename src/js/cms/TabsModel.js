@@ -72,7 +72,7 @@ define(['knockout', 'knockout-mapping', 'knockout-collection', 'cms/modules/disp
         that.activeTab(undefined);
       }
 
-      tabs.removeElement(tab);
+      tabs.remove(tab);
       amplify.publish('cms.tabs.closed', tab);
     };
 

@@ -1,10 +1,12 @@
-<div data-bind="foreach: files">
-  <a data-bind="attr: { href: url }" target="_blank" class="thumbnail">
-    <img data-bind="attr: {src: thumbnails.xs.url}" alt=""/>
-  </a>
+<div class="row" data-bind="foreach: addedFiles">
+  <div class="col-xs-3">
+    <a data-bind="attr: { href: url }" target="_blank" class="thumbnail">
+      <img data-bind="attr: {src: thumbnails.xs.url}" alt=""/>
+    </a>
+    <a class="btn btn-xs btn-danger top-right-button" href="#" data-bind="click: $parent.removeFromAddedFiles"><i class="fa fa-chain-broken"></i></a>
+  </div>
 </div>
-<div class="alert alert-info" data-bind="visible: processing">
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-  <strong><i class="fa fa-spinner fa-spin"></i> Warte kurz..</strong> Ich kopiere gerade die Dateien ins CMS 
-</div>
-<button type="button" data-bind="click: chooseWithDropbox" class="btn btn-large btn-block btn-primary">Aus der Dropbox hinzufügen</button>
+<!--ko if: addedFiles().length == 0 -->
+<p>Es sind keine Bilder verknüpft</p>
+<!--/ko-->
+<button type="button" data-bind="click: chooseFiles" class="btn btn-large btn-block btn-primary">Dateien auswählen</button>

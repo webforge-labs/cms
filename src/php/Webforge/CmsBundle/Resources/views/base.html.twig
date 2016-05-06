@@ -2,7 +2,7 @@
   <body role="document">
     {%include 'WebforgeCmsBundle:default:navbar.html.twig' %}
 
-    <div class="container-fluid">
+    <div class="container-fluid invisible" id="content-container" data-bind="invisible: loading">
       <div class="row">
         <div class="col-xs-9" data-bind="with: tabs">
           {%include 'WebforgeCmsBundle:default:tabs.html.twig' %}
@@ -15,9 +15,12 @@
 
     {% block body %}{% endblock %}
 
-   <script type="text/javascript">
-     require(['cms/main'], function(main) {
-       main({{data|raw}});
-     });
-   </script>
+    {%include 'WebforgeCmsBundle:components:file-manager-modal.html.twig' %}
+
+    <script type="text/javascript">
+      require(['cms/main'], function(main) {
+        main({{data|raw}});
+      });
+    </script>
+
 {%include 'WebforgeCmsBundle:default:foot.html.twig' %}

@@ -6,6 +6,8 @@ class File extends Item {
 
   public $directory;
   public $key;
+  public $mimeType;
+  public $isExisting;
 
   public function __construct($name, Directory $directory) {
     $this->directory = $directory;
@@ -25,11 +27,20 @@ class File extends Item {
     return $this->items;
   }
 
-  public function export() {
-    return (object) [
+  public function getRelativePath() {
+    return '/'.ltrim($this->key, '/');
+  }
+
+  public function export(array $options) {
+    $export = (object) [
       'name'=>$this->name,
       'type'=>$this->type,
-      'key'=>$this->key
+      'key'=>$this->key,
+      'isExisting'=>$this->isExisting
     ];
+
+    $options['withFile']($this, $export);
+
+    return $export;
   }
 }

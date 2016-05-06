@@ -1,0 +1,66 @@
+<div class="btn-group">
+  <a data-bind="click: addFilesFromDropbox" class="btn btn-default"><i class="fa fa-dropbox"></i> Dateien hinzufügen</a>
+  <a data-bind="click: newFolder" class="btn btn-default"><i class="fa fa-folder"></i> Neuer Ordner</a>
+</div>
+
+<div class="alert alert-info" data-bind="visible: processing">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <strong><i class="fa fa-spinner fa-spin"></i> Warte kurz..</strong> Ich kopiere gerade die Dateien ins CMS 
+</div>
+
+<ol class="breadcrumb m-t-1" data-bind="foreach: breadcrumbs">
+  <li><a href="#" data-bind="click: $parent.clickItem, text: label"></a></li>
+</ol>
+
+<!--ko if: hasItems -->
+<table class="table table-hover table-condensed">
+  <thead>
+    <tr>
+      <th>Auswahl</th>
+      <th>Name</th>
+  </thead>
+  <tbody data-bind="foreach: sortedItems">
+    <tr>
+      <td><input type="checkbox" data-bind="checked: $parent.selection, checkedValue: $data"></td>
+      <td><span class="fa" data-bind="css: { 'fa-folder': isDirectory, 'fa-file': isFile }"></span> <a href="#" data-bind="click: $parent.clickItem, text: label"></a></td>
+    </tr>
+  </tbody>
+</table>
+<!--/ko-->
+<!--ko ifnot: hasItems -->
+<div class="well">Dieser Ordner ist leer</div>
+<!--/ko-->
+
+<!--ko if: hasSelection() -->
+<fieldset>
+  <legend>ausgewählte Dateien...</legend>
+  <ul class="list-inline">
+    <!--
+    <li><a href="#" data-bind="click: moveItems"><i class="fa fa-arrow-right"></i> Verschieben / Umbenennen</a></li>
+    -->
+    <li><a class="text-danger" href="#" data-bind="click: removeItems"><i class="fa fa-trash"></i> ...löschen</a></li>
+  </ul>
+</fieldset>
+<!--/ko-->
+
+<!--ko if: isInChoosingMode() -->
+<fieldset>
+  <legend>Deine Auswahl</legend>
+  <div class="row" data-bind="foreach: chosenFiles.items">
+    <div class="col-xs-3">
+      <a data-bind="attr: { href: url }" target="_blank" class="thumbnail">
+        <!-- ko if: thumbnails -->
+        <img data-bind="attr: {src: thumbnails.xs.url}" alt=""/>
+        <!-- /ko -->
+        <!-- ko ifnot: thumbnails -->
+        <i class="fa fa-file fa-4x"></i>
+        <!-- /ko -->
+      </a>
+      <a class="btn btn-danger btn-xs top-right-button" href="#" data-bind="click: $parent.removeFromChosen"><i class="fa fa-chain-broken"></i></a>
+    </div>
+  </div>
+  <div class="well" data-bind="visible: !hasChosenFiles()">
+    Du hast noch keine Dateien ausgewählt. Du kannst Dateien aus verschiedenen Ordnern wählen, in dem Du sie anhakst.
+  </div>
+</fieldset>
+<!--/ko-->

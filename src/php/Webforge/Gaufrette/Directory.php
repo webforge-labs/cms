@@ -8,12 +8,15 @@ class Directory extends Item {
 
   public $parent;
 
+  public $path;
+
   private $itemsList;
 
-  public function __construct($name, Directory $parent = NULL, $type = 'directory') {
+  public function __construct($name, $path, Directory $parent = NULL, $type = 'directory') {
     if ($parent === NULL && $type != 'ROOT') {
       throw new \LogicException('only root directory shouldnt have a parent');
     }
+    $this->path = $path;
     $this->parent = $parent;
     $this->items = [];
     $this->itemsList = [];
@@ -33,13 +36,18 @@ class Directory extends Item {
     return $this->items;
   }
 
-  public function export() {
-    return (object) [
+  public function export(array $options) {
+    $export = (object) [
       'name'=>$this->name,
       'type'=>$this->type,
-      'items'=>array_map(function ($item) {
-        return $item->export();
+      'key'=>ltrim($this->path, '/'),
+      'items'=>array_map(function ($item) use ($options) {
+        return $item->export($options);
       }, $this->items)
     ];
+
+    $options['withDirectory']($this, $export);
+
+    return $export;
   }
 }

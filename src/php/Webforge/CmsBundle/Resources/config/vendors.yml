@@ -1,9 +1,34 @@
 knp_gaufrette:
   adapters:
     local_files:
-      safe_local:
+      local:
         directory:  %root_directory%/files/media
         create:     true
+  
   filesystems:
     cms_media:
       adapter: local_files
+  
+  stream_wrapper:
+    filesystems:
+      - cms_media
+
+liip_imagine:
+  resolvers:
+    default:
+      web_path:
+        web_root: %root_directory%/www
+        cache_prefix: /assets/images/cache
+
+  # have a look at cms-services.yml for the definition of the wrapper in gaufrette
+  loaders:
+    default:
+      stream:
+       wrapper: gaufrette://cms_media/
+
+  filter_sets:
+    xs:
+      quality: 75
+      #data_loader: stream.cms_media
+      filters:
+        thumbnail: { size: [120, 90], mode: outbound }

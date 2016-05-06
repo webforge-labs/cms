@@ -8,6 +8,7 @@ use Webforge\Common\ClassUtil;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Webmozart\Json\JsonDecoder;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 class CommonController extends Controller {
 
@@ -43,5 +44,10 @@ class CommonController extends Controller {
     } catch (\Exception $e) {
       throw new BadRequestHttpException('Invalid json message received.', 0, $e);
     }
+  }
+
+  protected function convertJsonToForm(Request $request) {
+    $json = $this->retrieveJsonBody($request);
+    $request->request = new ParameterBag((array) $json);
   }
 }

@@ -6,20 +6,19 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Webforge\Gaufrette\Index;
 
 class MediaController extends CommonController {
+
+  protected $thumbnailTypes = array('xs');
 
   /**
    * @Route("/media")
    * @Method("GET")
    */
   public function indexAction() {
-    $filesystem = $this->get('knp_gaufrette.filesystem_map')->get('cms_media');
+    $handler = $this->get('webforge.serialization.gaufrette_binary_handler');
 
-    $index = new Index($filesystem);
-
-    return new JsonResponse((object) ['root'=>$index->asTree()]);
+    return new JsonResponse($handler->asTree());
   }
 
   /**
@@ -32,7 +31,7 @@ class MediaController extends CommonController {
     $user = $this->getUser();
     $json = $this->retrieveJsonBody($request);
 
-    $path = trim($json->path, '/').'/'; // store without leadingslash but with trailingslash
+    $path = trim($json->path, '/').'/'; // store without leadingslash
     foreach ($json->dropboxFiles as $dbFile) {
       $filesystem->write($path.$dbFile->name, file_get_contents($dbFile->link));
     }

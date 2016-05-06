@@ -8,37 +8,8 @@
       </div>
       <div class="panel-body">
 
-      <div class="btn-group">
-        <a data-bind="click: addFilesFromDropbox" class="btn btn-default"><i class="fa fa-dropbox"></i> Dateien hinzufügen</a>
-        <a data-bind="click: newFolder" class="btn btn-default"><i class="fa fa-folder"></i> Neuer Ordner</a>
-      </div>
+        {% include "WebforgeCmsBundle:components:file-manager.html.twig" %}
 
-      <ol class="breadcrumb m-t-1" data-bind="foreach: breadcrumbs">
-        <li><a href="#" data-bind="click: $parent.clickItem, text: label"></a></li>
-      </ol>
-
-      <!--ko if: hasItems -->
-      <table class="table table-hover table-condensed">
-        <tbody data-bind="foreach: sortedItems">
-          <tr>
-            <td><input type="checkbox" data-bind="checked: $parent.selection, checkedValue: $data"></td>
-            <td><span class="fa" data-bind="css: { 'fa-folder': isDirectory, 'fa-file': isFile }"></span> <a href="#" data-bind="click: $parent.clickItem, text: label"></a></td>
-          </tr>
-        </tbody>
-      </table>
-      <!--/ko-->
-      <!--ko ifnot: hasItems -->
-      <div class="well">No items in this folder</div>
-      <!--/ko-->
-
-      <ul class="list-inline">
-        <!--ko if: hasSelection() -->
-        <!--
-        <li><a href="#" data-bind="click: moveItems"><i class="fa fa-arrow-right"></i> Verschieben / Umbenennen</a></li>
-        -->
-        <li><a class="text-danger" href="#" data-bind="click: removeItems"><i class="fa fa-trash"></i> Löschen</a></li>
-        <!--/ko-->
-      </ul>
       </div>
     </div>
   </div>
@@ -80,7 +51,7 @@
        }
      });
 
-     model.bindTo($('body'));
+     ko.applyBindings(model, $('body').get(0));
    });
  </script>
 {% endblock %}

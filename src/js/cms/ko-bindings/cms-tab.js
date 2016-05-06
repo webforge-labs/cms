@@ -4,7 +4,7 @@ define(['knockout', '../TabModel'], function(ko, Tab) {
       var wrappedValueAccessor = function() {
         return function(data, e) {
           e.preventDefault();
-          e.stopImmediatePropagation();
+          //e.stopImmediatePropagation(); // does not work on zombie, with jquery 2.x
 
           var tab = new Tab(valueAccessor());
           var cmsMain = context.$root;
