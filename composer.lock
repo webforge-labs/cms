@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f81e13b10ea3691e9d0ca0761433934c",
-    "content-hash": "254782235b0f1f418169eb3e60c36dd7",
+    "hash": "b656750cf30c60c592a9ec0edc6b460b",
+    "content-hash": "7494f6fd24f8402be20ec915309ce80a",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2623,16 +2623,16 @@
         },
         {
             "name": "webforge/doctrine",
-            "version": "1.2.1",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webforge-labs/webforge-doctrine.git",
-                "reference": "d20a4490dc6d169773f162bd06ef0f539bd52641"
+                "reference": "2a30f3d0038fb73563dd1ef5bf7d1063f3933b9e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webforge-labs/webforge-doctrine/zipball/d20a4490dc6d169773f162bd06ef0f539bd52641",
-                "reference": "d20a4490dc6d169773f162bd06ef0f539bd52641",
+                "url": "https://api.github.com/repos/webforge-labs/webforge-doctrine/zipball/2a30f3d0038fb73563dd1ef5bf7d1063f3933b9e",
+                "reference": "2a30f3d0038fb73563dd1ef5bf7d1063f3933b9e",
                 "shasum": ""
             },
             "require": {
@@ -2677,7 +2677,7 @@
                 }
             ],
             "description": "Doctrine ORM bridge for webforge",
-            "time": "2015-09-07 06:42:28"
+            "time": "2016-04-26 12:28:53"
         },
         {
             "name": "webforge/symfony",
