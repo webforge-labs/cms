@@ -106,6 +106,9 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
       .src(builder.resolveModule('bootstrap-datepicker')+'/bootstrap-datepicker.js')
       .pipe(rename, 'bootstrap-datepicker.js');
 
+    builder.add('js', 'bootstrap-select')
+      .src(builder.resolveModule('bootstrap-select')+'/bootstrap-select.js');
+
     gulp.task('images', ['clean'], function() {
       return gulp.src(cmsDir+'/Resources/img/**/*')
         .pipe(gulp.dest(builder.config.dest+'/img'));
@@ -115,7 +118,8 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
       includePaths: [
         cmsDir+'/src/scss',
         builder.resolveModule('bootstrap-sass')+'/../stylesheets',
-        builder.resolveModule('font-awesome')+'/scss'
+        builder.resolveModule('font-awesome')+'/scss',
+        builder.resolveModule('bootstrap-select')+'/../../sass'
       ],
 
       // this is a hack to have some selective components from bootstrap overriden without copying the whole bootstrap.scss with all its @imports
