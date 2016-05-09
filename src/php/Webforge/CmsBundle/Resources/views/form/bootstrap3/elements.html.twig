@@ -56,6 +56,21 @@
   </div> 
 {% endmacro %}
 
+{% macro select(label, name, options) %}
+  {% import _self as form %}
+
+  <div class="form-group">
+    {{ form.label(label, name) }}
+    <div class="col-sm-10">
+      <select 
+         class="selectpicker" data-live-search="true" data-icon-base="fa" 
+         data-bind="optionsAfterRender: $parent.afterOptionsHTML, options: {{options}}, optionsCaption: 'bitte auswählen', optionsText: 'label', optionsValue: 'value', value: {{name}}">
+      >
+      </select>
+    </div>
+  </div>
+{% endmacro %}
+
 
 {% macro multiple_files_chooser(label, name) %}
   {% import _self as form %}
