@@ -8,8 +8,8 @@
     
       "properties": {
         "id": { "type": "DefaultId" },
-        "firstName": { "type": "String" },
-        "lastName": { "type": "String" }
+        "firstName": { "type": "String", "nullable": true },
+        "lastName": { "type": "String", "nullable": true }
       }
     },
 
