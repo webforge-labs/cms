@@ -4,6 +4,7 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
   var sass = require('gulp-sass');
   var fs = require('fs');
   var WebforgeBuilder = require('webforge-js-builder');
+  var _ = require('lodash');
 
   var that = this;
 
@@ -18,6 +19,7 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
     mainConfigFile: cmsDir+'/src/js/config.js', // adds some paths here. But notice: baseUrl will be overriden anyway through this config
 
     paths: [],
+
     modules: [
       {
         name: "cms/main",
@@ -56,20 +58,17 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
       .addConfigured('js', 'knockout-collection')
       .addConfigured('js', 'requirejs-text')
       .addConfigured('js', 'requirejs-json')
+      .addConfigured('fonts', 'font-awesome');
     ;
 
-    builder.addConfigured('fonts', 'font-awesome');
+    that.addJsNamespace('cms', cmsDir+'/src/js/cms');
 
     builder.add('fonts', 'titilium')
       .src(cmsDir+'/Resources/fonts/**/*');
 
-    builder.add('js', 'cms')
-      .src(cmsDir+'/src/js/cms/**/*.js')
-      .pipe(builder.dest, 'cms')
-
     that.jsNamespaces.forEach(function(ns) {
       builder.add('js', ns.name)
-        .src(ns.dir+'/**/*.js')
+        .src(ns.dir+'/**/*')
         .pipe(builder.dest, ns.name)
     });
 
@@ -81,14 +80,6 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
     builder.add('js', 'i18next')
       .src(cmsDir+'/src/js/lib/i18next.amd-1.11.0.js')
       .pipe(rename, 'i18next.js');
-
-    builder.add('js', 'requirejs-text')
-      .src(cmsDir+'/src/js/lib/requirejs-text.js')
-      .pipe(rename, 'text.js');
-
-    builder.add('js', 'requirejs-json')
-      .src(cmsDir+'/src/js/lib/requirejs-json.js')
-      .pipe(rename, 'json.js');
 
     builder.add('js', 'knockout-dragdrop')
       .src(builder.resolveModule('knockout-dragdrop')+'/knockout.dragdrop.js')
@@ -105,6 +96,11 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
     builder.add('js', 'datepicker')
       .src(builder.resolveModule('bootstrap-datepicker')+'/bootstrap-datepicker.js')
       .pipe(rename, 'bootstrap-datepicker.js');
+
+    builder.add('js', 'dropins')
+      .src(cmsDir+'/src/js/lib/dropbox-dropins.js')
+      .pipe(rename, 'dropbox-chooser.js')
+      .pipe(builder.dest, 'cms/modules/')
 
     builder.add('js', 'bootstrap-select')
       .src(builder.resolveModule('bootstrap-select')+'/bootstrap-select.js');
@@ -181,10 +177,15 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
     });
   };
 
-  this.addTabModule = function(name) {
-    that.requirejs.modules.push({ 
-      name: name,
-      exclude: ['cms/main'] // because these are already loaded from the cms itself
-    });
-  }
+  this.addTabModule = function(name, options) {
+    that.requirejs.modules.push(
+      _.extend(
+        {
+          name: name,
+          exclude: ['cms/main'] // because these are already loaded from the cms itself
+        },
+        options
+      )
+    );
+  };
 };

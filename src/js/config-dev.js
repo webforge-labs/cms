@@ -4,8 +4,7 @@ var require = {
   paths: {
     'cms': '/cms-root/src/js/cms',
     'app': '/root/src/js/app',
-    'admin': '/root/src/js/admin',
-    "cms/modules/dropbox-chooser": ["https://www.dropbox.com/static/api/2/dropins"]
+    'admin': '/root/src/js/admin'
   },
 
   shim: {

@@ -2,7 +2,6 @@ var require = {
   baseUrl: '/assets/js',
 
   paths: {
-    "cms/modules/dropbox-chooser": "cms/lib/dropbox-dropins"
   },
 
   shim: {
