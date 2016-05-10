@@ -16,11 +16,17 @@ class GaufretteBinaryHandler {
   private $filesystem, $cacheManager;
   protected $thumbnailTypes;
 
-  public function __construct($filesystemMap, $filesystemName, $cacheManager, Array $thumbnailTypes) {
+  public function __construct($filesystemMap, $filesystemName, $cacheManager, $filterConfiguration) {
     $this->filesystem = $filesystemMap->get($filesystemName);
     $this->index = new GaufretteIndex($this->filesystem);
-    $this->thumbnailTypes = $thumbnailTypes;
     $this->cacheManager = $cacheManager;
+
+    $this->thumbnailTypes = array();
+    foreach ($filterConfiguration->all() as $key=>$filter) {
+      if (isset($filter['filters']['thumbnail'])) {
+        $this->thumbnailTypes[] = $key;
+      }
+    }
   }
 
   public function serialize(JsonSerializationVisitor $visitor, GaufretteFileInterface $binary, array $type, Context $context)  {

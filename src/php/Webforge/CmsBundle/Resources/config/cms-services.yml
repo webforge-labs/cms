@@ -17,7 +17,7 @@ services:
 
   webforge.serialization.gaufrette_binary_handler:
     class:      Webforge\CmsBundle\Serialization\GaufretteBinaryHandler
-    arguments: ['@knp_gaufrette.filesystem_map', 'cms_media', '@liip_imagine.cache.manager', ['xs']]
+    arguments: ['@knp_gaufrette.filesystem_map', 'cms_media', '@liip_imagine.cache.manager', '@liip_imagine.filter.configuration']
     tags: 
       - { name: jms_serializer.handler, direction: 'serialization', format: 'json', type: 'WebforgeGaufretteBinary', method: 'serialize' }
 #    tags: 

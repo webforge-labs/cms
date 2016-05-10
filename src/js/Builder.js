@@ -98,9 +98,7 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
       .pipe(rename, 'bootstrap-datepicker.js');
 
     builder.add('js', 'dropins')
-      .src(cmsDir+'/src/js/lib/dropbox-dropins.js')
-      .pipe(rename, 'dropbox-chooser.js')
-      .pipe(builder.dest, 'cms/modules/')
+      .src(cmsDir+'/src/js/lib/dropbox-dropins.js');
 
     builder.add('js', 'bootstrap-select')
       .src(builder.resolveModule('bootstrap-select')+'/bootstrap-select.js');
