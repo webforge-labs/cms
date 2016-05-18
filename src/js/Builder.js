@@ -186,4 +186,16 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
       )
     );
   };
+
+  this.addModule = function(name, options) {
+    that.requirejs.modules.push(
+      _.extend(
+        {
+          name: name,
+          exclude: [] // we need to exclude common build layers here (but we havent one yet)
+        },
+        options
+      )
+    );
+  };
 };
