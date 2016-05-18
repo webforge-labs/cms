@@ -25,6 +25,11 @@
       <td><span class="fa" data-bind="css: { 'fa-folder': isDirectory, 'fa-file': isFile }"></span> <a href="#" data-bind="click: $parent.clickItem, text: label"></a></td>
     </tr>
   </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="2"><a data-bind="click: selectAll">alle Dateien auswählen</a></td>
+    </tr>
+  </tfoot>
 </table>
 <!--/ko-->
 <!--ko ifnot: hasItems -->

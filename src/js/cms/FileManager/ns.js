@@ -171,6 +171,7 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
        return ci && ci.hasItems();
      });
 
+
      this.sortedItems = ko.computed(function() {
        var order = 'asc';
 
@@ -254,6 +255,18 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
          }
        });
      });
+
+     this.selectAll = function() {
+       var ci = that.currentItem();
+
+       if (ci) {
+         ko.utils.arrayForEach(ci.items(), function(item) {
+           if (item.isFile()) {
+             that.selection.push(item);
+           }
+         });
+       }
+     };
 
      this.removeFromChosen = function(item) {
        that.selection.remove(item);
