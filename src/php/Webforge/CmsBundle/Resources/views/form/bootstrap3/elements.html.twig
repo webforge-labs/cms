@@ -13,6 +13,17 @@
   </div>
 {% endmacro %}
 
+{% macro integer(label, name) %}
+  {% import _self as form %}
+
+  <div class="form-group">
+    {{ form.label(label, name) }}
+    <div class="col-sm-10">
+      <input data-bind="value: {{name}}" type="integer" class="form-control" id="{{name}}">
+    </div>
+  </div>
+{% endmacro %}
+
 {% macro markdown(label, name, rows) %}
   {% import _self as form %}
 
