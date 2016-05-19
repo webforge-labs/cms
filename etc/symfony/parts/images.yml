@@ -1,0 +1,40 @@
+liip_imagine:
+  resolvers:
+    default: 
+      web_path:
+        web_root: %root_directory%/www
+        cache_prefix: /assets/images/cache
+
+  cache: meta_web_path
+
+  # have a look at cms-services.yml for the definition of the wrapper in gaufrette
+  loaders:
+    default:
+      stream:
+       wrapper: gaufrette://cms_media/
+
+  filter_sets:
+    # outbound: crop, inset: no crop
+    xs:
+      quality: 75
+      filters:
+        auto_rotate: ~
+        thumbnail: { size: [120, 90], mode: inset }
+
+    sm:
+      quality: 75
+      filters:
+        auto_rotate: ~
+        thumbnail: { size: [620, 400], mode: outbound }
+
+    gallery:
+      quality: 100
+      filters:
+        auto_rotate: ~
+        thumbnail: { size: [1200, 800], mode: inset }
+
+    big:
+      quality: 100
+      filters:
+        auto_rotate: ~
+        thumbnail: { size: [4000, 4000], mode: inset }

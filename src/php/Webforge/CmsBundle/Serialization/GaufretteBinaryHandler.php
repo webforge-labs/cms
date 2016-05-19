@@ -10,21 +10,35 @@ use JMS\Serializer\EventDispatcher\ObjectEvent;
 use Webforge\CmsBundle\Model\GaufretteFileInterface;
 use Webforge\Gaufrette\Index as GaufretteIndex;
 use Webforge\Gaufrette\File as GaufretteFile;
+use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Binary\FileBinaryInterface;
+
+use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
+use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class GaufretteBinaryHandler {
 
-  private $filesystem, $cacheManager;
-  protected $thumbnailTypes;
+  private $filesystem, $cacheManager, $dataManager, $imagine;
+  protected $thumbnailFilters;
 
-  public function __construct($filesystemMap, $filesystemName, $cacheManager, $filterConfiguration) {
+  public function __construct($filesystemMap, $filesystemName, $cacheManager, $dataManager, $filterManager, \Imagine\Image\ImagineInterface $imagine, $filterConfiguration) {
     $this->filesystem = $filesystemMap->get($filesystemName);
     $this->index = new GaufretteIndex($this->filesystem);
     $this->cacheManager = $cacheManager;
+    $this->filterManager = $filterManager;
+    $this->dataManager = $dataManager;
+    $this->imagine = $imagine;
+    $this->cache = new \Doctrine\Common\Cache\ChainCache([
+      new \Doctrine\Common\Cache\ArrayCache(),
+      new \Doctrine\Common\Cache\FilesystemCache($GLOBALS['env']['root']->sub('files/cache/imagine-meta')->wtsPath())
+    ]);
 
-    $this->thumbnailTypes = array();
+    $this->thumbnailFilters = array();
     foreach ($filterConfiguration->all() as $key=>$filter) {
       if (isset($filter['filters']['thumbnail'])) {
-        $this->thumbnailTypes[] = $key;
+        $this->thumbnailFilters[] = $key;
       }
     }
   }
@@ -51,15 +65,56 @@ class GaufretteBinaryHandler {
   }
 
   public function serializeToFile(GaufretteFile $gFile, \stdClass $file) {
+
     $file->url = '/cms/media?download=1&file='.urlencode($gFile->getRelativePath());
     $file->mimeType = $gFile->mimeType;
-    $file->thumbnails = [];
-    foreach ($this->thumbnailTypes as $thumbnailType) {
-      $file->thumbnails[$thumbnailType] = (object) [
-        'url'=>$this->cacheManager->getBrowserPath($gFile->getRelativePath(), $thumbnailType),
-        'name'=>$thumbnailType
-      ];
+
+    if ($gFile->isImage()) {
+      $file->thumbnails = [];
+      foreach ($this->thumbnailFilters as $filter) {
+        $this->applyFilterFor($gFile, $filter);
+        $meta = $this->cache->fetch(\Webforge\CmsBundle\Imagine\MetaWebPathResolver::cacheKey($gFile->key, $filter));
+
+        $meta->url = $this->cacheManager->getBrowserPath($gFile->getRelativePath(), $filter);
+        $meta->name = $filter;
+
+        $file->thumbnails[$filter] = $meta;
+      }
     }
+  }
+
+  protected function applyFilterFor(GaufretteFile $gFile, $filter) {
+    $path = $gFile->key;
+            try
+            {
+                if(!$this->cacheManager->isStored($path, $filter))
+                {
+                    try
+                    {
+                        $binary = $this->dataManager->find($filter, $path);
+                    }
+                    catch(NotLoadableException $e)
+                    {
+                        if($defaultImageUrl = $this->dataManager->getDefaultImageUrl($filter))
+                        {
+                            return $defaultImageUrl;
+                        }
+
+                        throw new NotFoundHttpException('Source image could not be found', $e);
+                    }
+
+                    $this->cacheManager->store(
+                        $this->filterManager->applyFilter($binary, $filter),
+                        $path,
+                        $filter
+                    );
+                }
+
+            }
+            catch(RuntimeException $e)
+            {
+                throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $path, $filter, $e->getMessage()), 0, $e);
+            }
   }
 
   public function asTree() {
@@ -70,6 +125,6 @@ class GaufretteBinaryHandler {
       }
     ];
 
-    return(object) ['root'=>$this->index->asTree($options)];
+    return (object) ['root'=>$this->index->asTree($options)];
   }
 }

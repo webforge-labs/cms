@@ -31,6 +31,10 @@ class File extends Item {
     return '/'.ltrim($this->key, '/');
   }
 
+  public function isImage() {
+    return strpos($this->mimeType, 'image') === 0;
+  }
+
   public function export(array $options) {
     $export = (object) [
       'name'=>$this->name,

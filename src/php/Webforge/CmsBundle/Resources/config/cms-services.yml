@@ -17,7 +17,7 @@ services:
 
   webforge.serialization.gaufrette_binary_handler:
     class:      Webforge\CmsBundle\Serialization\GaufretteBinaryHandler
-    arguments: ['@knp_gaufrette.filesystem_map', 'cms_media', '@liip_imagine.cache.manager', '@liip_imagine.filter.configuration']
+    arguments: ['@knp_gaufrette.filesystem_map', 'cms_media', '@liip_imagine.cache.manager', '@liip_imagine.data.manager', '@liip_imagine.filter.manager', '@liip_imagine', '@liip_imagine.filter.configuration']
     tags: 
       - { name: jms_serializer.handler, direction: 'serialization', format: 'json', type: 'WebforgeGaufretteBinary', method: 'serialize' }
 #    tags: 
@@ -30,3 +30,12 @@ services:
     tags: 
       - { name: jms_serializer.event_listener, event: serializer.pre_serialize }
 
+  webforge.imagine.meta_web_path_resolver:
+    class: Webforge\CmsBundle\Imagine\MetaWebPathResolver
+    arguments: ['@liip_imagine.cache.resolver.default']
+    calls:
+      - [setImagine, ['@liip_imagine']]
+    tags:
+      - { name: 'liip_imagine.cache.resolver', resolver: 'meta_web_path' }
+
+  

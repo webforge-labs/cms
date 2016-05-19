@@ -19,10 +19,14 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
 
     $filesystem = $this->getContainer()->get('knp_gaufrette.filesystem_map')->get('cms_media');
 
-    foreach ($filesystem->keys() as $key) {
-      $filesystem->delete($key);
-    }
+    $GLOBALS['env']['root']->sub('www/assets/images/cache/')->delete();
+    $GLOBALS['env']['root']->sub('files/cache/imagine-meta')->delete();
 
+    foreach ($filesystem->keys() as $key) {
+      if (!$filesystem->isDirectory($key)) {
+        $filesystem->delete($key);
+      }
+    }
 
     $json = $this->getDropboxFiles();
     $this->sendJsonRequest($client, 'POST', '/cms/media/dropbox', $json);
@@ -38,7 +42,17 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
               ->key(0)
                 ->property('name', 'DSC03281.JPG')->end()
                 ->property('url')->is($this->logicalNot($this->isEmpty()))->end()
-                ->property('thumbnails')->isObject()->end()
+                ->property('thumbnails')->isObject()
+                  ->property('big')
+                    ->property('orientation')->is('landscape')->end()
+                    ->property('isPortrait')->is(false)->end()
+                    ->property('isLandscape')->is(true)->end()
+                    ->property('url')->contains('/assets/images/cache/big/2016-03-27/DSC03281.JPG')->end()
+                  ->end()
+                  ->property('sm')
+                    ->property('orientation')->is('landscape')->end()
+                  ->end()
+                ->end()
                 ->property('key', '2016-03-27/DSC03281.JPG')->end()
               ->end()
             ->end()
