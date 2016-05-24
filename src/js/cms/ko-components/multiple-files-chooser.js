@@ -1,4 +1,4 @@
-define(['knockout', 'knockout-collection', 'text!./multiple-files-chooser.html', 'cms/modules/dispatcher'], function(ko, KnockoutCollection, htmlString, dispatcher) {
+define(['knockout', 'knockout-collection', 'knockout-dragdrop', 'text!./multiple-files-chooser.html', 'cms/modules/dispatcher'], function(ko, KnockoutCollection, koDragdrop, htmlString, dispatcher) {
 
   var filesChooser = function(params) {
     var that = this;
@@ -29,6 +29,21 @@ define(['knockout', 'knockout-collection', 'text!./multiple-files-chooser.html',
     that.removeFromAddedFiles = function(file) {
       that.files.remove(file);
     };
+
+    that.dragStart = function(item) {
+    };
+    that.dragEnd = function(item) {
+    };
+
+    that.reorder = function(event, dragData, zoneData) {
+      if (dragData !== zoneData.item) {
+        var sortables = filesObservableArray;
+        var zoneDataIndex = sortables.indexOf(zoneData.item);
+        sortables.remove(dragData);
+        sortables.splice(zoneDataIndex, 0, dragData);
+      }
+    };
+
   };
 
   return { viewModel: filesChooser, template: htmlString };

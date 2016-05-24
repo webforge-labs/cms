@@ -30,6 +30,10 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
    FileManager.Item = function(data, parentItem) {
      var that = this;
 
+     that.isDragging = ko.observable(false);
+     that.type = ko.observable('file');
+     that.unsynced = ko.observable(false);
+
      var mapping = {
        items: {
          create: function(options) {
@@ -42,14 +46,6 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
      };
 
      koMapping.fromJS(data, mapping, that);
-
-     if (!that.type) {
-       that.type = ko.observable('file');
-     }
-
-     if (!that.unsynced) {
-       that.unsynced = ko.observable(false);
-     }
 
      this.label = ko.computed(function() {
        return that.name();

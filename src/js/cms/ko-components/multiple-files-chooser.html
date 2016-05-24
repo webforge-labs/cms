@@ -1,5 +1,15 @@
-<div class="row" data-bind="foreach: addedFiles">
-  <div class="col-xs-3">
+<div class="row multiple-files-chooser" data-bind="foreach: addedFiles">
+  <div class="col-xs-3" data-bind="
+     dragZone: { name: 'multiple-file-chooser',
+       dragStart: $parent.dragStart,
+       dragEnd: $parent.dragEnd
+     },
+     dragEvents: {
+       accepts: 'multiple-file-chooser',
+       dragOver: $parent.reorder,
+       data: { item: $data }
+     }
+  ">
     <a data-bind="attr: { href: url }" target="_blank" class="thumbnail">
       <img data-bind="attr: {src: thumbnails.xs.url}" alt=""/>
     </a>
