@@ -61,7 +61,8 @@ class GaufretteBinaryHandler {
       $file->isExisting = FALSE;
     }
 
-    return $file;
+    // we return an array here, because otherwise @inline in serializer will not work
+    return (array) $file;
   }
 
   public function serializeToFile(GaufretteFile $gFile, \stdClass $file) {
