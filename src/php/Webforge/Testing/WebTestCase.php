@@ -44,6 +44,19 @@ class WebTestCase extends LiipWebTestCase {
     );
   }
 
+  protected function sendHtmlRequest($client, $method, $url, $body = NULL) {
+    return $client->request(
+      $method,
+      $url,
+      array(),
+      array(),
+      array(
+        'HTTP_ACCEPT'  => 'text/html'
+      ),
+      $body
+    );
+  }
+
   protected function assertJsonResponse($statusCode, $client) {
     $this->assertStatusCode($statusCode, $client);
 
