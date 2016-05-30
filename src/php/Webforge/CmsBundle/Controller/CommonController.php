@@ -13,12 +13,14 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 class CommonController extends Controller {
 
   protected $em;
+  protected $dc;
 
   public function setContainer(ContainerInterface $container = NULL) {
     parent::setContainer($container);
 
     if ($container) {
       $this->em = $container->get('doctrine.orm.entity_manager');
+      $this->dc = $container->get('dc');
     }
   }
 
