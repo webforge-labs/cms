@@ -9,7 +9,7 @@ define(['knockout', 'knockout-mapping', 'cms/modules/dispatcher', 'cms/TabModel'
     if (that.isNew()) {
       that.entity = options.create();
     } else {
-      that.entity = options.EntityModel.map(data.mail);
+      that.entity = options.EntityModel.map(data.entity);
     }
 
     that.error = ko.observable();
