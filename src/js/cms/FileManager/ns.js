@@ -1,8 +1,13 @@
-define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/modules/ui', 'cms/modules/dropbox-chooser', 'cms/modules/dispatcher', 'amplify'], function(ko, KnockoutCollection, koMapping, lodash, ui, Dropbox, dispatcher, amplify) {
+define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/modules/ui', 'cms/modules/dropbox-chooser', 'cms/modules/dispatcher', 'amplify', 'bluebird'], function(ko, KnockoutCollection, koMapping, lodash, ui, Dropbox, dispatcher, amplify) {
+   var Promise = require("bluebird");
+
    var FileManager = {};
 
    FileManager.Sync = function() {
      var that = this;
+
+     that.concurrentFiles = ko.observable(2); // the number of files per request
+     that.concurrentConnections = ko.observable(4); // the number of requests simultanously
 
      this.removeFile = function(item) {
        that.batch.push(ko.unwrap(item.key));
@@ -13,18 +18,59 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
      };
 
      this.commitRemoveBatch = function(processing) {
+       var d = $.Deferred();
        if (that.batch.length) {
          processing(true);
-         return dispatcher.send('DELETE', '/cms/media', { keys: that.batch }, 'json')
+         dispatcher.send('DELETE', '/cms/media', { keys: that.batch }, 'json')
           .done(function(response) {
              processing(false);
+             d.resolve(response);
            })
           .fail(function(err, response) {
              processing(false);
              amplify.publish('cms.ajax.error', response);
+             d.reject(err, response);
           });
        }
+
+       return d.promise();
      };
+
+     this.uploadFromDropbox = function(ci, files, processing, progress, afterwards) {
+
+       var path = ci.path();
+
+       processing(true);
+       progress(0);
+
+       Promise.map(_.chunk(files, that.concurrentFiles()), function(chunkOfFiles) {
+         var sendPromise = dispatcher.sendPromised('POST', '/cms/media/dropbox', { dropboxFiles: chunkOfFiles, path: path }, 'json');
+
+         sendPromise.reflect().then(function(inspection) {
+          if (inspection.isFulfilled()) {
+            progress(progress()+chunkOfFiles.length);
+          }
+         });
+
+         return sendPromise;
+
+       }, {concurrency: that.concurrentConnections()}).then(function() {
+         return dispatcher.sendPromised('GET', '/cms/media', undefined, 'json');
+       })
+       .then(function(response) {
+         processing(false);
+         return afterwards(response);
+       })
+       .catch(function(fault) {
+         processing(false);
+
+         if (fault.response) {
+           amplify.publish('cms.ajax.error', fault.response);
+         } else {
+           throw fault;
+         }
+       });
+     }
    };
 
    FileManager.Item = function(data, parentItem) {
@@ -33,11 +79,17 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
      that.isDragging = ko.observable(false);
      that.type = ko.observable('file');
      that.unsynced = ko.observable(false);
+     that.items = ko.observableArray([]);
 
      var mapping = {
        items: {
          create: function(options) {
            return new FileManager.Item(options.data, options.parent);
+         },
+         arrayChanged: function(event, item) {
+           if (event === 'deleted') {
+             amplify.publish('fileManager.deleted', item);
+           }
          },
          key: function(data) {
            return ko.unwrap(data.key);
@@ -117,6 +169,8 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
      this.selection =  ko.observableArray([]); // selection on one page
      this.chosenFiles = new KnockoutCollection([], {key: 'path'});
      this.processing = ko.observable(false);
+     this.filesProgress = ko.observable(0);
+     this.filesTotal = ko.observable(0);
      this.isInChoosingMode = ko.observable(true);
 
      var mapping = {
@@ -194,6 +248,10 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
          } else {
            that.sync.removeFile(item);
            that.removeFromChosen(item);
+
+           if (that.currentItem() === item) {
+             that.setCurrentItem(item.parentItem);
+           }
          }
        }
      };
@@ -210,7 +268,7 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
 
          that.sync.commitRemoveBatch(that.processing)
            .done(function(response) {
-             koMapping.fromJS(response.body, mapping, that);
+             that.refreshData(response.body);
            });
        }
      };
@@ -225,14 +283,21 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
 
      this.newFolder = function() {
        ui.prompt("Wie soll der neue Ordner heißen?").done(function(name) {
-         that.currentItem().addDirectory(
-           new FileManager.Item({
-             name: name,
-             type: 'directory',
-             items: [],
-             unsynced: true
-           }, that.currentItem())
-         );
+         if (name != "") {
+           name = name.replace(/ä/g, 'ae').replace(/ö/g,'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss');
+
+           var item;
+           that.currentItem().addDirectory(
+             item = new FileManager.Item({
+               name: name,
+               type: 'directory',
+               items: [],
+               unsynced: true
+             }, that.currentItem())
+           );
+
+           that.setCurrentItem(item);
+         }
        });
      };
 
@@ -274,17 +339,10 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
          success: function(files) {
            var ci = that.currentItem();
 
-           that.processing(true);
- 
-           dispatcher.send('POST', '/cms/media/dropbox', { dropboxFiles: files, path: ci.path() }, 'json')
-            .done(function(response) {
-               koMapping.fromJS(response.body, mapping, that);
-               that.processing(false);
-             })
-            .fail(function(err, response) {
-               that.processing(false);
-               amplify.publish('cms.ajax.error', response);
-            });
+           that.filesTotal(files.length);
+           that.sync.uploadFromDropbox(ci, files, that.processing, that.filesProgress, function(response) {
+             that.refreshData(response.body);
+           });
           },
           linkType: "direct",
           multiselect: true,
@@ -296,8 +354,15 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
      };
 
      this.refreshData = function(data) {
-
+       koMapping.fromJS(data, mapping, that);
      };
+
+     amplify.subscribe('fileManager.deleted', function(item) {
+       var ci = that.currentItem();
+       if (ci && item === ci) {
+         that.setCurrentItem(ci.parentItem);
+       }
+     });
 
      this.confirmChosenFiles = function () {
        var chosen = that.chosenFiles.toArray();

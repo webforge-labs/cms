@@ -19,3 +19,9 @@ $spacer-y:                   $spacer;
 
 // copied from https://github.com/eternicode/bootstrap-datepicker/blob/master/dist/css/datepicker3.css
 @import 'vendor/datepicker3';
+
+.navbar .spinner {
+  float: left;
+  padding-top: 9px;
+  padding-right: 10px;
+}

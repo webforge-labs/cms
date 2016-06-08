@@ -103,6 +103,10 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
     builder.add('js', 'bootstrap-select')
       .src(builder.resolveModule('bootstrap-select')+'/bootstrap-select.js');
 
+    builder.add('js', 'bluebird')
+      .src(builder.resolveModule('bluebird')+'/../browser/'+(isDevelopment ? 'bluebird.js' : 'bluebird.min.js'))
+      .pipe(rename, 'bluebird.js');
+
     gulp.task('images', ['clean'], function() {
       return gulp.src(cmsDir+'/Resources/img/**/*')
         .pipe(gulp.dest(builder.config.dest+'/img'));

@@ -3,9 +3,10 @@
   <a data-bind="click: newFolder" class="btn btn-default"><i class="fa fa-folder"></i> Neuer Ordner</a>
 </div>
 
-<div class="alert alert-info" data-bind="visible: processing">
+<div class="alert alert-warning" data-bind="visible: processing">
   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-  <strong><i class="fa fa-spinner fa-spin"></i> Warte kurz..</strong> Ich kopiere gerade die Dateien ins CMS 
+  <strong><i class="fa fa-spinner fa-spin"></i> Bitte warte kurz..</strong> Ich kopiere gerade die neuen Dateien ins CMS und erzeuge die Bilder-Vorschau. Dies dauert immer etwas länger..<br />
+  Ich habe schon <strong data-bind="text: filesProgress"></strong> von <strong data-bind="text: filesTotal"></strong> bearbeitet.
 </div>
 
 <ol class="breadcrumb m-t-1" data-bind="foreach: breadcrumbs">

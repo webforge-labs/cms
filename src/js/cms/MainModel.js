@@ -4,6 +4,7 @@ define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'cms/FileMa
     var that = this;
 
     this.loading = ko.observable(true);
+    this.spinning = ko.observable(false); // this should be an comutable and we need a stack of promises to determine if something is ajaxing something
 
     koMapping.fromJS(data, {ignore:[]}, this);
 
@@ -66,9 +67,9 @@ define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'cms/FileMa
     };
 
     this.openFileManager = function(options) {
-      // @TODO spin something
-      dispatcher.send('GET', '/cms/media')
-        .done(function(response) {
+      that.spinning(true);
+      dispatcher.sendPromised('GET', '/cms/media')
+        .then(function(response) {
           if (!that.fileManager()) {
             var fileManager = new FileManager.Manager(response.body);
             that.fileManager(fileManager);
@@ -80,9 +81,16 @@ define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'cms/FileMa
       
           var $modal = $('#file-manager-modal');
           $modal.modal({'show': true});
+          
+          that.spinning(false);
+        }).catch(function(fault) {
+          that.spinning(false);
 
-        }).fail(function(err, response) {
-          amplify.publish('cms.ajax.error', response);
+          if (fault.response) {
+            amplify.publish('cms.ajax.error', fault.response);
+          } else {
+            throw fault;
+          }
         });
     }
 

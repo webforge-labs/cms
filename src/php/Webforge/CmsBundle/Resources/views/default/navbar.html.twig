@@ -1,35 +1,37 @@
 <nav class="navbar navbar-default" role="navigation">
   <div class="container-fluid">
 
-  <div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
-    <a class="navbar-brand" href="#">Mini-Tapir-CMS</a>
-  </div>
+    <div class="spinner"><i data-bind="style: { visibility: $root.spinning() ? 'visible' : 'hidden' }" class="fa fa-2x fa-spinner fa-spin"></i></div>
 
-  <!-- Collect the nav links, forms, and other content for toggling -->
-  <div class="collapse navbar-collapse navbar-ex1-collapse">
-    <ul class="nav navbar-nav">
-    </ul>
-    <form class="navbar-form navbar-left" role="search">
-      <div class="form-group">
-        <input type="text" class="form-control" placeholder="Suchen">
-      </div>
-      <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
-    </form>
-    <ul class="nav navbar-nav navbar-right">
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle" role="username" data-toggle="dropdown">{{user.displayName}} <b class="caret"></b></a>
-        <ul class="dropdown-menu">
-          <li><a href="#">Mein Zugang</a></li>
-          <li><a href="/logout">Abmelden</a></li>
-        </ul>
-      </li>
-    </ul>
-  </div><!-- /.navbar-collapse -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Mini-Tapir-CMS</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <ul class="nav navbar-nav">
+      </ul>
+      <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Suchen">
+        </div>
+        <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" role="username" data-toggle="dropdown">{{user.displayName}} <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Mein Zugang</a></li>
+            <li><a href="/logout">Abmelden</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
   </div>
 </nav>
