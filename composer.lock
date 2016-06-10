@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b656750cf30c60c592a9ec0edc6b460b",
-    "content-hash": "7494f6fd24f8402be20ec915309ce80a",
+    "hash": "7e4c80c4d9ef54bdac1b71ffd5f72c1b",
+    "content-hash": "3308b7b6e7c66d61aca35ca7920cdfa0",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2573,6 +2573,56 @@
             "time": "2016-01-25 21:22:18"
         },
         {
+            "name": "vlucas/phpdotenv",
+            "version": "v2.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vlucas/phpdotenv.git",
+                "reference": "63f37b9395e8041cd4313129c08ece896d06ca8e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/63f37b9395e8041cd4313129c08ece896d06ca8e",
+                "reference": "63f37b9395e8041cd4313129c08ece896d06ca8e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8 || ^5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Dotenv\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause-Attribution"
+            ],
+            "authors": [
+                {
+                    "name": "Vance Lucas",
+                    "email": "vance@vancelucas.com",
+                    "homepage": "http://www.vancelucas.com"
+                }
+            ],
+            "description": "Loads environment variables from `.env` to `getenv()`, `$_ENV` and `$_SERVER` automagically.",
+            "keywords": [
+                "dotenv",
+                "env",
+                "environment"
+            ],
+            "time": "2016-04-15 10:48:49"
+        },
+        {
             "name": "webforge/collections",
             "version": "1.0.5",
             "source": {
@@ -2681,20 +2731,21 @@
         },
         {
             "name": "webforge/symfony",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webforge-labs/webforge-symfony.git",
-                "reference": "28a8ba810ae5de1fb3c22c6f9960ff2bf9a38bfe"
+                "reference": "fc1a23df1087a61a636d0c81f840457dd1758d94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webforge-labs/webforge-symfony/zipball/28a8ba810ae5de1fb3c22c6f9960ff2bf9a38bfe",
-                "reference": "28a8ba810ae5de1fb3c22c6f9960ff2bf9a38bfe",
+                "url": "https://api.github.com/repos/webforge-labs/webforge-symfony/zipball/fc1a23df1087a61a636d0c81f840457dd1758d94",
+                "reference": "fc1a23df1087a61a636d0c81f840457dd1758d94",
                 "shasum": ""
             },
             "require": {
                 "jms/serializer": "*",
+                "vlucas/phpdotenv": "^2.2",
                 "webforge/utils": "*"
             },
             "type": "library",
@@ -2721,7 +2772,7 @@
                     "email": "p.scheit@ps-webforge.com"
                 }
             ],
-            "time": "2016-03-28 06:41:29"
+            "time": "2016-06-10 07:01:14"
         },
         {
             "name": "webforge/utils",
