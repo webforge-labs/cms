@@ -39,3 +39,8 @@ services:
       - { name: 'liip_imagine.cache.resolver', resolver: 'meta_web_path' }
 
   
+  webforge.cache.imagine_cache_warmer:
+    class: Webforge\CmsBundle\Cache\ImagineCacheWarmer
+    arguments: ['@webforge.serialization.gaufrette_binary_handler']
+    tags:
+      - { name: kernel.cache_warmer, priority: 1 }
