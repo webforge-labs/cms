@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7e4c80c4d9ef54bdac1b71ffd5f72c1b",
-    "content-hash": "3308b7b6e7c66d61aca35ca7920cdfa0",
+    "hash": "a2e82123029b8af0f04750a98b70feee",
+    "content-hash": "3278d58d44845003c8675bd8812a0043",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2673,16 +2673,16 @@
         },
         {
             "name": "webforge/doctrine",
-            "version": "1.2.2",
+            "version": "1.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webforge-labs/webforge-doctrine.git",
-                "reference": "2a30f3d0038fb73563dd1ef5bf7d1063f3933b9e"
+                "reference": "08b12442733cea8baff1f408b678b20b39b06841"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webforge-labs/webforge-doctrine/zipball/2a30f3d0038fb73563dd1ef5bf7d1063f3933b9e",
-                "reference": "2a30f3d0038fb73563dd1ef5bf7d1063f3933b9e",
+                "url": "https://api.github.com/repos/webforge-labs/webforge-doctrine/zipball/08b12442733cea8baff1f408b678b20b39b06841",
+                "reference": "08b12442733cea8baff1f408b678b20b39b06841",
                 "shasum": ""
             },
             "require": {
@@ -2727,20 +2727,20 @@
                 }
             ],
             "description": "Doctrine ORM bridge for webforge",
-            "time": "2016-04-26 12:28:53"
+            "time": "2016-06-18 10:36:32"
         },
         {
             "name": "webforge/symfony",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webforge-labs/webforge-symfony.git",
-                "reference": "fc1a23df1087a61a636d0c81f840457dd1758d94"
+                "reference": "cbe2c7b8279f4aca7013eefdfa49ea1e7721e7a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webforge-labs/webforge-symfony/zipball/fc1a23df1087a61a636d0c81f840457dd1758d94",
-                "reference": "fc1a23df1087a61a636d0c81f840457dd1758d94",
+                "url": "https://api.github.com/repos/webforge-labs/webforge-symfony/zipball/cbe2c7b8279f4aca7013eefdfa49ea1e7721e7a2",
+                "reference": "cbe2c7b8279f4aca7013eefdfa49ea1e7721e7a2",
                 "shasum": ""
             },
             "require": {
@@ -2772,7 +2772,7 @@
                     "email": "p.scheit@ps-webforge.com"
                 }
             ],
-            "time": "2016-06-10 07:01:14"
+            "time": "2016-06-13 11:31:52"
         },
         {
             "name": "webforge/utils",
