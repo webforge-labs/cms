@@ -44,7 +44,7 @@ class CommonController extends Controller {
     try {
       return $json->decode((string) $body);
     } catch (\Exception $e) {
-      throw new BadRequestHttpException('Invalid json message received.', 0, $e);
+      throw new BadRequestHttpException('Invalid json message received.', $e);
     }
   }
 
