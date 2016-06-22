@@ -11,3 +11,7 @@ phpunit
 and
 
 cucumber-js features -r tests/js/cucumber/bootstrap.js
+
+## Sponsoring
+
+A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsoring a free Live account, that allows us to test on Iphones and other devices.
