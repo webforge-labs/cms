@@ -4,10 +4,10 @@
 
     <div class="container-fluid invisible" id="content-container" data-bind="invisible: loading">
       <div class="row">
-        <div class="col-xs-9" data-bind="with: tabs">
+        <div class="col-sm-9" data-bind="with: tabs">
           {%include 'WebforgeCmsBundle:default:tabs.html.twig' %}
         </div>
-        <div class="col-xs-3" role="sidebar">
+        <div class="hidden-xs col-sm-3" role="sidebar">
           {%include 'WebforgeCmsBundle:default:sidebar.html.twig' %}
         </div>
       </div>

@@ -15,14 +15,25 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navbar-ex1-collapse">
-      <ul class="nav navbar-nav">
-      </ul>
-      <form class="navbar-form navbar-left" role="search">
+      <form class="navbar-form navbar-left hidden" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Suchen">
         </div>
         <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
       </form>
+      <ul class="nav navbar-nav visible-xs">
+        {% for label, group in sidebar.groups %}
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{label}} <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+          {% for link in group %}
+            <li><a href="#" data-bind='cmsTab: {{link.tab|json_encode}}'>{{link.label}}</a></li>
+          {% endfor %}
+          </ul>
+        </li>
+        {% endfor %}
+      </ul>
+      <hr class="visible-xs"/>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" role="username" data-toggle="dropdown">{{user.displayName}} <b class="caret"></b></a>
