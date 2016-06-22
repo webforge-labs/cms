@@ -285,6 +285,9 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
        ui.prompt("Wie soll der neue Ordner heißen?").done(function(name) {
          if (name != "") {
            name = name.replace(/ä/g, 'ae').replace(/ö/g,'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss');
+           name = name.replace(/[,/\\]/g, '_');
+           name = _.deburr(name);
+           name = _.trim(name);
 
            var item;
            that.currentItem().addDirectory(
