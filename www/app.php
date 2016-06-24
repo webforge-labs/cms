@@ -15,7 +15,7 @@ $loader->unregister();
 $apcLoader->register(true);
 */
 
-$kernel = new AppKernel('dev', true);
+$kernel = new AppKernel(getenv('SYMFONY_ENV'), (bool) getenv('SYMFONY_DEBUG'));
 $kernel->loadClassCache();
 $kernel->boot();
 //$kernel = new AppCache($kernel);

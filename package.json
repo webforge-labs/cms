@@ -48,6 +48,7 @@
     "webforge-js-components": "^1.0.7"
   },
   "devDependencies": {
+    "amplify": "0.0.11",
     "chai": "^3.4.1",
     "cuked-zombie": "~3.0.1",
     "gulp": "^3.9.0",

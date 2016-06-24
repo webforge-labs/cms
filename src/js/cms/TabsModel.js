@@ -63,16 +63,22 @@ define(['knockout', 'knockout-mapping', 'knockout-collection', 'cms/modules/disp
     };
 
     this.close = function(tab, e) {
-      var activeTab = that.activeTab();
-
       tab.deactivate();
+      tabs.remove(tab);
       
-      // if tab was active we have no active tab anymore
+      // if tab was active we switch to the last tab in the list
+      // maybe there's a better algo
+      var activeTab = that.activeTab();
       if (activeTab && activeTab.id() === tab.id()) {
-        that.activeTab(undefined);
+
+        if (tabs.length > 0) {
+          nextTab = tabs.toArray().pop();
+          that.select(nextTab);
+        } else {
+          that.activeTab(undefined);
+        }
       }
 
-      tabs.remove(tab);
       amplify.publish('cms.tabs.closed', tab);
     };
 

@@ -3,5 +3,5 @@
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
-class AppKernel extends \Webforge\CmsBundle\Kernel {
+class AppKernel extends \Webforge\Symfony\Kernel {
 }

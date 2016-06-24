@@ -7,6 +7,7 @@ requirejs.config({
   baseUrl: path.resolve(__dirname+'/../../../www/assets/js'),
   paths: {
     'app': path.resolve(__dirname+'/../../../src/js/app'),
+    'cms': path.resolve(__dirname+'/../../../src/js/cms'),
   }
 });
 
