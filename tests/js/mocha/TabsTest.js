@@ -60,6 +60,16 @@ describe('Tabs', function() {
       icon: 'envelope',
       label: 'Post #7'
     });
+
+    this.ptabs = [];
+    for (var i = 10; i<=20; i++) {
+      this.ptabs.push(new Tab({
+        id: 'post-'+i,
+        url: '/cms/posts/'+i,
+        icon: 'envelope',
+        label: 'Post #'+i
+      }));
+    }
   });
 
   it('opened tabs list should be empty initialized', function () {

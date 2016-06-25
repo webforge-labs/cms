@@ -1,17 +1,49 @@
-.nav-tabs > li {
-  .close {
-    margin: 0px 0px 0px 11px;
-    font-size: 14px;
-    font-weight: normal;
-    padding: 2px 4px;
+.tabs-container {
+  $tabs-height: 34px;
+  position: relative;
 
-    &:hover {
-      background-color: #d0221d;
-      border-radius: 20px;
-      color: #fff;
+  .btn-group {
+    padding-top: 8px;
+    padding-right: 5px;
+    float: left;
+    border-bottom: 1px solid #ddd;
+    height: $tabs-height;
+  }
+
+  .tabs-scroller {
+    overflow: hidden;
+    margin-right: 30px;
+
+    .nav-tabs {
+      height: $tabs-height;
+      width: 2000px;
+
+      > li {
+        font-size: $font-size-small; 
+
+        .close {
+          margin: 0px 0px 0px 4px;
+          font-size: $font-size-small;
+          font-weight: normal;
+          padding: 2px 4px;
+
+          &:hover {
+            background-color: #d0221d;
+            border-radius: 20px;
+            color: #fff;
+          }
+        }
+        a {
+          padding: 8px 8px;
+          padding-right: 4px;
+        }
+      }
     }
   }
-  a {
-    padding-right: 8px;
+
+  > .dropdown {
+    position: absolute;
+    right: 0px;
+    top: 9px;
   }
 }

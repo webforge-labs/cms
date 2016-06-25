@@ -14,6 +14,11 @@ define(['knockout', 'knockout-mapping', 'knockout-collection', 'cms/modules/disp
       });
     });
 
+
+    this.collapsedTabs = ko.computed(function() {
+      return that.openedTabs();
+    });
+
     var loadContents = function(tab) {
       dispatcher.send('GET', tab.url(), undefined, 'text/html')
         .done(function(response) {

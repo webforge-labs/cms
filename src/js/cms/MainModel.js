@@ -5,6 +5,7 @@ define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'cms/FileMa
 
     this.loading = ko.observable(true);
     this.spinning = ko.observable(false); // this should be an comutable and we need a stack of promises to determine if something is ajaxing something
+    this.breakpoint = ko.observable('xs');
 
     koMapping.fromJS(data, {ignore:[]}, this);
 
@@ -17,7 +18,6 @@ define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'cms/FileMa
       icon: 'dashboard',
       label: 'Dashboard'
     });
-
 
     this.loadStoredTabs = function() {
       that.tabs.add(dashboard);

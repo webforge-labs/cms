@@ -17,6 +17,14 @@
 
     {%include 'WebforgeCmsBundle:components:file-manager-modal.html.twig' %}
 
+    <div id="responsive-detector">
+      <span data-breakpoint="xs" class="visible-xs"></span>
+      <span data-breakpoint="sm" class="visible-sm"></span>
+      <span data-breakpoint="md" class="visible-md"></span>
+      <span data-breakpoint="lg" class="visible-lg"></span>
+      <span data-breakpoint="xl" class="visible-xl"></span>
+    </div>
+
     <script type="text/javascript">
       require(['cms/main'], function(main) {
         main({{data|raw}});

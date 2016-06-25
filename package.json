@@ -52,6 +52,7 @@
     "chai": "^3.4.1",
     "cuked-zombie": "~3.0.1",
     "gulp": "^3.9.0",
+    "jquery-deferred": "^0.3.0",
     "json-diff": "^0.3.1",
     "mocha": "^2.3.3",
     "xpath-builder": "0.0.7",

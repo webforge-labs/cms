@@ -3,3 +3,7 @@
   top: 5px;
   right: 22px;
 }
+
+.btn-xxs {
+  @include button-size(1px, 5px, $font-size-mini, $line-height-base, 3px);
+}
