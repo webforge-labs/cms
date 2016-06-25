@@ -13,24 +13,33 @@ define(['jquery', 'knockout', './MainModel', './ko-bindings/cms-tab', './ko-bind
     $(document).ready(function() {
       var $tabsContainer = $('.tabs-container');
       var $scroller = $tabsContainer.find('.tabs-scroller');
+      var animationTime = 100;
       $tabsContainer.on('click', '.btn-group .btn', function() {
         var offset = 79;
         var direction = $(this).is('.left') ? 'left' : 'right';
         var position = $scroller.scrollLeft();
 
         if (direction == 'right') {
-          var scrollerWidth = 0;
+          // the width of all tabs displayed in the viewport
+          var tabsWidth = 0;
+          $scroller.find('ul > li').each(function() {
+            tabsWidth += $(this).outerWidth();
+          });
 
-          /*
-          @TODO don't scroll too much
-          var $lastTab = $scroller.find('ul > li:last');
-          var scrollerWidth = $lastTab.position().left + $lastTab.outerWidth(); // the width of all tabs combined in the tab-bar
-          */
+          // the viewport width
+          var scrollerWidth = $scroller.innerWidth();
 
-          $scroller.animate({scrollLeft: position+offset}, 150);
+          if (position+offset+scrollerWidth < tabsWidth) {
+            // scroll more to the right
+            $scroller.animate({scrollLeft: position+offset}, animationTime);
+          } else {
+            // scroll to the exact end
+            $scroller.animate({scrollLeft: tabsWidth-scrollerWidth}, animationTime);
+          }
+
         } else {
           offset = offset * -1;
-          $scroller.animate({scrollLeft: position+offset}, 150);
+          $scroller.animate({scrollLeft: position+offset}, animationTime);
         }
       });
     });
