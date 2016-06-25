@@ -1,2 +1,4 @@
 $font-family-sans-serif:  "TitilliumMapsw400", Arial, sans-serif;
 $font-family-serif:       "TitilliumMapsw400", Times, serif;
+
+$font-size-mini:         ceil(($font-size-base * 0.7)) !default; // ~12px
