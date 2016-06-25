@@ -21,7 +21,7 @@ define(['knockout', 'cms/modules/dispatcher', 'bootstrap-notify'], function(ko, 
         ids.push(item.id());
       });
 
-      dispatcher.send('DELETE', '/cms/'+listOptions.restName, { ids: ids }, 'json')
+      dispatcher.send('POST', '/cms/'+listOptions.restName+'/delete', { ids: ids }, 'json')
         .done(function(response) {
           $.notify({
             message: "Okay, das konnte ich löschen."
