@@ -9,7 +9,6 @@ define(['jquery', 'knockout', './MainModel', './ko-bindings/cms-tab', './ko-bind
     main.loadStoredTabs();
     main.loaded();
 
-    // initialize only ones: this won't update on resize (because this is very inperformant)
     $(document).ready(function() {
       var $tabsContainer = $('.tabs-container');
       var $scroller = $tabsContainer.find('.tabs-scroller');
