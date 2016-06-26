@@ -33,6 +33,7 @@ define(['knockout', 'knockout-mapping', 'knockout-collection', 'cms/modules/disp
 
     this.open = function(tab, e) {
       if (!tabs.contains(tab)) {
+        amplify.publish('cms.tabs.open', tab, e);
         that.add(tab);
       } else {
         that.select(tab, e);
