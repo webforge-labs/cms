@@ -33,7 +33,7 @@ define(['jquery', 'amplify'], function($, amplify) {
 
         } else {
           offset = offset * -1;
-          that.$scroller.animate({scrollLeft: position+offset}, animationTime);
+          that.$scroller.animate({scrollLeft: Math.max(0, position+offset)}, animationTime);
         }
       });
 
@@ -44,7 +44,20 @@ define(['jquery', 'amplify'], function($, amplify) {
       var $tab = that.$tabsContainer.find('[role="tabs-nav"] > li.active');
 
       if ($tab.length) {
-        that.$scroller.animate({scrollLeft: $tab.position().left-that.$scroller.innerWidth()/2}, animationTime);
+        var tabsWidth = 0;
+        that.$scroller.find('ul > li').each(function() {
+          tabsWidth += $(this).outerWidth();
+        });
+
+        // the viewport width
+        var scrollerWidth = that.$scroller.innerWidth();
+
+        var position = Math.min(
+          $tab.position().left-scrollerWidth/2, // scroll to the tab beeing in the middle
+          tabsWidth-scrollerWidth // scroll to the end
+        );
+
+        that.$scroller.animate({scrollLeft: position}, animationTime);
       }
     };
   };
