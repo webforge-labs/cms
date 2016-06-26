@@ -4,6 +4,7 @@ define(['knockout', 'cms/modules/dispatcher', 'bootstrap-notify'], function(ko, 
     var that = listModel;
 
     that.selection =  ko.observableArray();
+    that.isProcessing = ko.observable(false);
 
     that.reloadTab = function() {
       require(['cms/modules/main'], function(cmsMain) {
@@ -21,8 +22,9 @@ define(['knockout', 'cms/modules/dispatcher', 'bootstrap-notify'], function(ko, 
         ids.push(item.id());
       });
 
-      dispatcher.send('POST', '/cms/'+listOptions.restName+'/delete', { ids: ids }, 'json')
-        .done(function(response) {
+      that.isProcessing(true);
+      dispatcher.sendPromised('POST', '/cms/'+listOptions.restName+'/delete', { ids: ids }, 'json')
+        .then(function(response) {
           $.notify({
             message: "Okay, das konnte ich löschen."
           },{
@@ -36,8 +38,10 @@ define(['knockout', 'cms/modules/dispatcher', 'bootstrap-notify'], function(ko, 
           });
 
           that.selection([]);
+          that.isProcessing(false);
         })
-        .fail(function(err, res) {
+        .catch(function(err) {
+          that.isProcessing(false);
           $.notify({
             message: "Oops, das löschen hat nicht geklappt."
           },{

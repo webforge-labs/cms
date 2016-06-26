@@ -19,4 +19,4 @@
 <!--ko if: addedFiles().length == 0 -->
 <p>Es sind keine Bilder verknüpft</p>
 <!--/ko-->
-<button type="button" data-bind="click: chooseFiles" class="btn btn-large btn-block btn-primary">Dateien auswählen</button>
+<button type="button" data-bind="click: chooseFiles, disable: isLoading" class="btn btn-large btn-block btn-primary"><i data-bind="visible: isLoading" class="fa fa-spinner fa-spin"></i> Dateien auswählen</button>

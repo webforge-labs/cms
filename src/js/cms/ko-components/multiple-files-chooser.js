@@ -7,6 +7,7 @@ define(['knockout', 'knockout-collection', 'knockout-dragdrop', 'text!./multiple
 
     that.files = new KnockoutCollection(filesObservableArray, {key: 'key', reference: true});
     that.processing = ko.observable(false);
+    that.isLoading = ko.observable(false);
 
     that.chooseFiles = function() {
       require(['cms/modules/main'], function(main) {
@@ -15,7 +16,8 @@ define(['knockout', 'knockout-collection', 'knockout-dragdrop', 'text!./multiple
             ko.utils.arrayForEach(files, function(file) {
               that.files.add(file);
             });
-          }
+          },
+          spinner: that.isLoading
         });
       });
     };

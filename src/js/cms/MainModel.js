@@ -68,6 +68,7 @@ define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'cms/FileMa
 
     this.openFileManager = function(options) {
       that.spinning(true);
+      if (options.spinner) options.spinner(true);
       dispatcher.sendPromised('GET', '/cms/media')
         .then(function(response) {
           if (!that.fileManager()) {
@@ -83,8 +84,10 @@ define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'cms/FileMa
           $modal.modal({'show': true});
           
           that.spinning(false);
+          if (options.spinner) options.spinner(false);
         }).catch(function(fault) {
           that.spinning(false);
+          if (options.spinner) options.spinner(false);
 
           if (fault.response) {
             amplify.publish('cms.ajax.error', fault.response);

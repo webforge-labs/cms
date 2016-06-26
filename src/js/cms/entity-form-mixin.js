@@ -5,6 +5,7 @@ define(['knockout', 'knockout-mapping', 'cms/modules/dispatcher', 'cms/TabModel'
     var EntityModel = options.EntityModel;
 
     that.isNew = ko.observable(data.isNew);
+    that.isProcessing = ko.observable(false);
 
     if (that.isNew()) {
       that.entity = options.create();
@@ -28,16 +29,18 @@ define(['knockout', 'knockout-mapping', 'cms/modules/dispatcher', 'cms/TabModel'
       }
 
       that.handle(
-        dispatcher.send(method, url, body),
+        dispatcher.sendPromised(method, url, body),
         e
       );
     };
 
-    that.handle = function(req, e) {
+    that.handle = function(promise, e) {
       that.error(undefined);
+      that.isProcessing(true);
 
-      req
-        .done(function(response) {
+      promise
+        .then(function(response) {
+          that.isProcessing(false);
 
           if (that.isNew()) {
             require(['cms/modules/main'], function(cmsMain) {
@@ -45,6 +48,8 @@ define(['knockout', 'knockout-mapping', 'cms/modules/dispatcher', 'cms/TabModel'
               var tab = new Tab(entity.editTab());
 
               cmsMain.tabs.open.call(cmsMain, tab, e);
+              // make new edit tab active
+              cmsMain.tabs.select.call(cmsMain, tab, e);
             });
             $.notify({
               message: "Alles klar, das hab ich neu erstellt."
@@ -59,7 +64,10 @@ define(['knockout', 'knockout-mapping', 'cms/modules/dispatcher', 'cms/TabModel'
             });
           }
         })
-        .fail(function(err, res) {
+        .catch(function(err) {
+          that.isProcessing(false);
+
+          var res = err.response;
           var text = '';
 
           if (res.body && res.body.validation && res.body.validation.errors) {
@@ -77,7 +85,5 @@ define(['knockout', 'knockout-mapping', 'cms/modules/dispatcher', 'cms/TabModel'
           that.error(text);
         });
     };
-
   };
-
 });
