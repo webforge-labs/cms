@@ -1,7 +1,9 @@
-define(['knockout', 'knockout-mapping', 'knockout-collection', 'cms/modules/dispatcher', 'amplify'], function(ko, koMapping, KnockoutCollection, dispatcher, amplify) {
+define(['knockout', 'knockout-mapping', 'knockout-collection', 'cms/modules/dispatcher', 'amplify', './TabsScroller'], function(ko, koMapping, KnockoutCollection, dispatcher, amplify, TabsScroller) {
 
   return function() {
     var that = this;
+
+    that.scroller = new TabsScroller();
 
     var tabs = new KnockoutCollection([], {key: 'id'});
     this.activeTab = ko.observable(undefined);
@@ -97,6 +99,10 @@ define(['knockout', 'knockout-mapping', 'knockout-collection', 'cms/modules/disp
 
       tab.reset();
       loadContents(tab);
+    };
+
+    this.domLoaded = function() {
+      that.scroller.init();
     };
   };
 });

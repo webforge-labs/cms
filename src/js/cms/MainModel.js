@@ -113,6 +113,10 @@ define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'cms/FileMa
       that.loading(false);
     };
 
+    this.domLoaded = function()  {
+      that.tabs.domLoaded();
+    };
+
     this.createContext = function(name, model, $context) {
       that[name] = model;
       return that.bindTo($context);
