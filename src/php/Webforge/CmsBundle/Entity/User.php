@@ -16,6 +16,10 @@ use JMS\Serializer\Annotation AS Serializer;
  */
 class User extends CompiledUser {
 
+  public function __construct() {
+    parent::__construct();
+  }
+
   public function getDisplayName() {
     return $this->getFirstName().' '.$this->getLastName();
   }
