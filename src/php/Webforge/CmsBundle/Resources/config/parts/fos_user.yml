@@ -1,7 +1,8 @@
 fos_user:
   db_driver: orm
   firewall_name: main
-  user_class: Webforge\CmsBundle\Entity\User
+  # user_class is dynamically set in prepend extension(!)
+  #user_class: Webforge\CmsBundle\Entity\User
 
   # make fixtures work for alice
   use_listener: true

@@ -76,6 +76,9 @@ class GaufretteBinaryHandler {
         $this->applyFilterFor($gFile, $filter);
         $meta = $this->cache->fetch(\Webforge\CmsBundle\Imagine\MetaWebPathResolver::cacheKey($gFile->key, $filter));
 
+        if (!$meta) {
+          throw new NotLoadableException('No meta cache for file with gaufretteKey: '.$gFile->key);
+        }
         $meta->url = $this->cacheManager->getBrowserPath($gFile->getRelativePath(), $filter);
         $meta->name = $filter;
 

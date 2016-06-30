@@ -1,0 +1,8 @@
+#parameters:
+# this have to go the parameters of the config.yml in the project sadface
+#    jms_serializer.serialized_name_annotation_strategy.class: JMS\Serializer\Naming\IdenticalPropertyNamingStrategy
+
+jms_serializer:
+  visitors:
+    json:
+      options: 128 # pretty print

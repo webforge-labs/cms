@@ -1,3 +1,14 @@
+imports:
+    - { resource: ./parts/framework.yml }
+    - { resource: ./parts/security.yml }
+    - { resource: ./parts/doctrine.yml }
+    - { resource: ./parts/imagine.yml }
+    - { resource: ./parts/fos_user.yml }
+    - { resource: ./parts/serializer.yml }
+    - { resource: ./parts/twig.yml }
+    - { resource: ./parts/swiftmailer.yml }
+
+
 knp_gaufrette:
   adapters:
     local_files:

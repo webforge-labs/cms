@@ -36,7 +36,7 @@ services:
     calls:
       - [setImagine, ['@liip_imagine']]
     tags:
-      - { name: 'liip_imagine.cache.resolver', resolver: 'meta_web_path' }
+      - { name: 'liip_imagine.cache.resolver', resolver: 'webforge_meta_web_path' }
 
   
   webforge.cache.imagine_cache_warmer:
