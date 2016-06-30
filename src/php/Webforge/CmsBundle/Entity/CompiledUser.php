@@ -27,7 +27,7 @@ abstract class CompiledUser extends \FOS\UserBundle\Model\User {
   /**
    * firstName
    * @var string
-   * @ORM\Column(nullable=true)
+   * @ORM\Column
    * @Serializer\Expose
    * @Serializer\Type("string")
    */
@@ -36,7 +36,7 @@ abstract class CompiledUser extends \FOS\UserBundle\Model\User {
   /**
    * lastName
    * @var string
-   * @ORM\Column(nullable=true)
+   * @ORM\Column
    * @Serializer\Expose
    * @Serializer\Type("string")
    */
@@ -71,7 +71,7 @@ abstract class CompiledUser extends \FOS\UserBundle\Model\User {
   /**
    * @param string $firstName
    */
-  public function setFirstName($firstName = NULL) {
+  public function setFirstName($firstName) {
     $this->firstName = $firstName;
     return $this;
   }
@@ -86,7 +86,7 @@ abstract class CompiledUser extends \FOS\UserBundle\Model\User {
   /**
    * @param string $lastName
    */
-  public function setLastName($lastName = NULL) {
+  public function setLastName($lastName) {
     $this->lastName = $lastName;
     return $this;
   }
