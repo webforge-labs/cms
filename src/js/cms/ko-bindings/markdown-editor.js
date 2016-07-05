@@ -16,7 +16,15 @@ define(['require', 'knockout', 'codemirror', 'marked', 'uikit-src/uikit', 'uikit
           lblMarkedview: 'Markdown'
         });
 
+        editor.addButtons({
+          headline: {
+            title  : 'Überschrift',
+            label  : '<i class="uk-icon-header"></i>'
+          }
+        });
+
         editor.options.toolbar = [
+          'headline',
           'bold',
           'italic',
           //'link',
@@ -25,6 +33,20 @@ define(['require', 'knockout', 'codemirror', 'marked', 'uikit-src/uikit', 'uikit
           'listUl',
           'listOl'
         ];
+
+
+        editor
+          .off('action.headline')
+          .on('action.headline', function (e, cmEditor) {
+             var cur = cmEditor.getCursor();
+             var curLine = cmEditor.getLine(cur.line);
+
+            if (curLine.charAt(0) === '#') {
+              editor.replaceLine('\#$1');
+            } else {
+              editor.replaceSelection('\# $1');
+            }
+          });
           
         //var cursor = editor.editor.getCursor();
         //editor.editor.replaceRange(value, cursor);
