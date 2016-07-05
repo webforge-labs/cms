@@ -17,7 +17,7 @@ security:
             pattern: ^/
             form_login:
                 provider: fos_userbundle
-                csrf_provider: security.csrf.token_manager # Use form.csrf_provider instead for Symfony <2.4
+                csrf_provider: security.csrf.token_manager
                 default_target_path: /cms
             remember_me:
                 key: %secret%

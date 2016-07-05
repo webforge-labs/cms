@@ -100,6 +100,17 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
     builder.add('js', 'dropins')
       .src(cmsDir+'/src/js/lib/dropbox-dropins.js');
 
+    builder.add('js', 'marked')
+      .src(cmsDir+'/src/js/lib/marked.js');
+
+    builder.add('js', 'codemirror')
+      .src(cmsDir+'/src/js/lib/codemirror-src/**/*')
+      .pipe(builder.dest, 'codemirror-src');
+
+    builder.add('js', 'uikit')
+      .src(cmsDir+'/src/js/lib/uikit-src/**/*')
+      .pipe(builder.dest, 'uikit-src');
+
     builder.add('js', 'bootstrap-select')
       .src(builder.resolveModule('bootstrap-select')+'/bootstrap-select.js');
 
@@ -160,6 +171,7 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
 
     gulp.task('watch', ['build'], function() {
       gulp.watch('src/scss/**/*.scss', ['sass-only']);
+      gulp.watch(cmsDir+'/src/scss/**/*.scss', ['sass-only']);
       gulp.watch('Resources/tpl/**/*.mustache', ['build']);
       gulp.watch('node_modules/webforge-js-components/src/js/**/*', ['build']);
       gulp.watch('node_modules/webforge-js-components/Resources/tpl/**/*', ['build']);

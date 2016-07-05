@@ -1,0 +1,1 @@
+in uikit/core/icon.scss we removed the loading from fontawesome

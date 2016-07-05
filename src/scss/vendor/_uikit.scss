@@ -1,0 +1,7 @@
+@import "uikit/uikit-mixins.scss";
+
+// we removed the loading from fontawesome in uikit in src
+//$icon-font-path: '/assets/fonts/fontawesome'
+
+@import "uikit/uikit.scss";
+@import "uikit/components/htmleditor.scss";
