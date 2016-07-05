@@ -349,7 +349,6 @@
                 }
             }
 
-            console.log(replace, text);
             var html = replace.replace('$1', text);
 
             this.editor.replaceSelection(html, 'end');
