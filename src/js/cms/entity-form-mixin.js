@@ -1,4 +1,4 @@
-define(['knockout', 'knockout-mapping', 'cms/modules/dispatcher', 'cms/TabModel', 'bootstrap-notify', 'bootstrap/alert'], function(ko, koMapping, dispatcher, Tab, notify, bsAlert) {
+define(['knockout', 'knockout-mapping', 'cms/modules/dispatcher', 'cms/TabModel', 'bootstrap-notify', 'bootstrap/alert', 'cms/ko-components/index'], function(ko, koMapping, dispatcher, Tab, notify, bsAlert, componentsIndex) {
 
   return function EntityFormMixing(formModel, data, options) {
     var that = formModel;

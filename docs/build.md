@@ -26,6 +26,9 @@ because you want to accomplish that:
 *e.g.:*  
 lets say the cms html-frame (where the tabs are displayed) loads knockout and jquery and your tabmodule requires them, then they must not be included in the 'admin/post/list'-module.
 
+**Note:**  
+This happens if you embed the form/bootstrap3/body.html.twig which calls the controller like that.
+
 
 ## Pitfalls
 

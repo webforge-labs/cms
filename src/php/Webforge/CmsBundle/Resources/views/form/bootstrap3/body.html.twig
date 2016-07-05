@@ -1,0 +1,21 @@
+{% set modelId = (id)|replace({ "-": "_" }) ~ "Model" %}
+<form id="{{id}}" data-bind="with: {{modelId}}" class="form-horizontal">
+
+  <div data-bind="visible: error" class="alert alert-danger">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <p><strong>Oops</strong> Hier hat was nicht geklappt.</p>
+    <div data-bind="html: error"></div>
+  </div>
+
+  {% block body %}{% endblock %}
+
+</form>
+<script type="text/javascript">
+  require(['require', '{{module}}', 'cms/modules/main', 'jquery'], function(require, controller, main, $) {
+    require({{ dependencies|default([])|json_encode|raw }}, function() {
+      var viewModel = controller({{data|json_encode(constant('JSON_PRETTY_PRINT'))|raw}});
+    
+      main.createContext('{{modelId}}', viewModel, $('#{{id}}'));
+    });
+  });
+</script>

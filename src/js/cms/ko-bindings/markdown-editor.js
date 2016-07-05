@@ -1,5 +1,37 @@
-define(['require', 'knockout', 'codemirror', 'marked', 'uikit-src/uikit', 'uikit-src/components/htmleditor'], function(require, ko, CodeMirror, marked) {
-  
+define(function(require) {
+
+  var ko = require('knockout');
+  var CodeMirror = require('codemirror');
+  var marked = require('marked');
+
+  require('uikit-src/uikit');
+  require('uikit-src/components/htmleditor');
+
+  // configure CodeMirror:
+  require('codemirror/mode/htmlmixed/htmlmixed');
+  require('codemirror/mode/gfm/gfm');
+  /*
+  require('codemirror/mode/xml/xml');
+  require('codemirror/mode/htmlembedded/htmlembedded');
+  require('codemirror/addon/mode/overlay');
+  require('codemirror/mode/gfm/gfm');
+  require('codemirror/addon/selection/active-line');
+  require('codemirror/addon/selection/mark-selection');
+  require('codemirror/addon/wrap/hardwrap');
+  require('codemirror/addon/edit/matchbrackets');
+  require('codemirror/addon/edit/closetag');
+  require('codemirror/addon/edit/closebrackets');
+  require('codemirror/addon/edit/matchtags');
+  require('codemirror/addon/display/placeholder');
+  require('codemirror/addon/hint/anyword-hint');
+  require('codemirror/addon/fold/markdown-fold');
+  require('codemirror/addon/fold/xml-fold');
+  require('codemirror/addon/hint/show-hint');
+  require('codemirror/addon/hint/javascript-hint');
+  require('codemirror/addon/hint/xml-hint');
+  */
+
+//  { mode: 'htmlmixed', lineWrapping: true, dragDrop: false, autoCloseTags: true, matchTags: true, autoCloseBrackets: true, matchBrackets: true, indentUnit: 4, indentWithTabs: false, tabSize: 4, hintOptions: {completionSingle:false} },
 
   ko.bindingHandlers.markdownEditor = {
     init: function(element, valueAccessor, allBindings, deprecated, bindingContext) {
@@ -38,14 +70,11 @@ define(['require', 'knockout', 'codemirror', 'marked', 'uikit-src/uikit', 'uikit
         editor
           .off('action.headline')
           .on('action.headline', function (e, cmEditor) {
-             var cur = cmEditor.getCursor();
-             var curLine = cmEditor.getLine(cur.line);
+            var cur = cmEditor.getCursor();
+            var curLine = cmEditor.getLine(cur.line);
 
-            if (curLine.charAt(0) === '#') {
-              editor.replaceLine('\#$1');
-            } else {
-              editor.replaceSelection('\# $1');
-            }
+            editor.replaceLine(curLine.charAt(0) === '#' ? '\#$1' : '\# $1');
+            cmEditor.setCursor({ line: cur.line, ch: null });
           });
           
         //var cursor = editor.editor.getCursor();
