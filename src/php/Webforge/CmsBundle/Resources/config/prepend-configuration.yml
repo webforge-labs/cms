@@ -2,7 +2,7 @@ imports:
     - { resource: ./parts/framework.yml }
     - { resource: ./parts/security.yml }
     - { resource: ./parts/doctrine.yml }
-    - { resource: ./parts/imagine.yml }
+    #- { resource: ./parts/imagine.yml } # this is done in the extension with load() because its not loaded from here correctly
     - { resource: ./parts/fos_user.yml }
     - { resource: ./parts/serializer.yml }
     - { resource: ./parts/twig.yml }

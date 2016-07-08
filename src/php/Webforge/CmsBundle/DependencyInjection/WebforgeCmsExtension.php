@@ -20,7 +20,14 @@ class WebforgeCmsExtension extends Extension implements PrependExtensionInterfac
   }
   
   public function prepend(ContainerBuilder $container) {
-    // make user_class for fos_user dynamic
+    // special handling for the liip_imagine extension that is very weird
+    $loader = new YamlFileLoader(
+      $container,
+      new FileLocator(__DIR__.'/../Resources/config')
+    );
+    $loader->load('parts/imagine.yml');
+
+    // make user dynamic
     $container->prependExtensionConfig('fos_user', array('user_class'=>$container->getParameter('entities_namespace').'\\User'));
   }
 }
