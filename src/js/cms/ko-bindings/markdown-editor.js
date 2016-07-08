@@ -126,11 +126,7 @@ define(function(require) {
         */
       });
 
-      ko.bindingHandlers.value.init(element, valueAccessor, allBindings, deprecated, bindingContext);
-    },
-
-    update: function(element, valueAccessor, allBindings, deprecated, bindingContext) {
-      ko.bindingHandlers.value.update(element, valueAccessor, allBindings, deprecated, bindingContext);
+      ko.bindingHandlers.textInput.init(element, valueAccessor, allBindings, deprecated, bindingContext);
     }
   };
 });
