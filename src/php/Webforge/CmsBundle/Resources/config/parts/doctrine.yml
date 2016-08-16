@@ -1,34 +1,39 @@
 # Doctrine Configuration
 doctrine:
     dbal:
-        driver:   pdo_mysql
-        host:     "%database_host%"
-        port:     "%database_port%"
-        dbname:   "%database_name%"
-        user:     "%database_user%"
-        password: "%database_password%"
-        charset:  UTF8
-        # if using pdo_sqlite as your database driver:
-        #   1. add the path in parameters.yml
-        #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
-        #   2. Uncomment database_path in parameters.yml.dist
-        #   3. Uncomment next line:
-        #     path:     "%database_path%"
+        connections:
+            default:
+                driver:   pdo_mysql
+                host:     "@=container.hasParameter('database_host') ? parameter('database_host') : 'localhost'"
+                port:     "@=container.hasParameter('database_port') ? parameter('database_port') : null"
+                dbname:   "@=container.hasParameter('database_name') ? parameter('database_name') : null"
+                dbname:   "@=container.hasParameter('database_user') ? parameter('database_user') : null"
+                dbname:   "@=container.hasParameter('database_password') ? parameter('database_password') : null"
+                charset:  UTF8
+                # if using pdo_sqlite as your database driver:
+                #   1. add the path in parameters.yml
+                #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
+                #   2. Uncomment database_path in parameters.yml.dist
+                #   3. Uncomment next line:
+                #     path:     "%database_path%"
 
         types:
-          WebforgeDateTime:  Webforge\Doctrine\Types\DateTimeType
-          WebforgeDate:  Webforge\Doctrine\Types\DateType
+            WebforgeDateTime:  Webforge\Doctrine\Types\DateTimeType
+            WebforgeDate:  Webforge\Doctrine\Types\DateType
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
-        naming_strategy: doctrine.orm.naming_strategy.underscore
-        auto_mapping: true
 
-        mappings:
-            WebforgeCmsBundle:
-                mapping:              false
-                type:                 annotation
-                dir:                  ~
-                alias:                ~
-                prefix:               Webforge\CmsBundle\Entity
-                is_bundle:            true
+        entity_managers:
+            default:
+                naming_strategy: doctrine.orm.naming_strategy.underscore
+                auto_mapping: true
+
+                mappings:
+                    WebforgeCmsBundle:
+                        mapping:              false
+                        type:                 annotation
+                        dir:                  ~
+                        alias:                ~
+                        prefix:               Webforge\CmsBundle\Entity
+                        is_bundle:            true
