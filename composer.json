@@ -27,7 +27,7 @@
         "friendsofsymfony/user-bundle": "2.0.*",
         "webforge/doctrine": "~1.2.4",
         "webforge/collections": "1.0.*@stable",
-        "webforge/symfony": "~1.3.0",
+        "webforge/symfony": "~1.4.0",
         "liip/functional-test-bundle": "1.3.*@dev",
         "knplabs/knp-gaufrette-bundle": "^0.3.0",
         "liip/imagine-bundle": "^1.5"
