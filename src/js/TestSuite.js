@@ -44,7 +44,7 @@ module.exports = function(options) {
 
     World.prototype.debug = require('debug')('cucumber-world');
 
-    World.prototype.cli = function(parameters, options) {
+    World.prototype.cli = function(parameters, execOptions) {
       var that = this;
       var execFile = require('child_process').execFile;
 
@@ -52,7 +52,7 @@ module.exports = function(options) {
       this.debug(parameters);
 
       return new Promise(function (resolve, reject) {
-        var child = execFile(options.cli, parameters, options, function(error, stdout, stderr) {
+        var child = execFile(options.cli, parameters, execOptions, function(error, stdout, stderr) {
           if (error) {
             that.debug(stderr, stdout);
             error += "\nstdout: \n"+stdout;
