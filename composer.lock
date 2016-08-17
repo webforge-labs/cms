@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "62110764c9f30c355a26f8ccab1298f7",
-    "content-hash": "c3284ce87aa06c811efa15cf8122e0af",
+    "hash": "640a57585ef5074eb50d248275c7063f",
+    "content-hash": "c60d0c6a5a4174fd03b942f64ca2904c",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2571,16 +2571,16 @@
         },
         {
             "name": "webforge/symfony",
-            "version": "1.4.1",
+            "version": "1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webforge-labs/webforge-symfony.git",
-                "reference": "c77f0f9ab1405dbde6ac55c42d7d8719c3169bf0"
+                "reference": "cd683ea5de42354928b10412330b91d27b39539a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webforge-labs/webforge-symfony/zipball/c77f0f9ab1405dbde6ac55c42d7d8719c3169bf0",
-                "reference": "c77f0f9ab1405dbde6ac55c42d7d8719c3169bf0",
+                "url": "https://api.github.com/repos/webforge-labs/webforge-symfony/zipball/cd683ea5de42354928b10412330b91d27b39539a",
+                "reference": "cd683ea5de42354928b10412330b91d27b39539a",
                 "shasum": ""
             },
             "require": {
@@ -2612,7 +2612,7 @@
                     "email": "p.scheit@ps-webforge.com"
                 }
             ],
-            "time": "2016-08-17 10:46:52"
+            "time": "2016-08-17 12:49:04"
         },
         {
             "name": "webforge/utils",
