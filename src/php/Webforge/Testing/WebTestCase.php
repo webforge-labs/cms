@@ -15,7 +15,7 @@ class WebTestCase extends LiipWebTestCase {
     )
   );
 
-  protected function loadAliceFixtures(Array $names, $client) {
+  protected function loadAliceFixtures(Array $names, $client, $con = 'default', $purge = TRUE) {
     $dir = $GLOBALS['env']['root']->sub('tests/files/alice/');
 
     $files = array();
@@ -23,11 +23,10 @@ class WebTestCase extends LiipWebTestCase {
       $files[] = $dir->getFile($name.'.yml');
     }
 
-    $manager = $client->getContainer()->get('h4cc_alice_fixtures.manager');    
-    $objects = $manager->loadFiles($files, 'yaml');
+    $objectManager = $client->getContainer()->get(sprintf('doctrine.orm.%s_entity_manager', $con));
+    $aliceManager = $client->getContainer()->get('webforge_symfony_alice_manager');
 
-    $manager->persist($objects, true);
-    return $objects;
+    $aliceManager->loadFixtures($files, $objectManager, $output = new \Symfony\Component\Console\Output\BufferedOutput(), $purge);
   }
 
   protected function sendJsonRequest($client, $method, $url, $json = NULL) {
