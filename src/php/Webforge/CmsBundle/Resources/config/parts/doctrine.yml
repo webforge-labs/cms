@@ -4,11 +4,11 @@ doctrine:
         connections:
             default:
                 driver:   pdo_mysql
-                host:     "@=container.hasParameter('database_host') ? parameter('database_host') : 'localhost'"
-                port:     "@=container.hasParameter('database_port') ? parameter('database_port') : null"
-                dbname:   "@=container.hasParameter('database_name') ? parameter('database_name') : null"
-                dbname:   "@=container.hasParameter('database_user') ? parameter('database_user') : null"
-                dbname:   "@=container.hasParameter('database_password') ? parameter('database_password') : null"
+                host:     "%database_host%"
+                port:     "%database_port%"
+                dbname:   "%database_name%"
+                user:     "%database_user%"
+                password: "%database_password%"
                 charset:  UTF8
                 # if using pdo_sqlite as your database driver:
                 #   1. add the path in parameters.yml

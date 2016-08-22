@@ -19,3 +19,10 @@ chimp
 ## Sponsoring
 
 A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsoring a free Live account, that allows us to test on Iphones and other devices.
+
+## BC Breaks for 1.6.x
+
+- You need to provide the database parameters again (database_host, database_port, database_name, database_user, database_password)
+- You need to set `sidebar.activeGroup` in the base.html.twig template
+- You need to set `site.url` and `site.title` in the base.html.twig template
+- You need to set `cms.title` and (optional) `site.xsTitle` in the base.html.twig template
