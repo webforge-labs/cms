@@ -16,9 +16,13 @@ class MediaController extends CommonController {
    * @Method("GET")
    */
   public function indexAction() {
+    return new JsonResponse($this->getIndex());
+  }
+
+  protected function getIndex() {
     $handler = $this->get('webforge.serialization.gaufrette_binary_handler');
 
-    return new JsonResponse($handler->asTree());
+    return $handler->asTree();
   }
 
   /**
@@ -32,14 +36,19 @@ class MediaController extends CommonController {
     $json = $this->retrieveJsonBody($request);
 
     $path = trim($json->path, '/').'/'; // store without leadingslash
+    $warnings = array();
     foreach ($json->dropboxFiles as $dbFile) {
-      $filesystem->write($path.$dbFile->name, file_get_contents($dbFile->link));
+      try {
+        $filesystem->write($path.$dbFile->name, file_get_contents($dbFile->link));
+      } catch (\Gaufrette\Exception\FileAlreadyExists $e) {
+        $warnings[] = sprintf('Die Datei %s existiert bereits und wird nicht von mir überschrieben. Du musst sie erst löschen, um sie zu ersetzen', $path.$dbFile->name);
+      }
     }
 
-    $response = $this->indexAction();
-    $response->setStatusCode(201);
+    $data = $this->getIndex();
+    $data->warnings = $warnings;
 
-    return $response;
+    return new JsonResponse($data, 201);
   }
 
   /**

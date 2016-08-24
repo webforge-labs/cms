@@ -1,4 +1,4 @@
-define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/modules/ui', 'cms/modules/dropbox-chooser', 'cms/modules/dispatcher', 'amplify', 'bluebird'], function(ko, KnockoutCollection, koMapping, lodash, ui, Dropbox, dispatcher, amplify) {
+define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/modules/ui', 'cms/modules/dropbox-chooser', 'cms/modules/dispatcher', 'amplify', 'bluebird'], function(ko, KnockoutCollection, koMapping, _, ui, Dropbox, dispatcher, amplify) {
    var Promise = require("bluebird");
 
    var FileManager = {};
@@ -37,17 +37,24 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
      };
 
      this.uploadFromDropbox = function(ci, files, processing, progress, afterwards) {
-
        var path = ci.path();
 
        processing(true);
        progress(0);
+
+       var warnings = [];
 
        Promise.map(_.chunk(files, that.concurrentFiles()), function(chunkOfFiles) {
          var sendPromise = dispatcher.sendPromised('POST', '/cms/media/dropbox', { dropboxFiles: chunkOfFiles, path: path }, 'json');
 
          sendPromise.reflect().then(function(inspection) {
           if (inspection.isFulfilled()) {
+            var response = inspection.value();
+
+            if (response.body && response.body.warnings && response.body.warnings.length) {
+              warnings = _.concat(warnings, response.body.warnings);
+            }
+
             progress(progress()+chunkOfFiles.length);
           }
          });
@@ -59,7 +66,7 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
        })
        .then(function(response) {
          processing(false);
-         return afterwards(response);
+         return afterwards(response, warnings);
        })
        .catch(function(fault) {
          processing(false);
@@ -169,6 +176,7 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
      this.selection =  ko.observableArray([]); // selection on one page
      this.chosenFiles = new KnockoutCollection([], {key: 'path'});
      this.processing = ko.observable(false);
+     this.error = ko.observable();
      this.filesProgress = ko.observable(0);
      this.filesTotal = ko.observable(0);
      this.isInChoosingMode = ko.observable(true);
@@ -343,8 +351,12 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
            var ci = that.currentItem();
 
            that.filesTotal(files.length);
-           that.sync.uploadFromDropbox(ci, files, that.processing, that.filesProgress, function(response) {
+           that.sync.uploadFromDropbox(ci, files, that.processing, that.filesProgress, function(response, warnings) {
              that.refreshData(response.body);
+
+             if (warnings.length) {
+               that.error({message: _.join(warnings, "<br>\n")});
+             }
            });
           },
           linkType: "direct",

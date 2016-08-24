@@ -3,11 +3,19 @@
   <a data-bind="click: newFolder" class="btn btn-default"><i class="fa fa-folder"></i> Neuer Ordner</a>
 </div>
 
-<div class="alert alert-warning" data-bind="visible: processing">
+<div class="alert alert-warning m-t-1" data-bind="visible: processing">
   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
   <strong><i class="fa fa-spinner fa-spin"></i> Bitte warte kurz..</strong> Ich kopiere gerade die neuen Dateien ins CMS und erzeuge die Bilder-Vorschau. Dies dauert immer etwas länger..<br />
   Ich habe schon <strong data-bind="text: filesProgress"></strong> von <strong data-bind="text: filesTotal"></strong> bearbeitet.
 </div>
+
+<!-- ko if: error -->
+<div class="alert alert-danger m-t-1" data-bind="with: error">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <strong>Hoppla</strong>
+  <div data-bind="html: message"></div>
+</div>
+<!-- /ko -->
 
 <ol class="breadcrumb m-t-1" data-bind="foreach: breadcrumbs">
   <li><a href="#" data-bind="click: $parent.clickItem, text: label"></a></li>
