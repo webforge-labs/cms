@@ -44,7 +44,7 @@ class GulpBuilderTest extends \PHPUnit_Framework_TestCase {
     $test('js/knockout-collection.js');
     $test('js/knockout-mapping.js');
 
-    $test('js/modules/Dispatcher.js');
+    $test('js/cms/modules/dispatcher.js');
 
     $test('js/WebforgeCmsBundle/translations-compiled.json');
 

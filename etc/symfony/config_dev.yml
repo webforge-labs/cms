@@ -18,11 +18,3 @@ web_profiler:
 
 swiftmailer:
     delivery_address: p.scheit@ps-webforge.com
-
-h4cc_alice_fixtures:
-    locale: de_De                               # default
-    seed: 7                                     # default
-    do_flush: true                              # default
-
-    schema_tool: null                           # default
-    doctrine: orm

@@ -11,3 +11,4 @@ composer.phar
 /etc/symfony/parameters.yml
 /src/js/admin/config.js
 /files/media
+/www/images/cache

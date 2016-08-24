@@ -8,3 +8,24 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: de
+
+
+# overwride the non-mapping-for-WebforgeCmsBundle part for other projects
+# this project uses the extended entities itself
+doctrine:
+    orm:
+        auto_generate_proxy_classes: "%kernel.debug%"
+
+        entity_managers:
+            default:
+                naming_strategy: doctrine.orm.naming_strategy.underscore
+                auto_mapping: true
+
+                mappings:
+                    WebforgeCmsBundle:
+                        mapping:              true
+                        type:                 annotation
+                        dir:                  ~
+                        alias:                ~
+                        prefix:               Webforge\CmsBundle\Entity
+                        is_bundle:            true
