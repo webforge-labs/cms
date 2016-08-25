@@ -1,11 +1,12 @@
-define(['knockout', 'knockout-mapping', 'cms/modules/dispatcher', 'cms/TabModel', 'bootstrap-notify', 'bootstrap/alert', 'cms/ko-components/index'], function(ko, koMapping, dispatcher, Tab, notify, bsAlert, componentsIndex) {
+define(['knockout', 'knockout-mapping', 'jquery', './form-mixin', 'cms/modules/dispatcher', 'cms/TabModel', 'bootstrap-notify', 'bootstrap/alert', 'cms/ko-components/index'], function(ko, koMapping, $, FormMixin, dispatcher, Tab, notify, bsAlert, componentsIndex) {
 
-  return function EntityFormMixing(formModel, data, options) {
+  return function EntityFormMixin(formModel, data, options) {
     var that = formModel;
     var EntityModel = options.EntityModel;
 
     that.isNew = ko.observable(data.isNew);
-    that.isProcessing = ko.observable(false);
+
+    FormMixin(that, { dispatcher: dispatcher});
 
     if (that.isNew()) {
       that.entity = options.create();
@@ -13,7 +14,9 @@ define(['knockout', 'knockout-mapping', 'cms/modules/dispatcher', 'cms/TabModel'
       that.entity = options.EntityModel.map(data.entity);
     }
 
-    that.error = ko.observable();
+    var _parent = {
+      save: that.save
+    };
 
     that.save = function(model, e) {
       var body = that.entity.serialize();
@@ -28,20 +31,8 @@ define(['knockout', 'knockout-mapping', 'cms/modules/dispatcher', 'cms/TabModel'
         url = that.entity.editTab().url;
       }
 
-      that.handle(
-        dispatcher.sendPromised(method, url, body),
-        e
-      );
-    };
-
-    that.handle = function(promise, e) {
-      that.error(undefined);
-      that.isProcessing(true);
-
-      promise
+      _parent.save(method, url, body)
         .then(function(response) {
-          that.isProcessing(false);
-
           if (that.isNew()) {
             require(['cms/modules/main'], function(cmsMain) {
               var entity = EntityModel.map(response.body);
@@ -63,27 +54,9 @@ define(['knockout', 'knockout-mapping', 'cms/modules/dispatcher', 'cms/TabModel'
               type: 'success'
             });
           }
+        }, function(err) {
+          // the error is displayed in formMixin, we won't have to do something else
         })
-        .catch(function(err) {
-          that.isProcessing(false);
-
-          var res = err.response;
-          var text = '';
-
-          if (res.body && res.body.validation && res.body.validation.errors) {
-            $.each(res.body.validation.errors, function(i, error) {
-              text += "<p>";
-              if (error.field && error.field.path) {
-                text += "<strong>"+error.field.path+"</strong>: ";
-              }
-              text += error.message+"</p>";
-            });
-          } else {
-            text = res.text;
-          }
-
-          that.error(text);
-        });
     };
   };
 });
