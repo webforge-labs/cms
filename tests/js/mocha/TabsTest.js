@@ -1,4 +1,6 @@
-var boot = require('./bootstrap');
+var bootstrap = require('./bootstrap');
+var boot = bootstrap({ context: __filename });
+
 var expect = boot.expect;
 var _ = require('lodash');
 
@@ -9,7 +11,7 @@ GLOBAL.window = {
 };
 
 // we replace amplify with a fake
-boot.requirejs.define('amplify', function() {
+boot.define('amplify', function() {
   return {
     publish: function() {
     }
@@ -17,12 +19,12 @@ boot.requirejs.define('amplify', function() {
 });
 
 // we fake jQuery
-boot.requirejs.define('jquery', function() {
+boot.define('jquery', function() {
   return require('jquery-deferred');
 });
 
 // we fake the dispatcher
-boot.requirejs.define('cms/modules/dispatcher', ['jquery'], function($) {
+boot.define('cms/modules/dispatcher', ['jquery'], function($) {
   var FakeDispatcher = function FakeDispatcher() {
     var that = this;
 

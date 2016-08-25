@@ -1,4 +1,6 @@
-var boot = require('./bootstrap');
+var bootstrap = require('./bootstrap');
+var boot = bootstrap({ context: __filename });
+
 var expect = boot.expect;
 var _ = require('lodash');
 
@@ -13,7 +15,7 @@ GLOBAL.window = {
 };
 
 // we replace amplify with a fake
-boot.requirejs.define('amplify', function() {
+boot.define('amplify', function() {
   return {
     publish: function() {
     },
@@ -23,7 +25,7 @@ boot.requirejs.define('amplify', function() {
 });
 
 // we fake jQuery
-boot.requirejs.define('jquery', function() {
+boot.define('jquery', function() {
   $ = require('jquery-deferred');
 
   $.notifications = [];
@@ -35,21 +37,30 @@ boot.requirejs.define('jquery', function() {
 });
 
 // we fake the dispatcher
-boot.requirejs.define('cms/modules/dispatcher', function() {
-  var FakeDispatcher = function FakeDispatcher() {
+boot.define('cms/modules/dispatcher', function() {
+  var FakeDispatcher= function () {
     var that = this;
 
-    that.nextPromises = [];
+    that.promiseBodies = [];
 
-    this.sendPromised = function() {
-      return that.nextPromises.shift();
+    that.onSend = function(promiseBody) {
+      that.promiseBodies.push(promiseBody);
     };
+
+    that.sendPromised = function(method, url, body) {
+      return new Promise(that.promiseBodies.shift());
+    };
+
+    that.reset = function() {
+      that.promiseBodies = []
+    };
+
   };
 
   return new FakeDispatcher();
 });
 
-boot.requirejs.define('cms/modules/dropbox-chooser', function() {
+boot.define('cms/modules/dropbox-chooser', function() {
   return {
     choose: function(options) {
       var files = [
@@ -130,7 +141,7 @@ describe('FileManager', function() {
     dispatcher.nextPromises = [];
   })
 
-  it('uploads files from the dropbox, are then displayed', function (done) {
+  it('uploads files from dropbox, which are then displayed', function (done) {
     var fm = this.fm, that = this;
 
     var uploadedRootResponse = clone(this.rootResponse);
@@ -138,13 +149,13 @@ describe('FileManager', function() {
       'name': 'uploaded.png'
     });
 
-    dispatcher.nextPromises.push(new Promise(function(fulfill, reject) {
+    dispatcher.onSend(function(fulfill, reject) {
       fulfill({body: uploadedRootResponse}); // this is indeed not used, yet. Its just the response from the POST call (which returns the index as well)
-    }));
+    });
 
-    dispatcher.nextPromises.push(new Promise(function(fulfill, reject) {
+    dispatcher.onSend(function(fulfill, reject) {
       fulfill({body: uploadedRootResponse});
-    }));
+    });
 
     fm.addFilesFromDropbox();
 
@@ -160,7 +171,7 @@ describe('FileManager', function() {
       expect(items[0], 'uploaded file').to.have.property('name', 'uploaded.png');
 
       done();
-    }, 2);
+    }, 10);
 
   });
 
@@ -177,13 +188,13 @@ describe('FileManager', function() {
     var msg, uploadWithWarnings = clone(uploadedRootResponse);
     uploadWithWarnings.warnings = [msg = 'Die Datei wurde nicht überschrieben. Zum überschreiben, erst die Datei löschen']
 
-    dispatcher.nextPromises.push(new Promise(function(fulfill, reject) {
+    dispatcher.onSend(function(fulfill, reject) {
       fulfill({body: uploadWithWarnings});
-    }));
+    });
 
-    dispatcher.nextPromises.push(new Promise(function(fulfill, reject) {
+    dispatcher.onSend(function(fulfill, reject) {
       fulfill({body: uploadedRootResponse});
-    }));
+    });
 
     fm.addFilesFromDropbox();
 

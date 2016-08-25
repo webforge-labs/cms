@@ -1,4 +1,6 @@
-var boot = require('./bootstrap');
+var bootstrap = require('./bootstrap');
+var boot = bootstrap({ context: __filename });
+
 var expect = boot.expect;
 var cukedZombie = require('cuked-zombie');
 var _ = require('lodash');
@@ -6,6 +8,7 @@ var Dragger = require('../dragger');
 
 describe('Navigation', function() {
   before(function(done) { // execute once
+    return this.skip();
     this.timeout(20000);
     var that = this;
 

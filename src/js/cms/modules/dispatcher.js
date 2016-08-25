@@ -23,7 +23,6 @@ define(['superagent', 'jquery', 'lodash', 'bluebird'], function(request, $, _, P
             if (response.ok) {
               fulfill(response);
             } else {
-              that.handleError(response, err);
               err.response = response;
               reject(err);
             }
@@ -55,20 +54,10 @@ define(['superagent', 'jquery', 'lodash', 'bluebird'], function(request, $, _, P
             d.resolve(response);
           } else {
             d.reject(err, response);
-            that.handleError(response, err);
           }
        });
 
       return d.promise();
-    };
-
-    this.handleError = function(info, err) {
-      /* globals alert, console */
-      if (console && console.log) {
-        console.log('Fehler aufgetreten im Dispatcher: ', info, err);
-      } else {
-        alert('Bei der Kommunikation mit dem Backend ist ein Fehler aufgetreten: '+err);
-      }
     };
   };
 
