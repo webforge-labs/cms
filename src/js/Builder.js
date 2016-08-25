@@ -103,10 +103,6 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
     builder.add('js', 'marked')
       .src(cmsDir+'/src/js/lib/marked.js');
 
-    builder.add('js', 'codemirror')
-      .src(cmsDir+'/src/js/lib/codemirror-src/**/*')
-      .pipe(builder.dest, 'codemirror-src');
-
     builder.add('js', 'uikit')
       .src(cmsDir+'/src/js/lib/uikit-src/**/*')
       .pipe(builder.dest, 'uikit-src');

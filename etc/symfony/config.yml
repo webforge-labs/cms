@@ -10,7 +10,7 @@ parameters:
     locale: de
 
 
-# overwride the non-mapping-for-WebforgeCmsBundle part for other projects
+# overwride the non-mapping-for: WebforgeCmsBundle part for other projects
 # this project uses the extended entities itself
 doctrine:
     orm:
