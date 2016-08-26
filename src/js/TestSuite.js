@@ -44,12 +44,28 @@ module.exports = function(options) {
 
     World.prototype.debug = require('debug')('cucumber-world');
 
+    World.prototype.setOption = function(name, value) {
+      options[name] = value;
+    };
+
     World.prototype.cli = function(parameters, execOptions) {
       var that = this;
       var execFile = require('child_process').execFile;
 
       this.debug('call cli command');
       this.debug(parameters);
+
+      if (execOptions.extendEnv) {
+        var env = {}, e;
+        for (e in process.env) {
+          env[e] = process.env[e];
+        }
+        for (e in execOptions.extendEnv) {
+          env[e] = execOptions.extendEnv[e];
+        }
+        execOptions.env = env;
+        delete execOptions.extendEnv;
+      }
 
       return new Promise(function (resolve, reject) {
         var child = execFile(options.cli, parameters, execOptions, function(error, stdout, stderr) {
@@ -63,6 +79,23 @@ module.exports = function(options) {
           }
         });
       });
+    };
+
+    // options: manager
+    World.prototype.dql = function(dql, parameters, options, execOptions) {
+      if (!options) options = {};
+      if (!options.manager) options.manager = 'default';
+
+      /* globals Buffer */
+      var jsonParameters = JSON.stringify(parameters);
+      var encodedParameters = new Buffer(jsonParameters).toString('base64');
+
+      return this.cli(['testing:dql', '--manager='+options.manager, '--base64', dql, encodedParameters], execOptions)
+        .then(function(stdout) {
+          var result = JSON.parse(stdout);
+
+          return result;
+        });
     };
   };
 
