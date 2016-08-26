@@ -43,8 +43,10 @@ define(['knockout', 'knockout-mapping', 'jquery', 'lodash', 'cms/TabModel', 'boo
               });
 
             // 500 error and others
-            } else {
+            } else if (res.html) {
               err.html = res.html;
+            } else if (res.text) {
+              err.html = res.text;
             }
 
             that.error(err.html);

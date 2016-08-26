@@ -184,4 +184,44 @@ describe('FormMixin', function() {
       done();
     }, 15);
   });  
+
+
+  it('sets error with response without html but text', function (done) {
+    var form = this.form;
+
+    var html = '<html><head><title>This is bad</title>/head><body>Reason why its bad</body></html>';
+    var rejectError = new Error('Fatal Server Error');
+    rejectError.status = 500;
+    // this was the weird response from superagent
+    rejectError.response = {
+      ok: false,
+      status: 500,
+      text: html,
+      type: "text/html",
+      charset: "UTF-8",
+      body: null,
+      clientError: false,
+      serverError: true
+    };
+
+    this.dispatcher.onSend(function(fulfill, reject) {
+      setTimeout(function() {
+        reject(rejectError);
+      }, 5);
+    });
+
+    var rejectCalled = false;
+    form.save('POST', '/saving-point', { custom: 'data' })
+      .catch(function(err) {
+        rejectCalled = true;
+      });
+
+    setTimeout(function() {
+      expect(rejectCalled,'promise from save() should  be rejected, when errors occur, ALLTHOUGH they are process in error()').to.be.true;
+      expect(form.error(), 'form.error observable').to.be.ok;
+      expect(form.error(), 'form.error()').to.contain('<title>This is bad</title>');
+      done();
+    }, 15);
+  });  
+
 });
