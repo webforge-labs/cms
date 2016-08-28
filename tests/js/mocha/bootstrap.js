@@ -4,8 +4,6 @@ module.exports = function(options) {
   var path = require('path');
   var globalRequirejs = require('requirejs');
 
-  console.log(options);
-
   var requirejs = globalRequirejs.config({
     context: options.context,
     nodeRequire: require,

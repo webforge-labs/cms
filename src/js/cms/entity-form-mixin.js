@@ -1,4 +1,4 @@
-define(['knockout', 'knockout-mapping', 'jquery', './form-mixin', 'cms/modules/dispatcher', 'cms/TabModel', 'bootstrap-notify', 'bootstrap/alert', 'cms/ko-components/index'], function(ko, koMapping, $, FormMixin, dispatcher, Tab, notify, bsAlert, componentsIndex) {
+define(['require', 'knockout', 'knockout-mapping', 'jquery', './form-mixin', 'cms/modules/dispatcher', 'cms/TabModel', 'bootstrap-notify', 'bootstrap/alert', 'cms/ko-components/index'], function(require, ko, koMapping, $, FormMixin, dispatcher, Tab, notify, bsAlert, componentsIndex) {
 
   return function EntityFormMixin(formModel, data, options) {
     var that = formModel;
@@ -31,7 +31,7 @@ define(['knockout', 'knockout-mapping', 'jquery', './form-mixin', 'cms/modules/d
         url = that.entity.editTab().url;
       }
 
-      _parent.save(method, url, body)
+      return _parent.save(method, url, body)
         .then(function(response) {
           if (that.isNew()) {
             require(['cms/modules/main'], function(cmsMain) {

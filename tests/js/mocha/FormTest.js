@@ -38,29 +38,14 @@ boot.define('bootstrap/alert', function() {
 
 var FormMixin = boot.requirejs('cms/form-mixin');
 var Promise = boot.requirejs('bluebird');
+var FakeDispatcher = boot.requirejs('cms/testing/FakeDispatcher');
 
 describe('FormMixin', function() {
 
   before(function() { // execute once
     this.form = {};
-    this.dispatcher = new (function () {
-      var that = this;
 
-      that.promiseBodies = [];
-
-      that.onSend = function(promiseBody) {
-        that.promiseBodies.push(promiseBody);
-      };
-
-      that.sendPromised = function(method, url, body) {
-        return new Promise(that.promiseBodies.shift());
-      };
-
-      that.reset = function() {
-        that.promiseBodies = []
-      };
-
-    })();
+    this.dispatcher = new FakeDispatcher();
 
     FormMixin(
       this.form,
@@ -96,14 +81,16 @@ describe('FormMixin', function() {
 
     form.error('a value that should be reset');
 
-    form.save('POST', '/saving-point', { custom: 'data' });
-
-    setTimeout(function() {
-      expect(intermediateProcessing, 'processing while saving').to.be.true;
-      expect(form.isProcessing(), 'processing after saving').to.be.false;
-      expect(form.error(), 'error after sucessful saving').to.be.undefined;
-      done();
-    }, 20);
+    form.save('POST', '/saving-point', { custom: 'data' })
+      .then(function() {
+        expect(intermediateProcessing, 'processing while saving').to.be.true;
+        expect(form.isProcessing(), 'processing after saving').to.be.false;
+        expect(form.error(), 'error after sucessful saving').to.be.undefined;
+        done();
+      }, function(err) {
+        expect(err, 'should not be rejected').to.be.undefined;
+        done();
+      });
   });
 
   it('sets an error when saving fails with validation', function (done) {
@@ -131,7 +118,7 @@ describe('FormMixin', function() {
         
         reject(error);
 
-      }, 5);
+      }, 4);
     });
 
     form.save('POST', '/saving-point', { custom: 'data' })
@@ -145,7 +132,7 @@ describe('FormMixin', function() {
 
       expect(form.error()).to.contain('<strong>title</strong>').and.to.contain('Dieser Wert sollte nicht leer sein');
       done();
-    }, 15);
+    }, 20);
   });
 
   it('does not resolve the returned promise, when an error occurs', function (done) {
@@ -174,15 +161,15 @@ describe('FormMixin', function() {
         thenCalled = true;
       }, function(err) {
         rejectCalled = true;
-      });
+      })
+        .then(function(errOrResponse) {
+          expect(thenCalled,'promise from save() should never be resolved, when errors occur').to.be.false;
+          expect(rejectCalled,'promise from save() should  be rejected, when errors occur, ALLTHOUGH they are process in error()').to.be.true;
+          expect(form.error(), 'form.error observable').to.be.ok;
+          expect(form.error(), 'form.error()').to.contain('<title>This is bad</title>');
+          done();
+        })
 
-    setTimeout(function() {
-      expect(thenCalled,'promise from save() should never be resolved, when errors occur').to.be.false;
-      expect(rejectCalled,'promise from save() should  be rejected, when errors occur, ALLTHOUGH they are process in error()').to.be.true;
-      expect(form.error(), 'form.error observable').to.be.ok;
-      expect(form.error(), 'form.error()').to.contain('<title>This is bad</title>');
-      done();
-    }, 15);
   });  
 
 
@@ -207,21 +194,20 @@ describe('FormMixin', function() {
     this.dispatcher.onSend(function(fulfill, reject) {
       setTimeout(function() {
         reject(rejectError);
-      }, 5);
+      }, 10);
     });
 
     var rejectCalled = false;
     form.save('POST', '/saving-point', { custom: 'data' })
       .catch(function(err) {
         rejectCalled = true;
-      });
-
-    setTimeout(function() {
-      expect(rejectCalled,'promise from save() should  be rejected, when errors occur, ALLTHOUGH they are process in error()').to.be.true;
-      expect(form.error(), 'form.error observable').to.be.ok;
-      expect(form.error(), 'form.error()').to.contain('<title>This is bad</title>');
-      done();
-    }, 15);
+      })
+        .then(function() {
+          expect(rejectCalled,'promise from save() should  be rejected, when errors occur, ALLTHOUGH they are process in error()').to.be.true;
+          expect(form.error(), 'form.error observable').to.be.ok;
+          expect(form.error(), 'form.error()').to.contain('<title>This is bad</title>');
+          done();
+        });
   });  
 
 });

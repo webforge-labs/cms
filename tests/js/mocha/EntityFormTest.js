@@ -36,27 +36,8 @@ boot.define('bootstrap/alert', function() {
   return {};
 });
 
-// we fake the dispatcher
-boot.define('cms/modules/dispatcher', function() {
-  var FakeDispatcher= function () {
-    var that = this;
-
-    that.promiseBodies = [];
-
-    that.onSend = function(promiseBody) {
-      that.promiseBodies.push(promiseBody);
-    };
-
-    that.sendPromised = function(method, url, body) {
-      return new Promise(that.promiseBodies.shift());
-    };
-
-    that.reset = function() {
-      that.promiseBodies = []
-    };
-
-  };
-
+// we inject an FakeDispatcher that we control in the test
+boot.define('cms/modules/dispatcher', ['cms/testing/FakeDispatcher'], function(FakeDispatcher) {
   return new FakeDispatcher();
 });
 
@@ -176,7 +157,7 @@ describe('EntityFormMixin', function() {
           };
 
           fulfill(response201);
-        }, 40);
+        }, 10);
 
       });
     };
@@ -199,26 +180,23 @@ describe('EntityFormMixin', function() {
         expect(that.newForm.isProcessing()).to.be.true;
       });
 
-      setTimeout(function() {
-        expect(that.newForm.isProcessing()).to.be.false;
-        done(); // end the test
-      }, 45);
-
-      this.newForm.save();
+      this.newForm.save()
+        .then(function() {
+          expect(that.newForm.isProcessing()).to.be.false;
+          done(); // end the test
+        })
     });
 
     it('shows a success notification if entity is successfully created', function(done) {
       var $ = boot.requirejs('jquery');
       $.notifications = [];
 
-      setTimeout(function() {
-        expect($.notifications).to.have.length(1);
-
-        done(); // end the test
-      }, 45);
-
       this.expect201Response();
-      this.newForm.save();
+      this.newForm.save()
+        .then(function() {
+          expect($.notifications).to.have.length(1);
+          done(); // end the test
+        });
     });
 
     it('displays the big error in the error-observable as html, when 500 occurs', function(done) {
