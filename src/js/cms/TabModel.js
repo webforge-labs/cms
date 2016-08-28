@@ -14,6 +14,7 @@ define(['knockout', 'knockout-mapping', 'jquery', 'cms/modules/translator', 'amp
     if (!this.wasLoaded) {
       this.wasLoaded = ko.observable(false);
     }
+    this.isLoading = ko.observable(false);
 
     this.hasError = ko.observable(false);
 

@@ -30,8 +30,7 @@ var Tab = boot.requirejs('cms/TabModel');
 
 describe('Tabs', function() {
 
-  before(function() { // execute once
-    //this.timeout(20000);
+  beforeEach(function() { // execute once
     var that = this;
 
     this.tabs = new Tabs();
@@ -68,36 +67,35 @@ describe('Tabs', function() {
       dispatcher.expect('GET', '/cms/posts/7').respond(200, '<h1>Post 7</h1> Content', { format: 'html' });
     };
 
+    dispatcher.reset();
   });
 
-  it('opened tabs list should be empty initialized', function () {
+  it('should have an empty list of opened tabs', function () {
     expect(this.tabs.openedTabs()).to.have.a.lengthOf(0);
   });
 
-  it('should have a tab if it is added', function() {
+  it('should have a tab, when a tab is added', function() {
     this.tabs.add(this.dashboard);
     expect(this.tabs.openedTabs()).to.have.a.lengthOf(1);
   });
 
-  it('should activate the tab when its selected', function() {
-    this.expectOkDashboardRequest();
+  it('should add and activate a new tab when its opened', function() {
+    this.expectOkPostTabRequest();
 
-    this.tabs.add(this.dashboard);
-    this.tabs.select(this.dashboard);
+    this.tabs.open(this.postTab);
 
     var activeTab = this.tabs.activeTab();
     expect(activeTab).to.be.ok;
-    expect(activeTab.id()).to.be.equal('dashboardid');
+    expect(activeTab.id()).to.be.equal('post-7');
   });
 
-  it('should activate the next tab when its clicked twice', function() {
+  it('should activate the next tab when its clicked once', function() {
     this.expectOkDashboardRequest();
     this.expectOkPostTabRequest();
 
     this.tabs.add(this.dashboard);
     this.tabs.select(this.dashboard);
 
-    this.tabs.open(this.postTab);
     this.tabs.open(this.postTab);
 
     expect(this.tabs.activeTab().id()).to.be.equal('post-7');
@@ -108,9 +106,9 @@ describe('Tabs', function() {
     this.expectOkDashboardRequest();
 
     this.tabs.add(this.dashboard);
-    this.tabs.add(this.postTab);
 
-    this.tabs.select(this.postTab);
+    this.tabs.open(this.postTab);
+
     expect(this.tabs.activeTab().id()).to.be.equal('post-7');
     
     this.tabs.close(this.postTab);
@@ -125,9 +123,8 @@ describe('Tabs', function() {
     this.expectOkDashboardRequest();
 
     this.tabs.add(this.dashboard);
-    this.tabs.add(this.postTab);
 
-    this.tabs.select(this.postTab);
+    this.tabs.open(this.postTab);
 
     this.tabs.close(this.postTab);
     this.tabs.close(this.dashboard);
@@ -135,4 +132,39 @@ describe('Tabs', function() {
     expect(this.tabs.openedTabs()).to.have.a.lengthOf(0);
     expect(this.tabs.activeTab()).to.be.undefined;
   });
+
+  it('should cache the loaded content of the tab if it is opened or activated', function(done) {
+    var that = this;
+
+    // expect only one request
+    this.expectOkPostTabRequest();
+
+    this.tabs.open(this.postTab);
+
+    setTimeout(function() {
+      // this would fail because the dispatcher does have only one expectation for the postTab request
+      that.tabs.open(that.postTab);
+      done();
+    }, 30);
+  });
+
+  it('should do nothing while its already loading the tab', function(done) {
+    var that = this;
+
+    // expect only one request
+    this.expectOkPostTabRequest();
+
+    this.tabs.open(this.postTab);
+
+    // trigger twice (before the first can be finished)
+    this.tabs.open(this.postTab);
+
+    setTimeout(function() {
+      // this would fail because the dispatcher does have only one expectation for the postTab request
+      that.tabs.open(that.postTab);
+      done();
+    }, 30);
+  });
+
+
 });

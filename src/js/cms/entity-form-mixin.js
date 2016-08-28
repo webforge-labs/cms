@@ -36,11 +36,11 @@ define(['require', 'knockout', 'knockout-mapping', 'jquery', './form-mixin', 'cm
           if (that.isNew()) {
             require(['cms/modules/main'], function(cmsMain) {
               var entity = EntityModel.map(response.body);
-              var tab = new Tab(entity.editTab());
+              var editTab = new Tab(entity.editTab());
 
-              cmsMain.tabs.open.call(cmsMain, tab, e);
-              // make new edit tab active
-              cmsMain.tabs.select.call(cmsMain, tab, e);
+              cmsMain.tabs.closeById(EntityModel.createTab().id);
+
+              cmsMain.tabs.open.call(cmsMain, editTab, e);
             });
             $.notify({
               message: "Alles klar, das hab ich neu erstellt."

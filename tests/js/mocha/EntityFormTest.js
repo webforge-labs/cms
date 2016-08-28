@@ -41,6 +41,7 @@ boot.define('cms/modules/main', function() {
     tabs: {
       open: function() {},
       select: function() {},
+      closeById: function() {},
     }
   }
 });
@@ -177,8 +178,10 @@ describe('EntityFormMixin', function() {
 
       this.newForm.save()
         .then(function() {
-          expect($.notifications).to.have.length(1);
-          done(); // end the test
+          process.nextTick(function() { // in the .then handler a require(['cms/modules/main']) call is made, which is asynchron in turn
+            expect($.notifications).to.have.length(1);
+            done(); // end the test
+          });
         });
     });
 

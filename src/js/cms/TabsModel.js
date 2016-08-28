@@ -22,26 +22,33 @@ define(['knockout', 'knockout-mapping', 'knockout-collection', 'cms/modules/disp
     });
 
     var loadContents = function(tab) {
-      dispatcher.sendPromised('GET', tab.url(), undefined, 'text/html')
-        .then(
-          function(response) {
-            tab.contentLoaded(response);
-          },
-          function(err) {
-            if (!err.response) throw err;
+      if (!tab.isLoading()) {
+        tab.isLoading(true);
 
-            tab.contentLoadingError(err.response);
-          }
-        );
+        dispatcher.sendPromised('GET', tab.url(), undefined, 'text/html')
+          .then(
+            function(response) {
+              tab.isLoading(false);
+              tab.contentLoaded(response);
+            },
+            function(err) {
+              tab.isLoading(false);
+
+              if (!err.response) throw err;
+
+              tab.contentLoadingError(err.response);
+            }
+          );
+      }
     };
 
     this.open = function(tab, e) {
       if (!tabs.contains(tab)) {
         amplify.publish('cms.tabs.open', tab, e);
         that.add(tab);
-      } else {
-        that.select(tab, e);
       }
+
+      that.select(tab, e);
 
       return tab;
     };
@@ -74,7 +81,16 @@ define(['knockout', 'knockout-mapping', 'knockout-collection', 'cms/modules/disp
       });
     };
 
-    this.close = function(tab, e) {
+    this.closeById = function(tabId) {
+      ko.utils.arrayForEach(that.openedTabs(), function(tab) {
+        if (tab.id() == tabId) {
+          that.close(tab);
+          return false;
+        }
+      });
+    };
+
+    this.close = function(tab) {
       tab.deactivate();
       tabs.remove(tab);
       
