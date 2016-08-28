@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test1": "mocha tests\\js\\mocha\\TabsTest.js",
+    "test2": "mocha tests\\js\\mocha\\FormTest.js",
+    "test3": "mocha tests\\js\\mocha\\EntityFormTest.js",
+    "test4": "mocha tests\\js\\mocha\\NavigationTest.js",
+    "test": "npm-run-all --parallel test1 test2 test3 test4",
     "build": "gulp build",
     "build-dev": "gulp build --dev"
   },
@@ -55,6 +59,7 @@
     "jquery-deferred": "^0.3.0",
     "json-diff": "^0.3.1",
     "mocha": "^2.3.3",
+    "npm-run-all": "^3.0.0",
     "xpath-builder": "0.0.7",
     "yargs": "^3.29.0"
   }
