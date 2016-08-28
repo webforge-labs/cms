@@ -36,27 +36,24 @@ boot.define('bootstrap/alert', function() {
   return {};
 });
 
+var dispatcher = boot.injectFakeDispatcher();
 var FormMixin = boot.requirejs('cms/form-mixin');
-var Promise = boot.requirejs('bluebird');
-var FakeDispatcher = boot.requirejs('cms/testing/FakeDispatcher');
 
 describe('FormMixin', function() {
 
   before(function() { // execute once
     this.form = {};
 
-    this.dispatcher = new FakeDispatcher();
-
     FormMixin(
       this.form,
       {
-        dispatcher: this.dispatcher
+        dispatcher: dispatcher
       }
     );
   });
 
   beforeEach(function() {
-    this.dispatcher.reset();
+    dispatcher.reset();
   });
 
   it('exposes an error observable', function () {
@@ -67,17 +64,16 @@ describe('FormMixin', function() {
     expect(this.form.isProcessing).to.be.an.observable;
   });
 
-  it('sets isProcessing and resets error, when it is currently saving', function (done) {
+  it('sets isProcessing and resets error on success, when it is currently saving', function (done) {
     var form = this.form, response200 = { body: null };
     expect(form.isProcessing()).to.be.false;
 
     var intermediateProcessing;
-    this.dispatcher.onSend(function(fulfill, reject) {
-      setTimeout(function() {
+    dispatcher.expect('POST', '/saving-point')
+      .respond(200, { id: 7, content: 'createed post'})
+      .whileProcessing(function() {
         intermediateProcessing = form.isProcessing();
-        fulfill(response200);
-      }, 5);
-    });
+      });
 
     form.error('a value that should be reset');
 
@@ -95,65 +91,40 @@ describe('FormMixin', function() {
 
   it('sets an error when saving fails with validation', function (done) {
     var form = this.form;
-    var response400 = { 
-      "body": {
-        "validation": {
-          "errors":[
-            {
-              "message":"Dieser Wert sollte nicht leer sein.",
-              "field": {"path":"title","name":"data"},
-              "params": {"{{ value }}":"null"}
-            }
-          ]
-        }
+    var body400 = { 
+      "validation": {
+        "errors":[
+          {
+            "message":"Dieser Wert sollte nicht leer sein.",
+            "field": {"path":"title","name":"data"},
+            "params": {"{{ value }}":"null"}
+          }
+        ]
       }
     };
 
     expect(form.isProcessing()).to.be.false;
 
-    this.dispatcher.onSend(function(fulfill, reject) {
-      setTimeout(function() {
-        var error = new Error('Validation Error');
-        error.response = response400;
-        
-        reject(error);
-
-      }, 4);
-    });
+    dispatcher.expect('POST', '/saving-point').to.respond(400, body400)
 
     form.save('POST', '/saving-point', { custom: 'data' })
       .catch(function() {
         // thats okay;
-      });
+      })
+        .then(function() {
+          expect(form.isProcessing(), 'processing after saving').to.be.false;
+          expect(form.error(), 'error').to.be.ok;
 
-    setTimeout(function() {
-      expect(form.isProcessing(), 'processing after saving').to.be.false;
-      expect(form.error(), 'error').to.be.ok;
-
-      expect(form.error()).to.contain('<strong>title</strong>').and.to.contain('Dieser Wert sollte nicht leer sein');
-      done();
-    }, 20);
+          expect(form.error()).to.contain('<strong>title</strong>').and.to.contain('Dieser Wert sollte nicht leer sein');
+          done();
+        });
   });
 
   it('does not resolve the returned promise, when an error occurs', function (done) {
     var form = this.form;
-
     var html = '<html><head><title>This is bad</title>/head><body>Reason why its bad</body></html>';
-    var rejectError = new Error('Fatal Server Error');
-    rejectError.status = 500;
-    rejectError.html = html;
-    rejectError.response = {
-      ok: false,
-      status: 500,
-      body: html,
-      html: html
-    };
 
-    this.dispatcher.onSend(function(fulfill, reject) {
-      setTimeout(function() {
-        reject(rejectError);
-      }, 5);
-    });
+    dispatcher.expect('POST', '/saving-point').to.respond(500, html, { format: 'html' });
 
     var thenCalled = false, rejectCalled = false;
     form.save('POST', '/saving-point', { custom: 'data' })
@@ -165,37 +136,17 @@ describe('FormMixin', function() {
         .then(function(errOrResponse) {
           expect(thenCalled,'promise from save() should never be resolved, when errors occur').to.be.false;
           expect(rejectCalled,'promise from save() should  be rejected, when errors occur, ALLTHOUGH they are process in error()').to.be.true;
-          expect(form.error(), 'form.error observable').to.be.ok;
           expect(form.error(), 'form.error()').to.contain('<title>This is bad</title>');
           done();
         })
-
-  });  
-
+  });
 
   it('sets error with response without html but text', function (done) {
     var form = this.form;
 
-    var html = '<html><head><title>This is bad</title>/head><body>Reason why its bad</body></html>';
-    var rejectError = new Error('Fatal Server Error');
-    rejectError.status = 500;
-    // this was the weird response from superagent
-    rejectError.response = {
-      ok: false,
-      status: 500,
-      text: html,
-      type: "text/html",
-      charset: "UTF-8",
-      body: null,
-      clientError: false,
-      serverError: true
-    };
+    var text = '<html><head><title>This is bad</title>/head><body>Reason why its bad</body></html>';
 
-    this.dispatcher.onSend(function(fulfill, reject) {
-      setTimeout(function() {
-        reject(rejectError);
-      }, 10);
-    });
+    dispatcher.expect('POST', '/saving-point').to.respond(500, text, { format: 'text' });
 
     var rejectCalled = false;
     form.save('POST', '/saving-point', { custom: 'data' })

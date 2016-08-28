@@ -36,30 +36,6 @@ boot.define('jquery', function() {
   return $;
 });
 
-// we fake the dispatcher
-boot.define('cms/modules/dispatcher', function() {
-  var FakeDispatcher= function () {
-    var that = this;
-
-    that.promiseBodies = [];
-
-    that.onSend = function(promiseBody) {
-      that.promiseBodies.push(promiseBody);
-    };
-
-    that.sendPromised = function(method, url, body) {
-      return new Promise(that.promiseBodies.shift());
-    };
-
-    that.reset = function() {
-      that.promiseBodies = []
-    };
-
-  };
-
-  return new FakeDispatcher();
-});
-
 boot.define('cms/modules/dropbox-chooser', function() {
   return {
     choose: function(options) {
@@ -80,8 +56,8 @@ boot.define('cms/modules/dropbox-chooser', function() {
   };
 });
 
+var dispatcher = boot.injectFakeDispatcher();
 var FileManager = boot.requirejs('cms/FileManager/ns');
-var dispatcher = boot.requirejs('cms/modules/dispatcher');
 var Promise = boot.requirejs('bluebird');
 
 describe('FileManager', function() {
@@ -138,7 +114,7 @@ describe('FileManager', function() {
 
   beforeEach(function() {
     this.fm.setCurrentItem(this.fm.root);
-    dispatcher.nextPromises = [];
+    dispatcher.reset();
   })
 
   it('uploads files from dropbox, which are then displayed', function (done) {
@@ -149,14 +125,10 @@ describe('FileManager', function() {
       'name': 'uploaded.png'
     });
 
-    dispatcher.onSend(function(fulfill, reject) {
-      fulfill({body: uploadedRootResponse}); // this is indeed not used, yet. Its just the response from the POST call (which returns the index as well)
-    });
-
-    dispatcher.onSend(function(fulfill, reject) {
-      fulfill({body: uploadedRootResponse});
-    });
-
+    // this is indeed not used, yet. Its just the response from the POST call (which returns the index as well)
+    dispatcher.expect('POST').to.respond(201, uploadedRootResponse);
+    dispatcher.expect('GET').to.respond(200, uploadedRootResponse);
+    
     fm.addFilesFromDropbox();
 
     setTimeout(function() {
@@ -171,7 +143,7 @@ describe('FileManager', function() {
       expect(items[0], 'uploaded file').to.have.property('name', 'uploaded.png');
 
       done();
-    }, 10);
+    }, 60);
 
   });
 
@@ -188,13 +160,8 @@ describe('FileManager', function() {
     var msg, uploadWithWarnings = clone(uploadedRootResponse);
     uploadWithWarnings.warnings = [msg = 'Die Datei wurde nicht überschrieben. Zum überschreiben, erst die Datei löschen']
 
-    dispatcher.onSend(function(fulfill, reject) {
-      fulfill({body: uploadWithWarnings});
-    });
-
-    dispatcher.onSend(function(fulfill, reject) {
-      fulfill({body: uploadedRootResponse});
-    });
+    dispatcher.expect('POST').to.respond(201, uploadWithWarnings);
+    dispatcher.expect('GET').to.respond(200, uploadedRootResponse);
 
     fm.addFilesFromDropbox();
 
@@ -207,7 +174,7 @@ describe('FileManager', function() {
       expect(fm.sortedItems(), 'items in uploaded folder').to.have.length(1);
 
       done();
-    }, 2);
+    }, 60);
 
   });
 });

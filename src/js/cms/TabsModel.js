@@ -22,13 +22,17 @@ define(['knockout', 'knockout-mapping', 'knockout-collection', 'cms/modules/disp
     });
 
     var loadContents = function(tab) {
-      dispatcher.send('GET', tab.url(), undefined, 'text/html')
-        .done(function(response) {
-          tab.contentLoaded(response);
-        })
-        .fail(function(response) {
-          tab.contentLoadingError(response);
-        });
+      dispatcher.sendPromised('GET', tab.url(), undefined, 'text/html')
+        .then(
+          function(response) {
+            tab.contentLoaded(response);
+          },
+          function(err) {
+            if (!err.response) throw err;
+
+            tab.contentLoadingError(err.response);
+          }
+        );
     };
 
     this.open = function(tab, e) {

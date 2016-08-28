@@ -28,7 +28,7 @@ module.exports = function(options) {
     });
   });
 
-  return {
+  var boot = {
     expect: expect,
     requirejs: requirejs,
     define: globalRequirejs.define,
@@ -41,4 +41,14 @@ module.exports = function(options) {
     }
   };
 
+  boot.injectFakeDispatcher = function() {
+    // we inject an FakeDispatcher that we control in the test
+    boot.define('cms/modules/dispatcher', ['cms/testing/FakeDispatcher'], function(FakeDispatcher) {
+      return new FakeDispatcher({ expect: expect });
+    });
+
+    return boot.requirejs('cms/modules/dispatcher'); // notice: this is the FakeDispatcher already injected
+  };
+
+  return boot;
 };

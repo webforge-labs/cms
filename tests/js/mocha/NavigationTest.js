@@ -8,7 +8,9 @@ var Dragger = require('../dragger');
 
 describe('Navigation', function() {
   before(function(done) { // execute once
-    return this.skip();
+    done();
+    return;
+
     this.timeout(20000);
     var that = this;
 
@@ -40,7 +42,7 @@ describe('Navigation', function() {
     });
   });
 
-  it('should serialize the fixture', function () {
+  it.skip('should serialize the fixture', function () {
     //https://github.com/webforge-labs/webforge-testdata-repository/blob/master/lib/Webforge/TestData/NestedSet/Hgdrn.php
     var navigation = this.koMain().navigation;
     var nodes = navigation.serialize();

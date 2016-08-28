@@ -36,11 +36,6 @@ boot.define('bootstrap/alert', function() {
   return {};
 });
 
-// we inject an FakeDispatcher that we control in the test
-boot.define('cms/modules/dispatcher', ['cms/testing/FakeDispatcher'], function(FakeDispatcher) {
-  return new FakeDispatcher();
-});
-
 boot.define('cms/modules/main', function() {
   return {
     tabs: {
@@ -49,6 +44,7 @@ boot.define('cms/modules/main', function() {
     }
   }
 });
+
 
 boot.define('cms/test/post-model', ['knockout', 'knockout-mapping'], function(ko, koMapping) {
 
@@ -91,11 +87,9 @@ boot.define('cms/test/post-model', ['knockout', 'knockout-mapping'], function(ko
   return Post;
 });
 
-
+var dispatcher = boot.injectFakeDispatcher();
 var EntityFormMixin = boot.requirejs('cms/entity-form-mixin');
 var Post = boot.requirejs('cms/test/post-model');
-var Promise = boot.requirejs('bluebird');
-var dispatcher = boot.requirejs('cms/modules/dispatcher');
 
 describe('EntityFormMixin', function() {
 
@@ -140,27 +134,6 @@ describe('EntityFormMixin', function() {
         });
       }
     });
-
-    this.expect201Response = function(whileProcessing) {
-      dispatcher.onSend(function(fulfill, reject) {
-
-        setTimeout(function() {
-          if (whileProcessing) {
-            whileProcessing.call();
-          }
-
-          var response201 = {
-            body: {
-              name: 'the name of the backend-response post',
-              content: 'backend content'
-            }
-          };
-
-          fulfill(response201);
-        }, 10);
-
-      });
-    };
   });
 
   describe('when new', function() {
@@ -176,9 +149,14 @@ describe('EntityFormMixin', function() {
       expect(this.newForm.isProcessing).to.be.ok;
       expect(this.newForm.isProcessing()).to.be.false;
 
-      this.expect201Response(function() {
-        expect(that.newForm.isProcessing()).to.be.true;
-      });
+      dispatcher.expect('POST', '/cms/posts')
+        .to.respond(201, {
+          name: 'the name of the backend-response post',
+          content: 'backend content'
+        })
+        .whileProcessing(function() {
+          expect(that.newForm.isProcessing()).to.be.true;
+        });
 
       this.newForm.save()
         .then(function() {
@@ -191,7 +169,12 @@ describe('EntityFormMixin', function() {
       var $ = boot.requirejs('jquery');
       $.notifications = [];
 
-      this.expect201Response();
+      dispatcher.expect('POST', '/cms/posts')
+        .to.respond(201, {
+          name: 'the name of the backend-response post',
+          content: 'backend content'
+        });
+
       this.newForm.save()
         .then(function() {
           expect($.notifications).to.have.length(1);
@@ -202,34 +185,17 @@ describe('EntityFormMixin', function() {
     it('displays the big error in the error-observable as html, when 500 occurs', function(done) {
       var form = this.newForm;
       var html = '<html><head><title>This is bad</title>/head><body>Reason why its bad</body></html>';
-      var rejectError = new Error();
 
-      rejectError.status = 500;
-      rejectError.html = html;
+      dispatcher.expect('POST', '/cms/posts').to.respond(500, html, { format: 'text'});
 
-      rejectError.response = {
-        ok: false,
-        status: 500,
-        body: html,
-        html: html
-      };
+      form.save()
+        .then(function(response) {
+          expect(response, 'it should not resolve with a response, because an error occured').to.be.undefined;
+          expect(form.error()).to.be.ok.and.to.contain(html);
 
-      dispatcher.onSend(function(fulfill, reject) {
-
-        setTimeout(function() {
-          reject(rejectError);
-        }, 10);
-
-      });
-
-      setTimeout(function() {
-        expect(form.error()).to.be.ok
-          .and.to.contain(html);
-        done();
-      }, 30);
-
-      form.save();
-    })
+          done();
+        });
+    });
   });
 
   describe('when edited', function() {

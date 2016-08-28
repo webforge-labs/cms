@@ -18,26 +18,13 @@ boot.define('amplify', function() {
   }
 });
 
-// we fake jQuery
 boot.define('jquery', function() {
-  return require('jquery-deferred');
-});
+  return function() {
 
-// we fake the dispatcher
-boot.define('cms/modules/dispatcher', ['jquery'], function($) {
-  var FakeDispatcher = function FakeDispatcher() {
-    var that = this;
-
-    this.send = function() {
-      var d = $.Deferred();
-
-      return d.promise();
-    };
   };
-
-  return new FakeDispatcher();
 });
 
+var dispatcher = boot.injectFakeDispatcher();
 var Tabs = boot.requirejs('cms/TabsModel');
 var Tab = boot.requirejs('cms/TabModel');
 
@@ -72,6 +59,15 @@ describe('Tabs', function() {
         label: 'Post #'+i
       }));
     }
+
+    this.expectOkDashboardRequest = function() {
+      dispatcher.expect('GET', '/cms/dashboard').respond(200, '<h1>Dashboard</h1> Content', { format: 'html' });
+    };
+
+    this.expectOkPostTabRequest = function() {
+      dispatcher.expect('GET', '/cms/posts/7').respond(200, '<h1>Post 7</h1> Content', { format: 'html' });
+    };
+
   });
 
   it('opened tabs list should be empty initialized', function () {
@@ -84,6 +80,8 @@ describe('Tabs', function() {
   });
 
   it('should activate the tab when its selected', function() {
+    this.expectOkDashboardRequest();
+
     this.tabs.add(this.dashboard);
     this.tabs.select(this.dashboard);
 
@@ -93,6 +91,9 @@ describe('Tabs', function() {
   });
 
   it('should activate the next tab when its clicked twice', function() {
+    this.expectOkDashboardRequest();
+    this.expectOkPostTabRequest();
+
     this.tabs.add(this.dashboard);
     this.tabs.select(this.dashboard);
 
@@ -102,7 +103,10 @@ describe('Tabs', function() {
     expect(this.tabs.activeTab().id()).to.be.equal('post-7');
   });
 
-  it('should deactivate the next tab when its activated and then closed', function() {
+  it('should activate and load an already opened tab, when a new tab is activated and then closed', function() {
+    this.expectOkPostTabRequest();
+    this.expectOkDashboardRequest();
+
     this.tabs.add(this.dashboard);
     this.tabs.add(this.postTab);
 
@@ -117,6 +121,9 @@ describe('Tabs', function() {
   });
 
   it('should work when all the tabs added are closed', function() {
+    this.expectOkPostTabRequest();
+    this.expectOkDashboardRequest();
+
     this.tabs.add(this.dashboard);
     this.tabs.add(this.postTab);
 
