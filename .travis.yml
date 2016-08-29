@@ -3,7 +3,7 @@ language: node_js
 sudo: false
 
 node_js:
-  - "5.0"
+  - "node"
 
 branches:
   only:
@@ -12,6 +12,9 @@ branches:
 cache:
   directories:
     - node_modules
+
+before_script:
+  - npm run build-dev
 
 notifications:
   hipchat: 1fbdbbbaa517c485f935a6d72f1110@239240
