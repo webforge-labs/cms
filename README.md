@@ -1,4 +1,4 @@
-# cms
+# cms [![Build Status](https://travis-ci.org/webforge-labs/cms.svg?branch=master)](https://travis-ci.org/webforge-labs/cms)
 
 this is a testable body of a cms installation.
 
@@ -19,6 +19,10 @@ chimp
 ## Sponsoring
 
 A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsoring a free Live account, that allows us to test on Iphones and other devices.
+
+## BC Breaks for 1.7.x
+
+- A link in the CMS adds and activates the tab with one click (instead of two). So calling tabs.open() was changed. add and select will still work.
 
 ## BC Breaks for 1.6.x
 
