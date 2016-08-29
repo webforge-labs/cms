@@ -50,5 +50,11 @@ module.exports = function(options) {
     return boot.requirejs('cms/modules/dispatcher'); // notice: this is the FakeDispatcher already injected
   };
 
+  global.window = {
+    location: {
+      search: ''
+    }
+  };
+
   return boot;
 };

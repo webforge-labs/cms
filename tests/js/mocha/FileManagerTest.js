@@ -2,16 +2,9 @@ var bootstrap = require('./bootstrap');
 var boot = bootstrap({ context: __filename });
 
 var expect = boot.expect;
-var _ = require('lodash');
 
 var clone = function(source) {
   return JSON.parse(JSON.stringify(source));
-};
-
-GLOBAL.window = {
-  location: {
-    search: ''
-  }
 };
 
 // we replace amplify with a fake

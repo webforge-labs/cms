@@ -4,12 +4,6 @@ var boot = bootstrap({ context: __filename });
 var expect = boot.expect;
 var _ = require('lodash');
 
-GLOBAL.window = {
-  location: {
-    search: ''
-  }
-};
-
 // we replace amplify with a fake
 boot.define('amplify', function() {
   return {
