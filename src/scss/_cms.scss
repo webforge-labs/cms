@@ -1,3 +1,4 @@
+$cms-alt-color: #f2f2f2;
 
 // the dependencies from bootstrapless/font-awesome will be imported directly from node-modules (its in the path in gulpfile)
 // you can override parts of bootstrap if you copy the scss file to the scr/js/scss/bootstrap directory
@@ -8,6 +9,7 @@
 @import 'fonts';
 @import 'cms/tabs';
 @import 'cms/buttons';
+@import 'cms/file-manager';
 
 $spacer:                     1em;
 $spacer-x:                   $spacer;

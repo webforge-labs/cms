@@ -19,6 +19,16 @@ class MediaController extends CommonController {
     return new JsonResponse($this->getIndex());
   }
 
+  /**
+   * @Route("/media/file-manager")
+   * @Method("GET")
+   */
+  public function fileManagerAction() {
+    return $this->render("WebforgeCmsBundle:components:file-manager-tab.html.twig", array(
+      
+    ));
+  }
+
   protected function getIndex() {
     $handler = $this->get('webforge.serialization.gaufrette_binary_handler');
 

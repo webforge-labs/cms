@@ -17,7 +17,8 @@ define(['knockout', 'knockout-collection', 'knockout-dragdrop', 'text!./multiple
               that.files.add(file);
             });
           },
-          spinner: that.isLoading
+          spinner: that.isLoading,
+          choosingMode: true
         });
       });
     };

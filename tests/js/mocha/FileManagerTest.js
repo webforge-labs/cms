@@ -92,11 +92,14 @@ describe('FileManager', function() {
 
     this.fm = new FileManager.Manager(this.rootResponse);
 
-    this.changeFolder = function(name) {
-      var folder = this.fm.sortedItems().find(function(item) {
+    this.findItem = function(name) {
+      return this.fm.sortedItems().find(function(item) {
         return item.name() === name;
       });
+    };
 
+    this.changeFolder = function(name) {
+      var folder = this.findItem(name);
       expect(folder, 'folder with name "'+name+'"').to.be.ok;
 
       // set as current item
@@ -169,5 +172,27 @@ describe('FileManager', function() {
       done();
     }, 60);
 
+  });
+
+  it('marks an item not selected/selected, when added to the selection/the selection is resetted', function() {
+    var fm = this.fm;
+
+    this.changeFolder('2016-03-27');
+    var item = this.findItem('Foto 27.03.16, 16 14 18.jpg');
+    var item2 = this.findItem('Foto 27.03.16, 16 14 21.jpg');
+
+    expect(item.selected(), 'item.selected').to.be.false;
+    expect(item2.selected(), 'item.selected').to.be.false;
+
+    fm.selection.push(item);
+    fm.selection.push(item2);
+
+    expect(item.selected(), 'item.selected').to.be.true;
+    expect(item2.selected(), 'item.selected').to.be.true;
+
+    fm.reset({});
+
+    expect(item.selected(), 'item.selected after reset').to.be.false;
+    expect(item2.selected(), 'item.selected after reset').to.be.false;
   });
 });

@@ -1,5 +1,5 @@
 <div class="row multiple-files-chooser" data-bind="foreach: addedFiles">
-  <div class="col-xs-6 col-sm-4 col-md-3" data-bind="
+  <div class="col-xs-5 col-sm-4 col-md-3" data-bind="
      dragZone: { name: 'multiple-file-chooser',
        dragStart: $parent.dragStart,
        dragEnd: $parent.dragEnd
@@ -10,8 +10,8 @@
        data: { item: $data }
      }
   ">
-    <a data-bind="attr: { href: url }" target="_blank" class="thumbnail">
-      <img data-bind="attr: {src: thumbnails.xs.url}" alt=""/>
+    <a href="#" data-bind="click: function() {}" target="_blank" class="thumbnail">
+      <img class="img-responsive" data-bind="attr: {src: thumbnails.xs.url}" alt=""/>
     </a>
     <a class="btn btn-xs btn-danger top-right-button" href="#" data-bind="click: $parent.removeFromAddedFiles"><i class="fa fa-chain-broken"></i></a>
   </div>

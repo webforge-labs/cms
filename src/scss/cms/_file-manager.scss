@@ -1,0 +1,62 @@
+.file-manager {
+
+  .folder-row > div {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+
+  .thumbnail {
+
+    .check {
+      position: absolute;
+      top: 46px;
+      left: 1px;
+
+      .fa-check-circle {
+        color: #1d9d74;
+      }
+
+      .fa-circle {
+        color: #fff;
+      }
+    }
+
+    .top {
+      display: blocK;
+      height: 78px;
+      text-align: center;
+
+      img {
+        width: auto;
+        max-height: 70px;
+        margin: auto;
+      }
+
+      .fa {
+        vertical-align: middle;
+        margin-top: 25px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    .bottom {
+      display: block;
+      background-color: $cms-alt-color;
+      margin-left: -4px;
+      margin-right: -4px;
+      margin-bottom: -4px;
+      padding: 5px 5px 5px 5px;
+      min-height: 45px;
+
+      p {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-align: center;
+        font-size: 82%;
+      }
+    }
+  }
+}

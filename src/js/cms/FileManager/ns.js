@@ -1,4 +1,4 @@
-define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/modules/ui', 'cms/modules/dropbox-chooser', 'cms/modules/dispatcher', 'amplify', 'bluebird'], function(ko, KnockoutCollection, koMapping, _, ui, Dropbox, dispatcher, amplify) {
+define(['require', 'knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/modules/ui', 'cms/modules/dropbox-chooser', 'cms/modules/dispatcher', 'amplify', 'bluebird', 'cms/ko-bindings/double-click'], function(require, ko, KnockoutCollection, koMapping, _, ui, Dropbox, dispatcher, amplify) {
    var Promise = require("bluebird");
 
    var FileManager = {};
@@ -87,6 +87,7 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
      that.type = ko.observable('file');
      that.unsynced = ko.observable(false);
      that.items = ko.observableArray([]);
+     that.selected = ko.observable(false);
 
      var mapping = {
        items: {
@@ -196,6 +197,17 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
 
      this.currentItem = ko.observable();
 
+     this.selection.subscribe(function(changes) {
+        _.each(changes, function(change) {
+          if (change.status === 'added') {
+            change.value.selected(true);
+          } else if (change.status === 'deleted') {
+            change.value.selected(false);
+          }
+
+        });
+     }, null, "arrayChange");
+
      this.setCurrentItem = function(item) {
        that.currentItem(item);
 
@@ -218,9 +230,8 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
      this.clickItem = function(item) {
        if (item.isDirectory()) {
          that.setCurrentItem(item);
-       } else {
-         alert('download: '+item.name());
-       }
+       } 
+       // we have the click function free for items (e.g. open details?)
      };
 
      this.hasItems = ko.computed(function() {
@@ -388,6 +399,9 @@ define(['knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/mo
 
      this.reset = function(options) {
        that.options = options;
+       if (options.hasOwnProperty('choosingMode')) {
+         that.isInChoosingMode(options.choosingMode);
+       }
        that.selection.removeAll();
        that.chosenFiles.removeAll();
      }

@@ -1,0 +1,23 @@
+<div id="file-manager-tab" data-bind="with: $root.fileManagerTab">
+
+  <!--ko if: isLoading -->
+  <i class="fa fa-2x fa-spinner fa-spin"></i>
+  <!--/ko-->
+
+  <div data-bind="with: fileManager">
+    {% include "WebforgeCmsBundle:components:file-manager.html.twig" %}
+  </div>
+
+  <script type="text/javascript">
+    require(['cms/modules/main', 'jquery', 'knockout'], function(main, $, ko) {
+       var model = {};
+
+       model.fileManager = main.fileManager;
+       model.isLoading = ko.observable(true);
+
+       main.openFileManager({ type: 'standalone', spinner: model.isLoading, choosingMode: false });
+
+       main.createContext('fileManagerTab', model, $('#file-manager-tab'));
+    });
+  </script>
+</div>

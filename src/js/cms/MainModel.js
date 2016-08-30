@@ -67,6 +67,8 @@ define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'cms/FileMa
     };
 
     this.openFileManager = function(options) {
+      if (!options.type) options.type = 'modal';
+
       that.spinning(true);
       if (options.spinner) options.spinner(true);
       dispatcher.sendPromised('GET', '/cms/media')
@@ -79,9 +81,11 @@ define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'cms/FileMa
           }
 
           that.fileManager().reset(options);
-      
-          var $modal = $('#file-manager-modal');
-          $modal.modal({'show': true});
+
+          if (options.type == 'modal') {
+            var $modal = $('#file-manager-modal');
+            $modal.modal({'show': true});
+          }
           
           that.spinning(false);
           if (options.spinner) options.spinner(false);
