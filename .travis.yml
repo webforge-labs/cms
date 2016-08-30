@@ -18,3 +18,4 @@ before_script:
 
 notifications:
   hipchat: 1fbdbbbaa517c485f935a6d72f1110@239240
+  slack: webforge:4FtiiZn6TyN29SI8ESWDqUAa
