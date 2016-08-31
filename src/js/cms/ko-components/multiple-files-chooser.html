@@ -1,21 +1,12 @@
-<div class="row multiple-files-chooser" data-bind="foreach: addedFiles">
-  <div class="col-xs-5 col-sm-4 col-md-3" data-bind="
-     dragZone: { name: 'multiple-file-chooser',
-       dragStart: $parent.dragStart,
-       dragEnd: $parent.dragEnd
-     },
-     dragEvents: {
-       accepts: 'multiple-file-chooser',
-       dragOver: $parent.reorder,
-       data: { item: $data }
-     }
-  ">
-    <a href="#" data-bind="click: function() {}" target="_blank" class="thumbnail">
+<div class="row multiple-files-chooser uk-sortable" data-bind="ukSortable: { foreach: addedFiles, change: reorder, handleClass: 'thumbnail' }">
+  <div class="col-xs-5 col-sm-4 col-md-3">
+    <button class="btn btn-sm btn-danger top-right-button" data-bind="click: $parent.removeFromAddedFiles"><i class="fa fa-chain-broken"></i></button>
+    <div class="thumbnail">
       <img class="img-responsive" data-bind="attr: {src: thumbnails.xs.url}" alt=""/>
-    </a>
-    <a class="btn btn-xs btn-danger top-right-button" href="#" data-bind="click: $parent.removeFromAddedFiles"><i class="fa fa-chain-broken"></i></a>
+    </div>
   </div>
 </div>
+
 <!--ko if: addedFiles().length == 0 -->
 <p>Es sind keine Bilder verknüpft</p>
 <!--/ko-->
