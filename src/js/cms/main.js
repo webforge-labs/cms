@@ -1,4 +1,4 @@
-define(['jquery', 'knockout', './MainModel', 'amplify', 'cms/transfer-effect', './ko-bindings/cms-tab', './ko-bindings/moment', 'bootstrap/button', 'bootstrap/transition', 'bootstrap/collapse', 'bootstrap/dropdown', 'bootstrap-notify'], function($, ko, Main, amplify, transferEffect) {
+define(['jquery', 'knockout', './MainModel', 'amplify', './ko-bindings/cms-tab', './ko-bindings/moment', 'bootstrap/button', 'bootstrap/transition', 'bootstrap/collapse', 'bootstrap/dropdown', 'bootstrap-notify'], function($, ko, Main, amplify) {
 
   return function(data) {
     var main = new Main(data);
@@ -12,17 +12,17 @@ define(['jquery', 'knockout', './MainModel', 'amplify', 'cms/transfer-effect', '
     $(document).ready(function() {
       main.domLoaded();
 
-      amplify.subscribe('cms.tabs.open', function(tab, e) {
-        if (e && e.currentTarget) {
-          var options = {
-            from: e.currentTarget,
-            to: '.tabs-container .dropdown-toggle',
-            duration: 650,
-            easing: 'swing'
-          };
+      //'.navbar-collapse [data-open-on-navbar-expand="true"]'
+      $('body').on('shown.bs.collapse', '.navbar-collapse', function(e) {
+        var $submenu = $(this).find('[data-open-on-navbar-expand="true"]').first();
 
-          transferEffect(options);
+        if ($submenu.length) {
+          $submenu.dropdown('toggle');
         }
+      });
+
+      amplify.subscribe('cms.close-the-nav', function(e) {
+        $('.navbar-collapse:first').collapse('hide');
       });
     });
   };

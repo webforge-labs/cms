@@ -1,6 +1,7 @@
-define(['knockout', '../TabModel'], function(ko, Tab) {
+define(['knockout', '../TabModel', 'amplify'], function(ko, Tab, amplify) {
   ko.bindingHandlers.cmsTab = {
     init: function(element, valueAccessor, allBindingsAccessor, viewModel, context) {
+
       var wrappedValueAccessor = function() {
         return function(data, e) {
           e.preventDefault();
@@ -10,6 +11,10 @@ define(['knockout', '../TabModel'], function(ko, Tab) {
           var cmsMain = context.$root;
 
           cmsMain.tabs.open.call(cmsMain, tab, e);
+
+          if (allBindingsAccessor().cmsTabCloseNav) {
+            amplify.publish('cms.close-the-nav');
+          }
         };
       };
 
