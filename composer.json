@@ -5,7 +5,6 @@
     "autoload": {
         "psr-0": {
             "Webforge\\CmsBundle": "src/php/",
-            "Webforge\\Testing": "src/php/",
             "Webforge\\Gaufrette": "src/php/"
         }
     },
@@ -34,7 +33,8 @@
         "nelmio/alice": "^2.2"
     },
     "require-dev": {
-        "webforge/testdata-repository": "0.2.2-alpha"
+        "webforge/testdata-repository": "0.2.2-alpha",
+        "webforge/testing": "^1.0.0"
     },
     "suggest": {
       "nelmio/alice": "to use alice-fixtures in your tests (use dev dependency version 2.x)"

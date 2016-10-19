@@ -96,3 +96,18 @@
 {% macro selection_delete_Button(label) %}
   <button type="button" data-bind="click: removeInSelection, disable: isProcessing" class="btn btn-danger"><i data-bind="visible: isProcessing" class="fa fa-spinner fa-spin"></i> {{label|default('Ausgewählte Einträge löschen')}} <i class="fa fa-exclamation-triangle"></i></button>
 {% endmacro %}
+
+{% macro single_entity_chooser(label, name, settings) %}
+  {% import _self as form %}
+
+  <div class="form-group">
+    {{ form.label(label, name) }}
+    <div class="col-sm-10">
+      <select 
+         class="selectpicker" 
+         data-bind="options: {{name}}Options, optionsCaption: 'bitte auswählen', optionsText: '{{settings.labelProperty|default('title')}}', optionsValue: '{{settings.valueProperty|default('id')}}', value: {{name}}OptionValue">
+      >
+      </select>
+    </div>
+  </div>
+{% endmacro %}

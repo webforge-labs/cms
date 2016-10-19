@@ -1,6 +1,6 @@
 framework:
     #esi:             ~
-    translator:      { fallbacks: ["%locale%"] }
+    translator:      { enabled: true, fallbacks: ["%locale%"] }
     secret:          "%secret%"
     router:
         resource: "%root_directory%/etc/symfony/routing.yml"
