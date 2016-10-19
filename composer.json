@@ -25,7 +25,7 @@
         "jbroadway/urlify": "^1.0@dev",
         "symfony/var-dumper": "2.7.*@stable",
         "friendsofsymfony/user-bundle": "2.0.*",
-        "webforge/doctrine": "~1.2.5",
+        "webforge/doctrine": "~1.2.6",
         "webforge/collections": "1.0.*@stable",
         "webforge/symfony": "~1.4.3",
         "liip/functional-test-bundle": "1.3.*@dev",

@@ -29,4 +29,4 @@ A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsori
 - You need to provide the database parameters again (database_host, database_port, database_name, database_user, database_password)
 - You need to set `sidebar.activeGroup` in the base.html.twig template
 - You need to set `site.url` and `site.title` in the base.html.twig template
-- You need to set `cms.title` and (optional) `site.xsTitle` in the base.html.twig template
+- You need to set `cms.title` and (optional) `site.xsTitle` in the base.html.twig template (do this with a global twig extension: `Twig_Extension_GlobalsInterface`)
