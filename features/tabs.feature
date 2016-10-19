@@ -6,6 +6,7 @@ Feature: tabs
   Background:
     Given I am logged in as "petra.platzhalter@ps-webforge.net"
 
+  @focus
   Scenario: Opening a tab through the right content
     When I click on "Benutzer verwalten" in section "CMS" in the sidebar
     Then a tab with title "Benutzer verwalten" is added
