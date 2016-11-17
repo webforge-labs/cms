@@ -1,10 +1,10 @@
 module.exports = function() {
 
   this.World.prototype.clickTabLink = function(label) {
-    var tabLink = this.css('.tabs-container ul.dropdown-menu li:contains("'+label+'") a').waitForExist();
-
     // open the dropdown menu
-    this.css('.tabs-container .dropdown .dropdown-toggle').click();
+    this.css('.tabs-container .dropdown .dropdown-toggle').waitForExist().click();
+
+    var tabLink = this.css('.tabs-container ul.dropdown-menu li:contains("'+label+'") a').waitForExist(4000);
 
     tabLink.click();
   };
@@ -59,6 +59,10 @@ module.exports = function() {
     }
   });
 
+  this.When(/^I wait to see the text "([^"]*)"$/, function (text) {
+    this.context.css(':contains("'+text+'")').waitForExist(2000);
+  });
+
   this.When(/^I click on "([^"]*)" in context$/, function (linktext) {
     this.context.css('a:contains("'+linktext+'"), button:contains("'+linktext+'")').click();
   });
@@ -73,14 +77,11 @@ module.exports = function() {
   });
 
   this.When(/^I click on the link in the row from the list table with "([^"]*)"$/, function (title) {
-    this.context.css('table.table tr:contains("'+title+'")').exists()
+    this.context.css('table.table tr:contains("'+title+'")').waitForExist(3000)
       .css('td a:first').click();
   });
 
   this.Then(/^a message is shown "([^"]*)"$/, function (text) {
-    browser.waitForVisible('div[role=alert]', 3000);
-    // i think waitForVisible in .css() does not work as expected with jquery selectors
-    this.css('div[role=alert] span:contains("'+text+'")').exists();
+    this.css('div[role=alert]:contains("'+text+'")').waitForVisible(3000);
   });
-
 };

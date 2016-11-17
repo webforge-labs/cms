@@ -2,6 +2,7 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
   // put all dependencies here to dependencies not to dev-depenendencies (because other projects will use the builder)
   var rename = require('gulp-rename');
   var sass = require('gulp-sass');
+  var sourcemaps = require('gulp-sourcemaps');
   var fs = require('fs');
   var WebforgeBuilder = require('webforge-js-builder');
   var _ = require('lodash');
@@ -110,6 +111,10 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
     builder.add('js', 'bootstrap-select')
       .src(builder.resolveModule('bootstrap-select')+'/bootstrap-select.js');
 
+    builder.add('js', 'bootstrap-select-de_DE')
+      .src(builder.resolveModule('bootstrap-select')+'/i18n/defaults-de_DE.js')
+      .pipe(rename, 'bootstrap-select-de_DE.js');
+
     builder.add('js', 'bluebird')
       .src(builder.resolveModule('bluebird')+'/../browser/'+(isDevelopment ? 'bluebird.js' : 'bluebird.min.js'))
       .pipe(rename, 'bluebird.js');
@@ -150,10 +155,12 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
     var sassTask = function() {
       try {
         return gulp.src('src/scss/*.scss')
+        .pipe(sourcemaps.init())
         .pipe(
            sass(sassOptions)
              .on('error', sass.logError)
          )
+        .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(builder.config.dest+'/css'))
       } catch (exc) {
         console.log(exc);

@@ -1,0 +1,14 @@
+{% set modelId = (id)|replace({ "-": "_" }) ~ "Model" %}
+<div id="{{id}}" data-bind="with: {{modelId}}" class="preview-wrapper">
+
+  <iframe class="preview" src="/de/reisen/usa-californien"></iframe>
+
+</div>
+<script type="text/javascript">
+  require(['require', '{{module}}', 'cms/modules/main', 'jquery'], function(require, controller, main, $) {
+    var $wrapper = $('#{{id}}');
+    var viewModel = controller({{data|json_encode(constant('JSON_PRETTY_PRINT'))|raw}}, $wrapper.find('iframe').get(0).contentWindow);
+  
+    main.createContext('{{modelId}}', viewModel, $wrapper);
+  });
+</script>

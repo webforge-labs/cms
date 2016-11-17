@@ -104,10 +104,59 @@
     {{ form.label(label, name) }}
     <div class="col-sm-10">
       <select 
-         class="selectpicker" 
-         data-bind="options: {{name}}Options, optionsCaption: 'bitte auswählen', optionsText: '{{settings.labelProperty|default('title')}}', optionsValue: '{{settings.valueProperty|default('id')}}', value: {{name}}OptionValue">
-      >
+         class="selectpicker form-control" 
+         data-none-selected-text="nichts ausgewählt"
+         {% if settings.options is defined %}
+         {{ settings.options }}
+         {% endif %}
+         data-bind="
+           options: {{name}}Options,
+           optionsCaption: 'bitte auswählen',
+           optionsText: '{{settings.labelProperty|default('title')}}',
+           optionsValue: '{{settings.valueProperty|default('id')}}',
+           value: {{name}}OptionValue
+        ">
       </select>
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro multiple_entity_chooser(label, name, settings) %}
+  {% import _self as form %}
+
+  <div class="form-group">
+    {{ form.label(label, name) }}
+    <div class="col-sm-10">
+      <select 
+         class="selectpicker form-control" 
+         data-icon-base="fontawesome"
+         data-tick-icon="fa fa-check"
+         data-none-selected-text="nichts ausgewählt"
+         data-selected-text-format="count"
+         {% if settings.search is defined %}
+         data-live-search="true"
+         data-live-search-normalize="true"
+         {% endif %}
+         {% if settings.options is defined %}
+         {{ settings.options }}
+         {% endif %}
+         data-bind="
+           options: {{name}}Options,
+           optionsText: '{{settings.labelProperty|default('title')}}',
+           optionsValue: '{{settings.valueProperty|default('id')}}',
+           value: {{name}}OptionValue
+      " multiple>
+      </select>
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro content_manager(label, name, settings) %}
+  {% import _self as form %}
+
+  <div class="form-group">
+    {{ form.label(label, name) }}
+    <div class="col-sm-10" data-bind='component: { name: "content-manager", params: { name: "{{name}}", model: $data } }'>
     </div>
   </div>
 {% endmacro %}

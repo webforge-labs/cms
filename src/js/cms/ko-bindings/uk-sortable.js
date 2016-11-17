@@ -33,6 +33,8 @@ define(['require', 'knockout', 'jquery', 'uikit-src/core/core', 'uikit-src/compo
 
         if (options.change) {
           $sortable.on('change.uk.sortable', function(e, srtbl, $dragged, type) {
+            if (!$dragged) return;
+  
             var draggedItem = ko.dataFor($dragged.get(0));
             var newIndex = $sortable.children().index($dragged);
 

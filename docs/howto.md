@@ -31,3 +31,8 @@ var cmsBuilder = new Cms.Builder(gulp, __dirname, require, isDevelopment);
 cmsBuilder.addTabModule('admin/post/list', { include: ['cms/ko-components/multiple-files-chooser']});
 
 ```
+# Create a component
+
+- create html
+- create js module (returns: `{ viewModel: function(params) {}, template: htmlString }` )
+- add name to `src\js\cms\ko-components\index.js`
