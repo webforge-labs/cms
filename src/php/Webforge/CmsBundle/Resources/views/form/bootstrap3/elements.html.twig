@@ -24,6 +24,17 @@
   </div>
 {% endmacro %}
 
+{% macro textarea(label, name, rows) %}
+  {% import _self as form %}
+
+  <div class="form-group">
+    {{ form.label(label, name) }}
+    <div class="col-sm-10">
+      <textarea data-bind="textInput: {{name}}" id="{{name}}" class="form-control" rows="{{rows|default(10)}}"></textarea>
+    </div>
+  </div> 
+{% endmacro %}
+
 {% macro markdown(label, name, rows) %}
   {% import _self as form %}
 

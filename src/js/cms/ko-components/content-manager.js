@@ -40,10 +40,14 @@ define(['require', 'knockout', 'knockout-mapping', 'lodash', 'knockout-collectio
       contents.blocks.splice(newIndex, 0, item);
     };
 
-    that.blockTypes = ko.observableArray([]);
+    that.blockTypes = new KnockoutCollection(ko.observableArray([]), { key: 'name', reference: true });
 
     _.each(config.contentManager.blockTypes, function(type) {
-      that.blockTypes.push(new BlockType(type.name, type.label, that));
+      that.blockTypes.add(new BlockType(type.name, type.label, that, type));
+    });
+
+    that.availableBlockTypes = ko.computed(function() {
+      return that.blockTypes.toArray();
     });
 
     that.addBlock = function(block) {
@@ -54,6 +58,15 @@ define(['require', 'knockout', 'knockout-mapping', 'lodash', 'knockout-collectio
     that.removeBlock = function(block) {
       blocks.remove(block);
     }
+
+    that.componentBlockTypeConfiguration = function(block) {
+      var blockType = that.blockTypes.get(ko.unwrap(block.type));
+      var config = _.extend({}, blockType.component);
+
+      config.params.data = block;
+
+      return config;
+    };
 
     that.trackBlocks = ko.computed(function() {
       return JSON.stringify(koMapping.toJS(blocks.toArray()), undefined, "  ");

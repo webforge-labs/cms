@@ -135,7 +135,8 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
         cmsDir+'/src/scss',
         builder.resolveModule('bootstrap-sass')+'/../stylesheets',
         builder.resolveModule('font-awesome')+'/scss',
-        builder.resolveModule('bootstrap-select')+'/../../sass'
+        builder.resolveModule('bootstrap-select')+'/../../sass',
+        //builder.resolveModule('bootstrap-markdown')+'/../scss' // does not work, yet (author has no scss in npm package)
       ],
 
       // this is a hack to have some selective components from bootstrap overriden without copying the whole bootstrap.scss with all its @imports

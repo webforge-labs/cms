@@ -1,27 +1,16 @@
 <div class="content-manager uk-sortable" data-bind="ukSortable: { foreach: sortedBlocks, change: reorder, handleClass: 'mover' }">
-  <div class="panel panel-default">
-    <div class="panel-heading clearfix">
-      <h3 class="panel-title pull-left" data-bind="text: label"></h3>
-      <button type="button" data-bind="click: $parent.removeBlock" class="btn btn-xs btn-danger pull-right" title="entfernen"><i class="fa fa-trash-o"></i></button>
-      <button type="button" class="btn btn-xs btn-warning mover pull-right" title="verschieben"><i class="fa fa-arrows" aria-hidden="true"></i></button>
+  <div class="move-container">
+    <div class="panel panel-default">
+      <div class="panel-heading clearfix">
+        <h3 class="panel-title pull-left" data-bind="text: label"></h3>
+        <button type="button" data-bind="click: $parent.removeBlock" class="btn btn-xs btn-danger pull-right" title="entfernen"><i class="fa fa-trash-o"></i></button>
+        <span class="label mover label-warning pull-right"><i class="fa fa-arrows"></i> verschieben</span>
 
-    </div>
-    <div class="panel-body">
-      <!-- ko if: type() == "markdown" -->
-      <textarea data-bind="markdownEditor: markdown" class="form-control" rows="14"></textarea>
-      <!--/ko-->
-      <!-- ko if: type() == "intro" -->
-      <textarea data-bind="markdownEditor: markdown" class="form-control" rows="8"></textarea>
-      <!--/ko-->
-      <!-- ko if: type() == "polaroid-stripe" -->
-      <p><i>Bildstreifen für alle Bilder des Posts (von oben nach unten, rechte Seite)</i></p>
-      <!--/ko-->
-      <!-- ko if: type() == "polaroid-stripe-horizontal" -->
-      <p><i>Bildstreifen für alle Bilder des Posts (quer, im Text)</i></p>
-      <!--/ko-->
+      </div>
+      <div class="panel-body" data-bind="component: $parent.componentBlockTypeConfiguration($data)">
+      </div>
     </div>
   </div>
-
 </div>
 
 <!--ko if: sortedBlocks().length == 0 -->
@@ -29,7 +18,7 @@
 <!--/ko-->
 <div class="btn-group">
   <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-plus-circle" aria-hidden="true"></i> Inhalt hinzufügen <span class="caret"></span></button>
-  <ul class="dropdown-menu" data-bind="foreach: blockTypes">
+  <ul class="dropdown-menu" data-bind="foreach: availableBlockTypes">
     <li><a href="#" data-bind="click: add, text: label"></a></li>
     <!--<li role="separator" class="divider"></li>-->
   </ul>

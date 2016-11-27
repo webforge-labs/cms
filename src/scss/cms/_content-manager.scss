@@ -1,3 +1,15 @@
 .content-manager {
   margin-bottom: 2em;
+
+}
+
+
+.content-manager, .uk-sortable-dragged {
+  .label.mover {
+    font-size: 100%;
+
+    &:hover {
+      cursor: move;
+    }
+  }
 }

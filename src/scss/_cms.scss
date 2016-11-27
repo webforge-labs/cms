@@ -12,6 +12,7 @@ $cms-alt-color: #f2f2f2;
 @import 'cms/file-manager';
 @import 'cms/content-manager';
 @import 'cms/preview';
+@import 'vendor/bootstrap-markdown';
 
 $spacer:                     1em;
 $spacer-x:                   $spacer;
