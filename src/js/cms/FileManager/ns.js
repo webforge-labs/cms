@@ -1,5 +1,7 @@
-define(['require', 'knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/modules/ui', 'cms/modules/dropbox-chooser', 'cms/modules/dispatcher', 'amplify', 'bluebird', 'cms/ko-bindings/double-click'], function(require, ko, KnockoutCollection, koMapping, _, ui, Dropbox, dispatcher, amplify) {
-   var Promise = require("bluebird");
+define(['require', 'knockout', 'knockout-collection', 'knockout-mapping', 'lodash', 'cms/modules/ui', 'cms/modules/dropbox-chooser', 'cms/modules/dispatcher', 'amplify', 'bluebird', 'urlify', 'cms/ko-bindings/double-click'], function(require, ko, KnockoutCollection, koMapping, _, ui, Dropbox, dispatcher) {
+   var Promise = require('bluebird');
+   var urlify = require('urlify');
+   var amplify = require('amplify');
 
    var FileManager = {};
 
@@ -303,10 +305,8 @@ define(['require', 'knockout', 'knockout-collection', 'knockout-mapping', 'lodas
      this.newFolder = function() {
        ui.prompt("Wie soll der neue Ordner heißen?").done(function(name) {
          if (name != "") {
-           name = name.replace(/ä/g, 'ae').replace(/ö/g,'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss');
-           name = name.replace(/[,/\\]/g, '_');
-           name = _.deburr(name);
            name = _.trim(name);
+           name = urlify(name, 120, false);
 
            var item;
            that.currentItem().addDirectory(

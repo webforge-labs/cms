@@ -49,6 +49,15 @@ boot.define('cms/modules/dropbox-chooser', function() {
   };
 });
 
+var ui = {
+  prompt: function() {
+  }
+}
+boot.define('cms/modules/ui', function() {
+  return ui;
+});
+
+
 var dispatcher = boot.injectFakeDispatcher();
 var FileManager = boot.requirejs('cms/FileManager/ns');
 var Promise = boot.requirejs('bluebird');
@@ -82,7 +91,7 @@ describe('FileManager', function() {
             ]
           },
           {
-            'name': 'Neuer Ordner',
+            'name': 'neuer-ordner',
             'type': 'directory',
             'items': []
           }
@@ -113,6 +122,27 @@ describe('FileManager', function() {
     dispatcher.reset();
   })
 
+  it('creates a new folder and normalizes its name to an urlsafe one', function(done) {
+    var that = this;
+
+    ui.prompt = function() {
+      var d = require('jquery-deferred').Deferred();
+
+      process.nextTick(function() {
+        d.resolve("Neuer Ordner");
+
+        var item = that.fm.currentItem();
+        expect(item).to.be.ok;
+        expect(item.label()).to.be.equal('neuer-ordner');
+        done();
+      });
+
+      return d.promise();
+    };
+
+    this.fm.newFolder();
+  });
+
   it('uploads files from dropbox, which are then displayed', function (done) {
     var fm = this.fm, that = this;
 
@@ -128,7 +158,7 @@ describe('FileManager', function() {
     fm.addFilesFromDropbox();
 
     setTimeout(function() {
-      that.changeFolder('Neuer Ordner');
+      that.changeFolder('neuer-ordner');
 
       var items = [];
       fm.sortedItems().forEach(function(item) {
@@ -162,7 +192,7 @@ describe('FileManager', function() {
     fm.addFilesFromDropbox();
 
     setTimeout(function() {
-      that.changeFolder('Neuer Ordner');
+      that.changeFolder('neuer-ordner');
 
       expect(fm.error(), 'fm.error').to.be.ok
         .and.to.have.property('message').to.contain(msg);
