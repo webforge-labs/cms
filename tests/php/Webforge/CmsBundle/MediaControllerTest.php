@@ -9,7 +9,6 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
   public function testImagesAndOtherStuffSaving() {
     $client = self::makeClient($this->credentials['petra']);
 
-    // we will have a database after this, that is prefilled with players and clubs and should sync with all entities meeting
     $this->loadAliceFixtures(
       array(
         'users'
@@ -17,18 +16,7 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
       $client
     );
 
-    $filesystem = $this->getContainer()->get('knp_gaufrette.filesystem_map')->get('cms_media');
-
-    foreach ($filesystem->keys() as $key) {
-      if (!$filesystem->isDirectory($key)) {
-        $filesystem->delete($key);
-      }
-    }
-
-    // clearing the thumbnails cache is important: otherwise we'll get the "no meta cache key"
-    $GLOBALS['env']['root']->sub('www/images/cache/')->delete();
-    $GLOBALS['env']['root']->sub('files/cache/imagine-meta')->delete();
-
+    $this->emptyFileSystemAndCache();
 
     $json = $this->getDropboxFiles();
     $this->sendJsonRequest($client, 'POST', '/cms/media/dropbox', $json);
@@ -66,7 +54,6 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
   public function testImageBatchDeleting() {
     $client = self::makeClient($this->credentials['petra']);
 
-    // we will have a database after this, that is prefilled with players and clubs and should sync with all entities meeting
     $this->loadAliceFixtures(
       array(
         'users'
@@ -98,7 +85,6 @@ JSON
   public function testExistingImagesWillNotBeOverwritten_AndNoticed() {
     $client = self::makeClient($this->credentials['petra']);
 
-    // we will have a database after this, that is prefilled with players and clubs and should sync with all entities meeting
     $this->loadAliceFixtures(
       array(
         'users'
@@ -122,6 +108,33 @@ JSON
       ->property('warnings')->isArray()->length(1)
         ->key(0)->contains('folder/mini-single.png')->contains('existiert')->end()
       ->end()
+    ;
+  }
+
+  public function testThatImagesWithBadNamesWillBeUrlified() {
+    $client = self::makeClient($this->credentials['petra']);
+
+    $this->loadAliceFixtures(
+      array(
+        'users'
+      ),
+      $client
+    );
+
+    $this->emptyFileSystemAndCache();
+
+    $json = $this->getDropboxFiles();
+    $json->dropboxFiles[0]->name = '20140825-IMGP4127_Käernten superpilß.jpg';
+    $json->path = '/folder2/';
+    $this->sendJsonRequest($client, 'POST', '/cms/media/dropbox', $json);
+
+    $this->assertJsonResponse(201, $client)
+      ->property('root')
+        ->property('items')->isArray()
+          ->key(0)
+            ->property('key', 'folder2/')->end()
+            ->property('items')->isArray()
+              ->key(0)->property('key', 'folder2/20140825-imgp4127-kaeernten-superpilss.jpg')
     ;
   }
 
@@ -153,5 +166,19 @@ JSON
 
   protected function getResourceImage($filename) {
     return $GLOBALS['env']['root']->sub('Resources/img/')->getFile($filename);
+  }
+
+  protected function emptyFileSystemAndCache() {
+    $filesystem = $this->getContainer()->get('knp_gaufrette.filesystem_map')->get('cms_media');
+
+    foreach ($filesystem->keys() as $key) {
+      if (!$filesystem->isDirectory($key)) {
+        $filesystem->delete($key);
+      }
+    }
+
+    // clearing the thumbnails cache is important: otherwise we'll get the "no meta cache key"
+    $GLOBALS['env']['root']->sub('www/images/cache/')->delete();
+    $GLOBALS['env']['root']->sub('files/cache/imagine-meta')->delete();
   }
 }

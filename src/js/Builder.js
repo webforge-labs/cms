@@ -104,6 +104,9 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
     builder.add('js', 'marked')
       .src(cmsDir+'/src/js/lib/marked.js');
 
+    builder.add('js', 'urlify')
+      .src(cmsDir+'/src/js/lib/urlify.js');
+
     builder.add('js', 'uikit')
       .src(cmsDir+'/src/js/lib/uikit-src/**/*')
       .pipe(builder.dest, 'uikit-src');
@@ -114,6 +117,9 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
     builder.add('js', 'bootstrap-select-de_DE')
       .src(builder.resolveModule('bootstrap-select')+'/i18n/defaults-de_DE.js')
       .pipe(rename, 'bootstrap-select-de_DE.js');
+
+    builder.add('js', 'bootstrap-markdown')
+      .src(builder.resolveModule('bootstrap-markdown')+'/js/bootstrap-markdown.js');
 
     builder.add('js', 'bluebird')
       .src(builder.resolveModule('bluebird')+'/../browser/'+(isDevelopment ? 'bluebird.js' : 'bluebird.min.js'))

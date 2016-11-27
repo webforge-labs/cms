@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use URLify;
 
 class MediaController extends CommonController {
 
@@ -48,10 +49,11 @@ class MediaController extends CommonController {
     $path = trim($json->path, '/').'/'; // store without leadingslash
     $warnings = array();
     foreach ($json->dropboxFiles as $dbFile) {
+      $filename = $this->normalizeFilename($dbFile->name);
       try {
-        $filesystem->write($path.$dbFile->name, file_get_contents($dbFile->link));
+        $filesystem->write($path.$filename, file_get_contents($dbFile->link));
       } catch (\Gaufrette\Exception\FileAlreadyExists $e) {
-        $warnings[] = sprintf('Die Datei %s existiert bereits und wird nicht von mir überschrieben. Du musst sie erst löschen, um sie zu ersetzen', $path.$dbFile->name);
+        $warnings[] = sprintf('Die Datei %s existiert bereits und wird nicht von mir überschrieben. Du musst sie erst löschen, um sie zu ersetzen', $path.$filename);
       }
     }
 
@@ -59,6 +61,10 @@ class MediaController extends CommonController {
     $data->warnings = $warnings;
 
     return new JsonResponse($data, 201);
+  }
+
+  private function normalizeFilename($name) {
+    return URLify::filter($name, 120, 'de', $isFilanme = true);
   }
 
   /**
