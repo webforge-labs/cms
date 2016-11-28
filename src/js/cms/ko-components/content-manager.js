@@ -59,18 +59,11 @@ define(['require', 'knockout', 'knockout-mapping', 'lodash', 'knockout-collectio
       blocks.remove(block);
     }
 
-    that.componentBlockTypeConfiguration = function(block) {
-      var blockType = that.blockTypes.get(ko.unwrap(block.type));
-      var config = _.extend({}, blockType.component);
+    this.componentNameForBlockType = function(blockTypeName) {
+      var blockType = that.blockTypes.get(blockTypeName);
 
-      config.params.data = block;
-
-      return config;
+      return blockType.component.name;
     };
-
-    that.trackBlocks = ko.computed(function() {
-      return JSON.stringify(koMapping.toJS(blocks.toArray()), undefined, "  ");
-    });
   };
 
   return { viewModel: contentManager, template: htmlString };
