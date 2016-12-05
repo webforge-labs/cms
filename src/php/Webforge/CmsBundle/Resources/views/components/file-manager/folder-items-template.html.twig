@@ -1,0 +1,19 @@
+<script type="text/html" id="folder-items-template">
+  <!-- ko foreach: { data: dirs, as: 'dir' } -->
+  <li data-bind="css: { active: $parent.folderPicker.isActive($data) }">
+    <a href="#" data-bind="click: $parent.folderPicker.selectDirectory">
+      <!-- ko ifnot: dir.isRoot() -->
+        <span class="fa fa-folder"></span> <span data-bind="text: dir.label"></span>
+      <!-- /ko -->
+      <!-- ko if: dir.isRoot() -->
+      <i class="fa fa-home"></i> Hauptordner
+      <!-- /ko -->
+    </a>
+
+    <!-- ko if: dir.hasItems -->
+    <ul data-bind="template: { name: 'folder-items-template', data: { dirs: dir.subDirectories, folderPicker: $parent.folderPicker } }">
+    </ul>
+    <!-- /ko -->
+  </li>
+  <!-- /ko -->
+</script>

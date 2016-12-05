@@ -1,0 +1,21 @@
+<h2>Dateien verschieben nach …</h2>
+
+{% include 'WebforgeCmsBundle:components:file-manager/folder-items-template.html.twig' %}
+
+<div class="row">
+  <div class="col-xs-11 col-sm-8 col-md-6">
+    <div class="folder-tree well">
+      <ul class="root list-unstyled" data-bind="template: { name: 'folder-items-template', data: { dirs: [root], folderPicker: $data.folderPicker } }">
+      </ul>
+
+      <div class="btn-group m-t">
+        <button type="button" data-bind="click: folderPicker.newDirectory, enable: folderPicker.hasDirectory" class="btn btn-default"><i class="fa fa-folder"></i> Neuer Ordner</button>
+      </div>
+    </div>
+
+    <p class="m-t-2 text-center">
+      <button type="button" class="btn btn-warning" data-bind="enable: folderPicker.hasValidDirectory, click: confirmMoveItems"><i class="fa fa-check-square"></i> verschieben</button>
+      <button type="button" data-bind="click: toNavigator" class="btn btn-danger"><i class="fa fa-ban"></i> abbrechen</button>
+    </p>
+  </div>
+</div>

@@ -1,3 +1,4 @@
+// ATTENTION: modified version: removeList is removed
 define(function() {
     /*global XRegExp*/
 
@@ -154,13 +155,6 @@ define(function() {
         if (!allowUnicode) {
             s = downcode(s);
         }
-        var removelist = [
-            "a", "an", "as", "at", "before", "but", "by", "for", "from", "is",
-            "in", "into", "like", "of", "off", "on", "onto", "per", "since",
-            "than", "the", "this", "that", "to", "up", "via", "with"
-        ];
-        var r = new RegExp('\\b(' + removelist.join('|') + ')\\b', 'gi');
-        s = s.replace(r, '');
         // if downcode doesn't hit, the char will be stripped here
         if (allowUnicode) {
             // Keep Unicode letters including both lowercase and uppercase

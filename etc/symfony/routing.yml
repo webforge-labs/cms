@@ -3,5 +3,4 @@ cms:
 
 testing:
   resource: "@WebforgeCmsBundle/Controller/TestController.php"
-  prefix:   /cms
   type:     annotation

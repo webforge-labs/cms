@@ -84,4 +84,13 @@ module.exports = function() {
   this.Then(/^a message is shown "([^"]*)"$/, function (text) {
     this.css('div[role=alert]:contains("'+text+'")').waitForVisible(3000);
   });
+
+  this.Then(/^a modal with "([^"]*)" is opened$/, function (text) {
+    var modal = this.css('modal.open').waitForExist();
+
+    modal.css('*:contains("'+text+'")').waitForVisible();
+
+    this.contextBeforeModal = this.context;
+    this.context = modal;
+  });
 };

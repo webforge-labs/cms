@@ -1,90 +1,9 @@
 <div class="file-manager">
-  <div class="btn-group">
-    <a data-bind="click: addFilesFromDropbox" class="btn btn-default"><i class="fa fa-dropbox"></i> Dateien hinzufügen</a>
-    <a data-bind="click: newFolder" class="btn btn-default"><i class="fa fa-folder"></i> Neuer Ordner</a>
-  </div>
-
-  <div class="alert alert-warning m-t-1" data-bind="visible: processing">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <strong><i class="fa fa-spinner fa-spin"></i> Bitte warte kurz..</strong> Ich kopiere gerade die neuen Dateien ins CMS und erzeuge die Bilder-Vorschau. Dies dauert immer etwas länger..<br />
-    Ich habe schon <strong data-bind="text: filesProgress"></strong> von <strong data-bind="text: filesTotal"></strong> bearbeitet.
-  </div>
-
-  <!-- ko if: error -->
-  <div class="alert alert-danger m-t-1" data-bind="with: error">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <strong>Hoppla</strong>
-    <div data-bind="html: message"></div>
-  </div>
+  <!-- ko if: view() == "navigator" -->
+    {% include 'WebforgeCmsBundle:components:file-manager/navigator.html.twig' %}
   <!-- /ko -->
 
-  <ol class="breadcrumb m-t-1" data-bind="foreach: breadcrumbs">
-    <!-- ko if: isRoot() -->
-    <li><a href="#" data-bind="click: $parent.clickItem"><i class="fa fa-home" title="Hauptverzeichnis"></i></a></li>
-    <!-- /ko -->
-
-    <!-- ko ifnot: isRoot() -->
-    <li><a href="#" data-bind="click: $parent.clickItem, text: label"></a></li>
-    <!-- /ko -->
-  </ol>
-
-  <!--ko if: hasItems -->
-  <div class="folder-row" data-bind="foreach: sortedItems">
-    <div class="col-xs-4 col-sm-3 col-md-2">
-      <div class="thumbnail">
-        <span class="check fa-stack fa-lg" data-bind="visible: selected">
-          <i class="fa fa-circle fa-stack-1x"></i>
-          <i class="fa fa-stack-1x fa-check-circle"></i>
-        </span>
-        <a class="top" href="#" data-bind="click: $parent.clickItem">
-          <!-- ko if: isImage() -->
-          <img class="img-responsive" data-bind="attr: {src: thumbnails.xs.url}" alt=""/>
-          <!-- /ko -->
-          <!-- ko ifnot: isImage() -->
-            <span class="fa fa-2x" data-bind="css: { 'fa-folder': isDirectory, 'fa-file': isFile }"></span>
-          <!-- /ko -->
-        </a>
-        <div class="bottom">
-          <span class="filename" data-bind="text: label"></span>
-
-          <label class="checkbox-inline">
-            <input type="checkbox" data-bind="checked: $parent.selection, checkedValue: $data">
-            wählen
-          </label>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!--/ko-->
-  <div class="clearfix"></div>
-
-  <!--ko ifnot: hasItems -->
-  <div class="well">Dieser Ordner ist leer</div>
-  <!--/ko-->
-
-  <!--ko if: hasSelection() -->
-  <p><button type="button" data-bind="click: removeItems" class="btn btn-danger"><i class="fa fa-trash"></i> Dateien löschen <i class="fa fa-warning" title="Dateien werden sofort gelöscht"></i></button></p>
-  <!--/ko-->
-
-  <!--ko if: isInChoosingMode() -->
-  <fieldset class="m-t">
-    <legend>Deine Auswahl</legend>
-    <div class="row" data-bind="foreach: chosenFiles.items">
-      <div class="col-xs-4 col-sm-3">
-        <a data-bind="attr: { href: url }" target="_blank" class="thumbnail">
-          <!-- ko if: isImage() -->
-          <img data-bind="attr: {src: thumbnails.xs.url}" alt=""/>
-          <!-- /ko -->
-          <!-- ko ifnot: isImage() -->
-          <i class="fa fa-file fa-4x"></i>
-          <!-- /ko -->
-        </a>
-        <a class="btn btn-danger btn-xs top-right-button" href="#" data-bind="click: $parent.removeFromChosen"><i class="fa fa-chain-broken"></i></a>
-      </div>
-    </div>
-    <div class="well" data-bind="visible: !hasChosenFiles()">
-      Du hast noch keine Dateien ausgewählt. Du kannst Dateien aus verschiedenen Ordnern wählen, in dem Du sie anhakst.
-    </div>
-  </fieldset>
-  <!--/ko-->
+  <!-- ko if: view() == "folder-picker" -->
+    {% include 'WebforgeCmsBundle:components:file-manager/folder-picker.html.twig' %}
+  <!-- /ko -->
 </div>
