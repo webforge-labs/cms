@@ -20,7 +20,7 @@ define(['knockout', 'knockout-mapping', 'amplify'], function(ko, koMapping, ampl
           }
         },
         key: function(data) {
-          return ko.unwrap(data.key);
+          return ko.unwrap(data.path);
         }
       }
     };

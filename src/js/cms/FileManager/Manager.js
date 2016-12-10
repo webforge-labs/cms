@@ -151,7 +151,7 @@ define(function(require) {
         var items = [];
         ko.utils.arrayForEach(selection, function(item) {
           items.push(item);
-          moveFiles.push(item.key());
+          moveFiles.push(item.path());
         });
 
         that.folderPicker.reset(items);
@@ -163,7 +163,7 @@ define(function(require) {
       if (that.folderPicker.hasValidDirectory()) {
         var targetDir = that.folderPicker.selected();
 
-        that.sync.moveFiles(moveFiles, targetDir.key(), function(response) {
+        that.sync.moveFiles(moveFiles, targetDir.path(), function(response) {
           $.notify({
             message: "Okay, die Dateien habe ich verschoben."
           },{

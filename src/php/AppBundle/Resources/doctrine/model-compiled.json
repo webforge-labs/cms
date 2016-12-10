@@ -26,6 +26,32 @@
           "type":"String"
         }
       }
+    },
+    {
+      "name":"Binary",
+      "fqn":"AppBundle\\Entity\\Binary",
+      "singular":"binary",
+      "plural":"binaries",
+      "tableName":"binaries",
+      "extends":null,
+      "description":null,
+      "properties":{
+        "id":{
+          "name":"id",
+          "isEntityReference":false,
+          "type":"Id"
+        },
+        "gaufretteKey":{
+          "name":"gaufretteKey",
+          "isEntityReference":false,
+          "type":"String"
+        },
+        "originalName":{
+          "name":"originalName",
+          "isEntityReference":false,
+          "type":"String"
+        }
+      }
     }
   ]
 }

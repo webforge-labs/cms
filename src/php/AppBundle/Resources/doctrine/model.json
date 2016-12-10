@@ -11,6 +11,18 @@
         "firstName": { "type": "String" },
         "lastName": { "type": "String" }
       }
+    },
+
+    {
+      "name": "Binary",
+
+      "properties": {
+        "id": { "type": "DefaultId" },
+
+        "gaufretteKey": { "type": "String" },
+        "originalName": { "type": "String" }
+      }
     }
+
   ]
 }

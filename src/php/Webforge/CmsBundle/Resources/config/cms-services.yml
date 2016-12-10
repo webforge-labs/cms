@@ -3,17 +3,16 @@ services:
   #imports:
   #  - { resource: '../../vendor/webforge/symfony/Resources/config/services.yml' }
 
+  dc:
+    class: Webforge\Doctrine\Entities
+    arguments: ["@doctrine.orm.entity_manager", "%entities_namespace%"]
+
   webforge.liip_imagine.binary.loader.stream.cms_media:
     class: "%liip_imagine.binary.loader.stream.class%"
     arguments:
       - 'gaufrette://cms_media/'
     tags:
       - { name: 'liip_imagine.binary.loader', loader: 'stream.cms_media' }
-
-
-  dc:
-    class: Webforge\Doctrine\Entities
-    arguments: ["@doctrine.orm.entity_manager", "%entities_namespace%"]
 
   webforge.serialization.gaufrette_binary_handler:
     class:      Webforge\CmsBundle\Serialization\GaufretteBinaryHandler
@@ -37,10 +36,13 @@ services:
       - [setImagine, ['@liip_imagine']]
     tags:
       - { name: 'liip_imagine.cache.resolver', resolver: 'webforge_meta_web_path' }
-
   
   webforge.cache.imagine_cache_warmer:
     class: Webforge\CmsBundle\Cache\ImagineCacheWarmer
     arguments: ['@webforge.serialization.gaufrette_binary_handler']
     tags:
       - { name: kernel.cache_warmer, priority: 1 }
+
+  webforge.media.persistent_storage:
+    class: Webforge\CmsBundle\Media\PersistentStorage
+    arguments: ['@dc', 'Binary']

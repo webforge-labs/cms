@@ -9,4 +9,6 @@ interface GaufretteFileInterface {
 
   public function getGaufretteKey();
 
+  public function setGaufretteKey($key);
+
 }

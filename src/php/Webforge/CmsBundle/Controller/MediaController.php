@@ -42,6 +42,7 @@ class MediaController extends CommonController {
    */
   public function uploadMediaFromDropboxAction(Request $request) {
     $filesystem = $this->get('knp_gaufrette.filesystem_map')->get('cms_media');
+    $storage = $this->get('webforge.media.persistent_storage');
 
     $user = $this->getUser();
     $json = $this->retrieveJsonBody($request);
@@ -50,12 +51,18 @@ class MediaController extends CommonController {
     $warnings = array();
     foreach ($json->dropboxFiles as $dbFile) {
       $filename = $this->normalizeFilename($dbFile->name);
+      $gaufretteKey = $path.$filename;
       try {
-        $filesystem->write($path.$filename, file_get_contents($dbFile->link));
+        $filesystem->write($gaufretteKey, file_get_contents($dbFile->link));
+
+        $storage->persistFile($gaufretteKey, $dbFile->name);
+
       } catch (\Gaufrette\Exception\FileAlreadyExists $e) {
         $warnings[] = sprintf('Die Datei %s existiert bereits und wird nicht von mir überschrieben. Du musst sie erst löschen, um sie zu ersetzen', $path.$filename);
       }
     }
+
+    $storage->flush();
 
     $data = $this->getIndex();
     $data->warnings = $warnings;
@@ -76,10 +83,14 @@ class MediaController extends CommonController {
     $json = $this->retrieveJsonBody($request);
 
     $filesystem = $this->get('knp_gaufrette.filesystem_map')->get('cms_media');
+    $storage = $this->get('webforge.media.persistent_storage');
 
     foreach ($json->keys as $key) {
       $filesystem->delete($key);
+      $storage->deleteFileByGaufretteKey($key);
     }
+
+    $storage->flush();
 
     return $this->indexAction();
   }
