@@ -1,0 +1,31 @@
+{
+  "namespace":"AppBundle\\Entity",
+  "entities":[
+    {
+      "name":"User",
+      "fqn":"AppBundle\\Entity\\User",
+      "singular":"user",
+      "plural":"users",
+      "tableName":"users",
+      "extends":"Webforge\\CmsBundle\\Entity\\User",
+      "description":null,
+      "properties":{
+        "id":{
+          "name":"id",
+          "isEntityReference":false,
+          "type":"Id"
+        },
+        "firstName":{
+          "name":"firstName",
+          "isEntityReference":false,
+          "type":"String"
+        },
+        "lastName":{
+          "name":"lastName",
+          "isEntityReference":false,
+          "type":"String"
+        }
+      }
+    }
+  ]
+}

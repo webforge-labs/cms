@@ -83,4 +83,27 @@ class MediaController extends CommonController {
 
     return $this->indexAction();
   }
+
+  /**
+   * @Route("/media/move")
+   * @Method("POST")
+   */
+  public function moveFiles(Request $request) {
+    $user = $this->getUser();
+    $json = $this->retrieveJsonBody($request);
+
+    $filesystem = $this->get('knp_gaufrette.filesystem_map')->get('cms_media');
+
+    foreach ($json->keys as $key) {
+      if (!$filesystem->isDirectory($key)) {
+        $path = explode('/', ltrim($key, '/'));
+        $filename = array_pop($path);
+
+        $filesystem->rename($key, $json->target.$filename);
+      }
+    }
+
+
+    return $this->indexAction();
+  }
 }

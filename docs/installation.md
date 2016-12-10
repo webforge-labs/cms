@@ -40,6 +40,6 @@ knp_gaufrette:
 
 ### Imagine
 
-liip imagine bundle has to be configured (see vendors yml)
+liip imagine bundle has to be configured (see prepend-configuration.yml)
 
 

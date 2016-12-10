@@ -10,11 +10,10 @@ use JMS\Serializer\Annotation AS Serializer;
  * 
  * 
  * this entity was compiled from Webforge\Doctrine\Compiler
- * @ORM\Entity
- * @ORM\Table(name="users")
+ * @ORM\MappedSuperClass
  * @Serializer\ExclusionPolicy("all")
  */
-class User extends CompiledUser {
+abstract class User extends CompiledUser {
 
   public function __construct() {
     parent::__construct();

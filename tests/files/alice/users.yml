@@ -1,4 +1,4 @@
-Webforge\CmsBundle\Entity\User:
+AppBundle\Entity\User:
   petra_platzhalter: 
     username: petraplatzhalter
     firstName: Petra

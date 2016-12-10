@@ -1,0 +1,16 @@
+{
+  "namespace": "AppBundle\\Entity",
+
+  "entities": [
+    {
+      "name": "User",
+      "extends": "Webforge\\CmsBundle\\Entity\\User",
+    
+      "properties": {
+        "id": { "type": "DefaultId" },
+        "firstName": { "type": "String" },
+        "lastName": { "type": "String" }
+      }
+    }
+  ]
+}

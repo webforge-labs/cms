@@ -8,6 +8,11 @@
             "Webforge\\Gaufrette": "src/php/"
         }
     },
+    "autoload-dev": {
+        "psr-0": { 
+            "AppBundle": "src/php/"
+        }
+    },
     "prefer-stable": true,
     "require": {
         "php": ">=5.4.0",

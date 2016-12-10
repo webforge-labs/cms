@@ -1,7 +1,13 @@
 <?php
 
 use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\Config\Loader\LoaderInterface;
 
 class AppKernel extends \Webforge\Symfony\Kernel {
+
+  public function registerBundles() {
+    $bundles = parent::registerBundles();
+    $bundles[] = new \AppBundle\AppBundle();
+
+    return $bundles;
+  }
 }
