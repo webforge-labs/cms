@@ -5,8 +5,8 @@ namespace Webforge\CmsBundle;
 use Symfony\Component\Process\Process;
 
 class MediaControllerTest extends \Webforge\Testing\WebTestCase {
-  
-  public function testImagesAndOtherStuffSaving() {
+
+  protected function setupEmpty() {
     $client = self::makeClient($this->credentials['petra']);
 
     $this->loadAliceFixtures(
@@ -17,6 +17,12 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
     );
 
     $this->emptyFileSystemAndCache();
+
+    return $client;
+  }
+  
+  public function testImagesAndOtherStuffSaving() {
+    $client = $this->setupEmpty();
 
     $json = $this->getDropboxFiles();
     $this->sendJsonRequest($client, 'POST', '/cms/media/dropbox', $json);
@@ -30,14 +36,14 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
             ->property('type', 'directory')->end()
             ->property('items')->isArray()
               ->key(0)
-                ->property('name', 'DSC03281.JPG')->end()
+                ->property('name', 'dsc03281.jpg')->end()
                 ->property('url')->is($this->logicalNot($this->isEmpty()))->end()
                 ->property('thumbnails')->isObject()
                   ->property('big')
                     ->property('orientation')->is('landscape')->end()
                     ->property('isPortrait')->is(false)->end()
                     ->property('isLandscape')->is(true)->end()
-                    ->property('url')->contains('/images/cache/big/2016-03-27/DSC03281.JPG')->end()
+                    ->property('url')->contains('/images/cache/big/2016-03-27/dsc03281.jpg')->end()
                   ->end()
                   ->property('sm')
                     ->property('orientation')->is('landscape')->end()
@@ -52,18 +58,12 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
   }
 
   public function testImageBatchDeleting() {
-    $client = self::makeClient($this->credentials['petra']);
+    $client = $this->setupEmpty();
 
-    $this->loadAliceFixtures(
-      array(
-        'users'
-      ),
-      $client
-    );
-
-    $filesystem = $this->getContainer()->get('knp_gaufrette.filesystem_map')->get('cms_media');
-    $filesystem->write('test-image.png', $this->getResourceImage('tapire.png')->getContents(), $overwrite = true);
-    $filesystem->write('something/test-image2.png', $this->getResourceImage('mini-single.png')->getContents(), $overwrite = true);
+    $filesystem = $this->storeFiles($client, [
+      'test-image.png' => 'tapire.png',
+      'something/test-image2.png' => 'mini-single.png'
+    ]);
 
     $json = $this->parseJSON(<<<'JSON'
 {
@@ -76,25 +76,19 @@ JSON
     $this->assertJsonResponse(200, $client)
       ->property('root')
         ->property('type', 'ROOT')->end()
-        ->property('items')->isArray();
+        ->property('items')->isArray()->length(0);
 
     $this->assertFalse($filesystem->has('test-image.png'));
     $this->assertFalse($filesystem->has('something/test-image2.png'));
   }
 
   public function testExistingImagesWillNotBeOverwritten_AndNoticed() {
-    $client = self::makeClient($this->credentials['petra']);
+    $client = $this->setupEmpty();
 
-    $this->loadAliceFixtures(
-      array(
-        'users'
-      ),
-      $client
-    );
-
-    $filesystem = $this->getContainer()->get('knp_gaufrette.filesystem_map')->get('cms_media');
-    $filesystem->write('folder/tapire.png', $this->getResourceImage('tapire.png')->getContents(), $overwrite = true);
-    $filesystem->write('folder/mini-single.png', $this->getResourceImage('mini-single.png')->getContents(), $overwrite = true);
+    $this->storeFiles($client, [
+      'folder/tapire.png' => 'tapire.png',
+      'folder/mini-single.png' => 'mini-single.png'
+    ]);
 
     $json = $this->getDropboxFiles();
     $json->dropboxFiles[0]->name = 'mini-single.png';
@@ -112,16 +106,7 @@ JSON
   }
 
   public function testThatImagesWithBadNamesWillBeUrlified() {
-    $client = self::makeClient($this->credentials['petra']);
-
-    $this->loadAliceFixtures(
-      array(
-        'users'
-      ),
-      $client
-    );
-
-    $this->emptyFileSystemAndCache();
+    $client = $this->setupEmpty();
 
     $json = $this->getDropboxFiles();
     $json->dropboxFiles[0]->name = '20140825-IMGP4127_Käernten superpilß.jpg';
@@ -139,19 +124,12 @@ JSON
   }
 
   public function testMovingASingleFileFromOneToAnotherDirectory() {
-    $client = self::makeClient($this->credentials['petra']);
+    $client = $this->setupEmpty();
 
-    $this->loadAliceFixtures(
-      array(
-        'users'
-      ),
-      $client
-    );
-
-    $this->emptyFileSystemAndCache();
-    $filesystem = $this->getContainer()->get('knp_gaufrette.filesystem_map')->get('cms_media');
-    $filesystem->write('folder1/folder2/tapire.png', $this->getResourceImage('tapire.png')->getContents(), $overwrite = true);
-    $filesystem->write('other/mini.png', $this->getResourceImage('mini-single.png')->getContents(), $overwrite = true);
+    $this->storeFiles($client, [
+      'folder1/folder2/tapire.png' => 'tapire.png',
+      'other/mini.png' => 'mini-single.png'
+    ]);
 
     $this->sendJsonRequest($client, 'POST', '/cms/media/move', (object) [
       'keys'=>["other/mini.png"],
@@ -177,19 +155,13 @@ JSON
   }
 
   public function testMovingCompleteFolderToAnother() {
-    $client = self::makeClient($this->credentials['petra']);
+    $client = $this->setupEmpty();
 
-    $this->loadAliceFixtures(
-      array(
-        'users'
-      ),
-      $client
-    );
+    $filesystem = $this->storeFiles($client, [
+      'folder1/folder2/tapire.png'=>'tapire.png',
+      'folder1/mini.png'=>'mini-single.png'
+    ]);
 
-    $this->emptyFileSystemAndCache();
-    $filesystem = $this->getContainer()->get('knp_gaufrette.filesystem_map')->get('cms_media');
-    $filesystem->write('folder1/folder2/tapire.png', $this->getResourceImage('tapire.png')->getContents(), $overwrite = true);
-    $filesystem->write('folder1/mini.png', $this->getResourceImage('mini-single.png')->getContents(), $overwrite = true);
 
     $this->sendJsonRequest($client, 'POST', '/cms/media/move', (object) [
       'keys'=>["folder1"],
@@ -270,5 +242,15 @@ JSON
     // clearing the thumbnails cache is important: otherwise we'll get the "no meta cache key"
     $GLOBALS['env']['root']->sub('www/images/cache/')->delete();
     $GLOBALS['env']['root']->sub('files/cache/imagine-meta')->delete();
+  }
+
+  protected function storeFiles($client, Array $files) {
+    $filesystem = $client->getContainer()->get('knp_gaufrette.filesystem_map')->get('cms_media');
+
+    foreach ($files as $target => $source) {
+      $filesystem->write($target, $this->getResourceImage($source)->getContents(), $overwrite = true);
+    }
+
+    return $filesystem;
   }
 }
