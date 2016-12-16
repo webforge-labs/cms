@@ -7,19 +7,17 @@ use JMS\Serializer\GraphNavigator;
 use JMS\Serializer\JsonSerializationVisitor;
 use JMS\Serializer\Context;
 use Webforge\CmsBundle\Model\GaufretteFileInterface;
-use Webforge\Gaufrette\Index as GaufretteIndex;
 use Webforge\Gaufrette\File as GaufretteFile;
-use Knp\Bundle\GaufretteBundle\FilesystemMap;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Webforge\CmsBundle\Media\Manager as MediaManager;
 
 class JmsSerializerGaufretteBinaryHandler {
 
-  private $filesystem, $index, $serializeHandlers;
+  private $manager, $serializeHandlers;
 
-  public function __construct(FilesystemMap $filesystemMap, $filesystemName, Array $handlers) {
-    $this->filesystem = $filesystemMap->get($filesystemName);
-    $this->index = new GaufretteIndex($this->filesystem);
+  public function __construct(MediaManager $manager, Array $handlers) {
+    $this->manager = $manager;
     $this->serializeHandlers = $handlers;
   }
 
@@ -32,7 +30,7 @@ class JmsSerializerGaufretteBinaryHandler {
     $file->key = $binary->getGaufretteKey();
 
     try {
-      $gaufretteFile = $this->index->getFile($binary->getGaufretteKey());
+      $gaufretteFile = $this->manager->getFile($binary->getGaufretteKey());
 
       $this->serializeToFile($gaufretteFile, $file);
       $file->isExisting = TRUE;
@@ -62,6 +60,6 @@ class JmsSerializerGaufretteBinaryHandler {
       }
     ];
 
-    return (object) ['root'=>$this->index->asTree($options)];
+    return (object) ['root'=>$this->manager->asTree($options)];
   }
 }

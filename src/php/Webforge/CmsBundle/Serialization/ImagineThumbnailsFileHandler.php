@@ -3,6 +3,7 @@
 namespace Webforge\CmsBundle\Serialization;
 
 use Webforge\Gaufrette\File as GaufretteFile;
+use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Binary\BinaryInterface;
@@ -20,7 +21,7 @@ class ImagineThumbnailsFileHandler implements GaufretteBinaryFileHandler {
   protected $dataManager;
   protected $imagine;
 
-  public function __construct(CacheManager $cacheManager, DataManager $dataManager, FilterManager $filterManager, \Imagine\Image\ImagineInterface $imagine, FilterConfiguration $filterConfiguration) {
+  public function __construct(CacheManager $cacheManager, DataManager $dataManager, FilterManager $filterManager, ImagineInterface $imagine, FilterConfiguration $filterConfiguration) {
     $this->cacheManager = $cacheManager;
     $this->filterManager = $filterManager;
     $this->dataManager = $dataManager;

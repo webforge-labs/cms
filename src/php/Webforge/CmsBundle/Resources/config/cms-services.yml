@@ -16,11 +16,9 @@ services:
 
   webforge.serialization.jms_gaufrette_binary_handler:
     class:      Webforge\CmsBundle\Serialization\JmsSerializerGaufretteBinaryHandler
-    arguments: ['@knp_gaufrette.filesystem_map', 'cms_media', [@webforge.serialization.imagine_thumbnails_file_handler]]
+    arguments: [@webforge.media.manager, [@webforge.serialization.imagine_thumbnails_file_handler]]
     tags: 
       - { name: jms_serializer.handler, direction: 'serialization', format: 'json', type: 'WebforgeGaufretteBinary', method: 'serialize' }
-#    tags: 
-#      - { name: jms_serializer.event_listener, event: serializer.post_serialize, class: WebforgeGaufretteBinary }
 
   webforge.serialization.special_types_listener:
     class:      Webforge\CmsBundle\Serialization\SpecialTypesListener
@@ -49,4 +47,17 @@ services:
 
   webforge.media.persistent_storage:
     class: Webforge\CmsBundle\Media\PersistentStorage
-    arguments: ['@dc', 'Binary']
+    arguments: ['@dc', 'Binary', 'MediaTree']
+
+  webforge.media.filesystem:
+    class: Gaufrette\Filesystem
+    factory: 'knp_gaufrette.filesystem_map:get'
+    arguments: ['cms_media']
+
+  webforge.gaufrette_index:
+    class: Webforge\Gaufrette\Index
+    arguments: ['@webforge.media.filesystem']
+
+  webforge.media.manager:
+    class: Webforge\CmsBundle\Media\Manager
+    arguments: ['@webforge.media.filesystem', '@webforge.gaufrette_index', '@webforge.media.persistent_storage']
