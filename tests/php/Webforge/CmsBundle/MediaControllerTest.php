@@ -154,22 +154,12 @@ JSON
       'target'=>'folder1/folder2/'
     ]);
 
-    $this->assertJsonResponse(200, $client)
-      ->property('root')
-        ->property('items')->isArray()
-          ->key(0)
-            ->property('key', 'folder1/')->end()
-            ->property('items')->isArray()
-              ->key(0)
-                ->property('key', 'folder1/folder2/')->end()
-                ->property('items')->isArray()
-                  ->key(1)
-                    ->property('key', 'folder1/folder2/tapire.png')->end()
-                  ->end()
-                  ->key(0)
-                    ->property('key', 'folder1/folder2/mini.png')->end()
-                  ->end()
-    ;
+    $response = $this->assertJsonResponse(200, $client);
+
+    $this->assertMediaFiles($response, [
+      'folder1/folder2/tapire.png',
+      'folder1/folder2/mini.png'
+    ]);
   }
 
   public function testMovingCompleteFolderToAnother() {
@@ -198,28 +188,27 @@ JSON
       ->property('items')->end()
       ->get();
 
-    // do the tree => flat conversion
+    // do the tree => flat conversion (Tiefensuche)
     $files = [];
-    $queue = [$root];
+    $stack = [$root];
     $path = [];
-    while (count($queue) > 0) {
-      $item = array_shift($queue);
+    while (count($stack) > 0) {
+      $item = array_pop($stack);
 
-      if ($item === 'end') {
-        array_pop($path);
-      } elseif ($item->type === 'directory' || $item->type === 'ROOT') {
-        $queue = array_merge($queue, $item->items);
+      if ($item->type === 'directory' || $item->type === 'ROOT') {
+        foreach ($item->items as $child) {
+          $stack[] = $child;
+        }
 
         if ($item->type === 'directory') {
           $path[] = $item->name;
-          $queue[] = 'end';
         }
       } else {
-        $files[] = implode('/', $path).'/'.$item->name;
+        $files[] = $f = implode('/', $path).'/'.$item->name;
       }
     }
 
-    $this->assertArrayEquals($files, $flatFiles);
+    $this->assertArrayEquals($flatFiles, $files);
   }
 
   private function assertDatabaseBinaries($client, array $files) {

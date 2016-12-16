@@ -31,7 +31,7 @@ class MediaController extends CommonController {
   }
 
   protected function getIndex() {
-    $handler = $this->get('webforge.serialization.gaufrette_binary_handler');
+    $handler = $this->get('webforge.serialization.jms_gaufrette_binary_handler');
 
     return $handler->asTree();
   }

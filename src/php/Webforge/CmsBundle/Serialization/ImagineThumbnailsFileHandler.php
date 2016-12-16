@@ -2,30 +2,25 @@
 
 namespace Webforge\CmsBundle\Serialization;
 
-use JMS\Serializer\Handler\SubscribingHandlerInterface;
-use JMS\Serializer\GraphNavigator;
-use JMS\Serializer\JsonSerializationVisitor;
-use JMS\Serializer\Context;
-use JMS\Serializer\EventDispatcher\ObjectEvent;
-use Webforge\CmsBundle\Model\GaufretteFileInterface;
-use Webforge\Gaufrette\Index as GaufretteIndex;
 use Webforge\Gaufrette\File as GaufretteFile;
-use Liip\ImagineBundle\Binary\BinaryInterface;
-use Liip\ImagineBundle\Binary\FileBinaryInterface;
-
 use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Binary\FileBinaryInterface;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Liip\ImagineBundle\Imagine\Data\DataManager;
+use Liip\ImagineBundle\Imagine\Filter\FilterManager;
+use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
+use RuntimeException;
 
-class GaufretteBinaryHandler {
+class ImagineThumbnailsFileHandler implements GaufretteBinaryFileHandler {
 
-  private $filesystem, $cacheManager, $dataManager, $imagine;
   protected $thumbnailFilters;
+  protected $cacheManager;
+  protected $dataManager;
+  protected $imagine;
 
-  public function __construct($filesystemMap, $filesystemName, $cacheManager, $dataManager, $filterManager, \Imagine\Image\ImagineInterface $imagine, $filterConfiguration) {
-    $this->filesystem = $filesystemMap->get($filesystemName);
-    $this->index = new GaufretteIndex($this->filesystem);
+  public function __construct(CacheManager $cacheManager, DataManager $dataManager, FilterManager $filterManager, \Imagine\Image\ImagineInterface $imagine, FilterConfiguration $filterConfiguration) {
     $this->cacheManager = $cacheManager;
     $this->filterManager = $filterManager;
     $this->dataManager = $dataManager;
@@ -43,33 +38,7 @@ class GaufretteBinaryHandler {
     }
   }
 
-  public function serialize(JsonSerializationVisitor $visitor, GaufretteFileInterface $binary, array $type, Context $context)  {
-    // @TODO i want to export all serialized properties here, what should i use the visitor? the context?
-    // $serialized = $visitor->getNavigator()->accept($binary, $type, $context);
-
-    $file = new \stdClass;
-    $file->id = $binary->getId();
-    $file->key = $binary->getGaufretteKey();
-
-    try {
-      $gaufretteFile = $this->index->getFile($binary->getGaufretteKey());
-
-      $this->serializeToFile($gaufretteFile, $file);
-      $file->isExisting = TRUE;
-
-    } catch (\Gaufrette\Exception\FileNotFound $e) {
-      $file->isExisting = FALSE;
-    }
-
-    // we return an array here, because otherwise @inline in serializer will not work
-    return (array) $file;
-  }
-
   public function serializeToFile(GaufretteFile $gFile, \stdClass $file) {
-
-    $file->url = '/cms/media?download=1&file='.urlencode($gFile->getRelativePath());
-    $file->mimeType = $gFile->mimeType;
-
     if ($gFile->isImage()) {
       $file->thumbnails = [];
       foreach ($this->thumbnailFilters as $filter) {
@@ -117,18 +86,7 @@ class GaufretteBinaryHandler {
             }
             catch(RuntimeException $e)
             {
-                throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $path, $filter, $e->getMessage()), 0, $e);
+                throw new RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $path, $filter, $e->getMessage()), 0, $e);
             }
-  }
-
-  public function asTree() {
-    $that = $this;
-    $options = [
-      'withFile'=>function(GaufretteFile $gFile, \stdClass $file) use ($that) {
-        return $that->serializeToFile($gFile, $file);
-      }
-    ];
-
-    return (object) ['root'=>$this->index->asTree($options)];
   }
 }
