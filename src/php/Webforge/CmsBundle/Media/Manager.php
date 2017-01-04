@@ -7,11 +7,14 @@ use Gaufrette\Filesystem;
 use Webforge\Gaufrette\Index;
 
 class Manager {
+
+  private $serializeHandlers;
   
-  public function __construct(Filesystem $filesystem, Index $gaufretteIndex, PersistentStorage $storage) {
+  public function __construct(Filesystem $filesystem, Index $gaufretteIndex, PersistentStorage $storage, Array $serializeHandlers) {
     $this->filesystem = $filesystem;
     $this->gaufretteIndex = $gaufretteIndex;
     $this->storage = $storage;
+    $this->serializeHandlers = $serializeHandlers;
   }
 
   public function addFile($path, $name, $contents) {
@@ -45,10 +48,6 @@ class Manager {
     
   }
 
-  public function asTree(Array $options) {
-    return $this->gaufretteIndex->asTree($options);
-  }
-
   private function normalizeFilename($name) {
     return URLify::filter($name, 120, 'de', $isFilanme = true);
   }
@@ -59,5 +58,25 @@ class Manager {
 
   public function commitTransaction() {
     $this->storage->flush();
+  }
+
+  public function serializeFile(MediaFileInterface $mediaFile, \stdClass $file) {
+    $file->url = '/cms/media?download=1&file='.urlencode($mediaFile->getFilesystemIdentifier());
+    $file->mimeType = $mediaFile->getMimeType();
+
+    foreach ($this->serializeHandlers as $handler) {
+      $handler->serializeToFile($mediaFile, $file);
+    }
+  }
+
+  public function asTree() {
+    $that = $this;
+    $options = [
+      'withFile'=>function(MediaFileInterface $mediaFile, \stdClass $file) use ($that) {
+        return $that->serializeFile($mediaFile, $file);
+      }
+    ];
+
+    return (object) ['root'=>$this->gaufretteIndex->asTree($options)];
   }
 }

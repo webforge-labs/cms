@@ -41,15 +41,32 @@
           "isEntityReference":false,
           "type":"Id"
         },
-        "gaufretteKey":{
-          "name":"gaufretteKey",
+        "mediaFileKey":{
+          "name":"mediaFileKey",
           "isEntityReference":false,
           "type":"String"
+        }
+      }
+    },
+    {
+      "name":"Image",
+      "fqn":"AppBundle\\Entity\\Image",
+      "singular":"image",
+      "plural":"images",
+      "tableName":"images",
+      "extends":null,
+      "description":null,
+      "properties":{
+        "id":{
+          "name":"id",
+          "isEntityReference":false,
+          "type":"Id"
         },
-        "originalName":{
-          "name":"originalName",
-          "isEntityReference":false,
-          "type":"String"
+        "binary":{
+          "name":"binary",
+          "isEntityReference":true,
+          "type":"AppBundle\\Entity\\Binary",
+          "isCollection":false
         }
       }
     }

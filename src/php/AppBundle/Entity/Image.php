@@ -10,8 +10,8 @@ use JMS\Serializer\Annotation AS Serializer;
  * 
  * this entity was compiled from Webforge\Doctrine\Compiler
  * @ORM\Entity
- * @ORM\Table(name="binaries")
+ * @ORM\Table(name="images")
  * @Serializer\ExclusionPolicy("all")
  */
-class Binary extends CompiledBinary implements \Webforge\CmsBundle\Model\MediaFileEntityInterface {
+class Image extends CompiledImage {
 }

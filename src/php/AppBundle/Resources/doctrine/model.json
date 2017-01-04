@@ -19,8 +19,17 @@
       "properties": {
         "id": { "type": "DefaultId" },
 
-        "gaufretteKey": { "type": "String" },
-        "originalName": { "type": "String" }
+        "mediaFileKey": { "type": "String" }
+      }
+    },
+
+    {
+      "name": "Image",
+
+      "properties": {
+        "id": { "type": "DefaultId" },
+
+        "binary": { "type": "Binary" }
       }
     }
 

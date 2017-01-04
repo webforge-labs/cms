@@ -2,7 +2,7 @@
 
 namespace Webforge\CmsBundle\Serialization;
 
-use Webforge\Gaufrette\File as GaufretteFile;
+use Webforge\CmsBundle\Model\MediaFileInterface;
 use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
@@ -14,7 +14,7 @@ use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use RuntimeException;
 
-class ImagineThumbnailsFileHandler implements GaufretteBinaryFileHandler {
+class ImagineThumbnailsFileHandler implements MediaFileHandlerInterface {
 
   protected $thumbnailFilters;
   protected $cacheManager;
@@ -39,17 +39,17 @@ class ImagineThumbnailsFileHandler implements GaufretteBinaryFileHandler {
     }
   }
 
-  public function serializeToFile(GaufretteFile $gFile, \stdClass $file) {
-    if ($gFile->isImage()) {
+  public function serializeToFile(MediaFileInterface $mediaFile, \stdClass $file) {
+    if ($mediaFile->isImage()) {
       $file->thumbnails = [];
       foreach ($this->thumbnailFilters as $filter) {
-        $this->applyFilterFor($gFile, $filter);
-        $meta = $this->cache->fetch(\Webforge\CmsBundle\Imagine\MetaWebPathResolver::cacheKey($gFile->key, $filter));
+        $this->applyFilterFor($mediaFile, $filter);
+        $meta = $this->cache->fetch(\Webforge\CmsBundle\Imagine\MetaWebPathResolver::cacheKey($mediaFile->getKey(), $filter));
 
         if (!$meta) {
-          throw new NotLoadableException('No meta cache for file with gaufretteKey: '.$gFile->key);
+          throw new NotLoadableException('No meta cache for file with gaufretteKey: '.$mediaFile->getKey());
         }
-        $meta->url = $this->cacheManager->getBrowserPath($gFile->getRelativePath(), $filter);
+        $meta->url = $this->cacheManager->getBrowserPath($mediaFile->getKey(), $filter);
         $meta->name = $filter;
 
         $file->thumbnails[$filter] = $meta;
@@ -57,8 +57,8 @@ class ImagineThumbnailsFileHandler implements GaufretteBinaryFileHandler {
     }
   }
 
-  protected function applyFilterFor(GaufretteFile $gFile, $filter) {
-    $path = $gFile->key;
+  protected function applyFilterFor(MediaFileInterface $mediaFile, $filter) {
+    $path = $mediaFile->getKey();
             try
             {
                 if(!$this->cacheManager->isStored($path, $filter))

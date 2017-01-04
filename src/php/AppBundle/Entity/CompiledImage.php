@@ -6,12 +6,12 @@ use Doctrine\ORM\Mapping AS ORM;
 use JMS\Serializer\Annotation AS Serializer;
 
 /**
- * Compiled Entity for AppBundle\Entity\Binary
+ * Compiled Entity for AppBundle\Entity\Image
  * 
- * To change table name or entity repository edit the AppBundle\Entity\Binary class.
+ * To change table name or entity repository edit the AppBundle\Entity\Image class.
  * @ORM\MappedSuperclass
  */
-abstract class CompiledBinary {
+abstract class CompiledImage {
   
   /**
    * id
@@ -25,13 +25,14 @@ abstract class CompiledBinary {
   protected $id;
   
   /**
-   * mediaFileKey
-   * @var string
-   * @ORM\Column
+   * binary
+   * @var AppBundle\Entity\Binary
+   * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Binary")
+   * @ORM\JoinColumn(nullable=false)
    * @Serializer\Expose
-   * @Serializer\Type("string")
+   * @Serializer\Type("AppBundle\Entity\Binary")
    */
-  protected $mediaFileKey;
+  protected $binary;
   
   public function __construct() {
 
@@ -53,17 +54,17 @@ abstract class CompiledBinary {
   }
   
   /**
-   * @return string
+   * @return AppBundle\Entity\Binary
    */
-  public function getMediaFileKey() {
-    return $this->mediaFileKey;
+  public function getBinary() {
+    return $this->binary;
   }
   
   /**
-   * @param string $mediaFileKey
+   * @param AppBundle\Entity\Binary $binary
    */
-  public function setMediaFileKey($mediaFileKey) {
-    $this->mediaFileKey = $mediaFileKey;
+  public function setBinary(Binary $binary) {
+    $this->binary = $binary;
     return $this;
   }
 }

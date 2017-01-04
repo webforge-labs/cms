@@ -14,16 +14,16 @@ services:
     tags:
       - { name: 'liip_imagine.binary.loader', loader: 'stream.cms_media' }
 
-  webforge.serialization.jms_gaufrette_binary_handler:
-    class:      Webforge\CmsBundle\Serialization\JmsSerializerGaufretteBinaryHandler
-    arguments: [@webforge.media.manager, [@webforge.serialization.imagine_thumbnails_file_handler]]
+  webforge.serialization.jms_serializer_media_file_entity_handler:
+    class:      Webforge\CmsBundle\Serialization\JmsSerializerMediaFileEntityHandler
+    arguments: [@webforge.media.manager]
     tags: 
-      - { name: jms_serializer.handler, direction: 'serialization', format: 'json', type: 'WebforgeGaufretteBinary', method: 'serialize' }
+      - { name: jms_serializer.handler, direction: 'serialization', format: 'json', type: 'WebforgeMediaFileEntity', method: 'serialize' }
 
   webforge.serialization.special_types_listener:
     class:      Webforge\CmsBundle\Serialization\SpecialTypesListener
     arguments:
-      - { Webforge\CmsBundle\Model\GaufretteFileInterface: WebforgeGaufretteBinary }
+      - { Webforge\CmsBundle\Model\MediaFileEntityInterface: WebforgeMediaFileEntity }
     tags: 
       - { name: jms_serializer.event_listener, event: serializer.pre_serialize }
 
@@ -41,7 +41,7 @@ services:
   
   webforge.cache.imagine_cache_warmer:
     class: Webforge\CmsBundle\Cache\ImagineCacheWarmer
-    arguments: ['@webforge.serialization.jms_gaufrette_binary_handler']
+    arguments: ['@webforge.serialization.jms_serializer_media_file_entity_handler']
     tags:
       - { name: kernel.cache_warmer, priority: 1 }
 
@@ -60,4 +60,4 @@ services:
 
   webforge.media.manager:
     class: Webforge\CmsBundle\Media\Manager
-    arguments: ['@webforge.media.filesystem', '@webforge.gaufrette_index', '@webforge.media.persistent_storage']
+    arguments: ['@webforge.media.filesystem', '@webforge.gaufrette_index', '@webforge.media.persistent_storage', [@webforge.serialization.imagine_thumbnails_file_handler]]

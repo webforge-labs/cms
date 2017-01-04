@@ -5,10 +5,10 @@ namespace Webforge\CmsBundle\Model;
 /**
  * Entities implementing that interface will be mapped to a special serializer type that converts images and serializes infos for the media file
  */
-interface GaufretteFileInterface {
+interface MediaFileEntityInterface {
 
-  public function getGaufretteKey();
+  public function getMediaFileKey();
 
-  public function setGaufretteKey($key);
+  public function setMediaFileKey($key);
 
 }
