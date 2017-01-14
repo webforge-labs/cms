@@ -11,6 +11,13 @@ define(['knockout'], function(ko) {
 
     if (!options) options = {};
 
+    if (!options.icon) {
+      options.icon = 'plus-square';
+    }
+
+    that.hasIcon = true;
+    that.iconClass = 'fa fa-fw fa-'+options.icon;
+
     that.add = function() {
       var blockData = {
         type: ko.observable(name),
