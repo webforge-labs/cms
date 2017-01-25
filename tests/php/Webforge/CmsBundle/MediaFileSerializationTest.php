@@ -1,9 +1,9 @@
 <?php
 
-namespace Webforge\CmsBundle;
+namespace Webforge\CmsBundle\Media;
 
 use Symfony\Component\Process\Process;
-
+  
 class MediaFileSerializationTest extends \Webforge\Testing\WebTestCase {
 
   use \Webforge\Testing\TestTrait;
@@ -21,7 +21,35 @@ class MediaFileSerializationTest extends \Webforge\Testing\WebTestCase {
     return $client;
   }
 
-  public function testMediaControllerReturnsTheEmptyStructure() {
+  public function testDiscoverTree() {
+
+    $builder = new \Tree\Builder\NodeBuilder;
+
+    $builder
+        ->value('A')
+        ->leaf('B')
+        ->tree('C')
+            ->tree('D')
+                ->leaf('G')
+                ->leaf('H')
+                ->end()
+            ->leaf('E')
+            ->leaf('F')
+            ->end()
+    ;
+
+    $nodeA = $builder->getNode();
+
+    $dumper = new DumpVisitor();
+
+    $str = serialize($nodeA);
+
+    $nodeAUnserialized = unserialize($str);
+
+    $this->assertEquals($dump = $nodeA->accept($dumper), $nodeAUnserialized->accept($dumper));
+  }
+
+  public function testTheBinaryEntityIsSerializedWithImageInformations() {
     $client = $this->setupEmpty();
 
     $manager = $client->getContainer()->get('webforge.media.manager');
@@ -34,6 +62,8 @@ class MediaFileSerializationTest extends \Webforge\Testing\WebTestCase {
 
     $image = new Image();
     $image->setBinary($binary);
+
+    $this->markTestIncomplete('this should check if serialization works');
   }
   
 }

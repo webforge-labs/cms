@@ -45,6 +45,37 @@
           "name":"mediaFileKey",
           "isEntityReference":false,
           "type":"String"
+        },
+        "mediaName":{
+          "name":"mediaName",
+          "isEntityReference":false,
+          "type":"String"
+        }
+      }
+    },
+    {
+      "name":"MediaTree",
+      "fqn":"AppBundle\\Entity\\MediaTree",
+      "singular":"media-tree",
+      "plural":"media-trees",
+      "tableName":"media_trees",
+      "extends":null,
+      "description":null,
+      "properties":{
+        "id":{
+          "name":"id",
+          "isEntityReference":false,
+          "type":"Id"
+        },
+        "content":{
+          "name":"content",
+          "isEntityReference":false,
+          "type":"Text"
+        },
+        "created":{
+          "name":"created",
+          "isEntityReference":false,
+          "type":"DateTime"
         }
       }
     },

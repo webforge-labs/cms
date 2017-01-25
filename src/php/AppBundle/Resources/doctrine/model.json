@@ -19,7 +19,19 @@
       "properties": {
         "id": { "type": "DefaultId" },
 
-        "mediaFileKey": { "type": "String" }
+        "mediaFileKey": { "type": "String" },
+        "mediaName": { "type": "String" }
+      }
+    },
+
+    {
+      "name": "MediaTree",
+
+      "properties": {
+        "id": { "type": "DefaultId" },
+
+        "content": { "type": "Text" },
+        "created": { "type": "DateTime" }
       }
     },
 

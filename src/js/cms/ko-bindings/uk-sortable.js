@@ -1,4 +1,4 @@
-define(['require', 'knockout', 'jquery', 'uikit-src/core/core', 'uikit-src/components/sortable'], function(require, ko, $) {
+define(['require', 'knockout', 'jquery', 'uikit-src/uikit-core'], function(require, ko, $, UIkit) {
 
   var getTemplateOptions = function(options) {
     var result = {};
@@ -23,7 +23,7 @@ define(['require', 'knockout', 'jquery', 'uikit-src/core/core', 'uikit-src/compo
 
       ko.bindingHandlers.template.init(element, function() { return templateOptions; }, allBindingsAccessor, data, context);
 
-      require(['uikit', 'uikit-sortable'], function(UIkit) {
+      require(['uikit', 'uikit-src/components/sortable'], function(UIkit) {
         var $sortable = $(element);
         var sortable = UIkit.sortable(element, {
           animation: 120,

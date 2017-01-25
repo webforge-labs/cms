@@ -2,7 +2,7 @@
 
 namespace Webforge\CmsBundle\Serialization;
 
-use Webforge\CmsBundle\Model\MediaFileInterface;
+use Webforge\CmsBundle\Media\FileInterface as MediaFileInterface;
 use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
@@ -43,13 +43,15 @@ class ImagineThumbnailsFileHandler implements MediaFileHandlerInterface {
     if ($mediaFile->isImage()) {
       $file->thumbnails = [];
       foreach ($this->thumbnailFilters as $filter) {
-        $this->applyFilterFor($mediaFile, $filter);
-        $meta = $this->cache->fetch(\Webforge\CmsBundle\Imagine\MetaWebPathResolver::cacheKey($mediaFile->getKey(), $filter));
+        $path = $mediaFile->getKey().'/'.$mediaFile->getName();
+
+        $this->applyFilterFor($path, $mediaFile->getKey(), $filter);
+        $meta = $this->cache->fetch(\Webforge\CmsBundle\Imagine\MetaWebPathResolver::cacheKey($path, $filter));
 
         if (!$meta) {
-          throw new NotLoadableException('No meta cache for file with gaufretteKey: '.$mediaFile->getKey());
+          throw new NotLoadableException('No meta cache for file with gaufretteKey: '.$path);
         }
-        $meta->url = $this->cacheManager->getBrowserPath($mediaFile->getKey(), $filter);
+        $meta->url = $this->cacheManager->getBrowserPath($path, $filter);
         $meta->name = $filter;
 
         $file->thumbnails[$filter] = $meta;
@@ -57,15 +59,14 @@ class ImagineThumbnailsFileHandler implements MediaFileHandlerInterface {
     }
   }
 
-  protected function applyFilterFor(MediaFileInterface $mediaFile, $filter) {
-    $path = $mediaFile->getKey();
+  protected function applyFilterFor($path, $mediaKey, $filter) {
             try
             {
                 if(!$this->cacheManager->isStored($path, $filter))
                 {
                     try
                     {
-                        $binary = $this->dataManager->find($filter, $path);
+                        $binary = $this->dataManager->find($filter, $mediaKey); // file is stored in gaufrette just by key
                     }
                     catch(NotLoadableException $e)
                     {

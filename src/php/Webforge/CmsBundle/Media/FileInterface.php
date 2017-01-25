@@ -15,6 +15,12 @@ interface FileInterface {
    */
   public function getKey();
 
+  /**
+   * Just the name of the file (without the path)
+   * @return string
+   */
+  public function getName();
+
   public function getMimeType();
 
   public function isImage();

@@ -2,7 +2,7 @@
 
 namespace Webforge\CmsBundle\Serialization;
 
-use Webforge\CmsBundle\Model\MediaFileInterface;
+use Webforge\CmsBundle\Media\FileInterface as MediaFileInterface;
 
 Interface MediaFileHandlerInterface {
 

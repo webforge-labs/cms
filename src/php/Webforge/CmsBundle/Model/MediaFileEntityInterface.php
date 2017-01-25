@@ -11,4 +11,12 @@ interface MediaFileEntityInterface {
 
   public function setMediaFileKey($key);
 
+  public function getMediaName();
+
+  /**
+   * Sets a descriptive name - used as a filename in outputs
+   * @param string $filename
+   */
+  public function setMediaName($filename);
+
 }

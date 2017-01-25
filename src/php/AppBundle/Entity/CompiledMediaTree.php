@@ -2,16 +2,17 @@
 
 namespace AppBundle\Entity;
 
+use Webforge\Common\DateTime\DateTime;
 use Doctrine\ORM\Mapping AS ORM;
 use JMS\Serializer\Annotation AS Serializer;
 
 /**
- * Compiled Entity for AppBundle\Entity\Binary
+ * Compiled Entity for AppBundle\Entity\MediaTree
  * 
- * To change table name or entity repository edit the AppBundle\Entity\Binary class.
+ * To change table name or entity repository edit the AppBundle\Entity\MediaTree class.
  * @ORM\MappedSuperclass
  */
-abstract class CompiledBinary {
+abstract class CompiledMediaTree {
   
   /**
    * id
@@ -25,22 +26,22 @@ abstract class CompiledBinary {
   protected $id;
   
   /**
-   * mediaFileKey
+   * content
    * @var string
-   * @ORM\Column
+   * @ORM\Column(type="text")
    * @Serializer\Expose
    * @Serializer\Type("string")
    */
-  protected $mediaFileKey;
+  protected $content;
   
   /**
-   * mediaName
-   * @var string
-   * @ORM\Column
+   * created
+   * @var Webforge\Common\DateTime\DateTime
+   * @ORM\Column(type="WebforgeDateTime")
    * @Serializer\Expose
-   * @Serializer\Type("string")
+   * @Serializer\Type("WebforgeDateTime")
    */
-  protected $mediaName;
+  protected $created;
   
   public function __construct() {
 
@@ -64,30 +65,30 @@ abstract class CompiledBinary {
   /**
    * @return string
    */
-  public function getMediaFileKey() {
-    return $this->mediaFileKey;
+  public function getContent() {
+    return $this->content;
   }
   
   /**
-   * @param string $mediaFileKey
+   * @param string $content
    */
-  public function setMediaFileKey($mediaFileKey) {
-    $this->mediaFileKey = $mediaFileKey;
+  public function setContent($content) {
+    $this->content = $content;
     return $this;
   }
   
   /**
-   * @return string
+   * @return Webforge\Common\DateTime\DateTime
    */
-  public function getMediaName() {
-    return $this->mediaName;
+  public function getCreated() {
+    return $this->created;
   }
   
   /**
-   * @param string $mediaName
+   * @param Webforge\Common\DateTime\DateTime $created
    */
-  public function setMediaName($mediaName) {
-    $this->mediaName = $mediaName;
+  public function setCreated(DateTime $created) {
+    $this->created = $created;
     return $this;
   }
 }

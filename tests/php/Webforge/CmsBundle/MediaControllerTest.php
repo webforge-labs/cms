@@ -41,6 +41,7 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
     $this->sendJsonRequest($client, 'POST', '/cms/media/dropbox', $json);
 
     $dsc03281Key = $this->assertJsonResponse(201, $client)
+      ->debug()
       ->property('root')
         ->property('type', 'ROOT')->end()
         ->property('items')->isArray()
@@ -56,7 +57,7 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
                     ->property('orientation')->is('landscape')->end()
                     ->property('isPortrait')->is(false)->end()
                     ->property('isLandscape')->is(true)->end()
-                    ->property('url')->contains('/images/cache/big/2016-03-27/dsc03281.jpg')->end()
+                    ->property('url')->contains('/images/cache/big')->contains('dsc03281.jpg')->end()
                   ->end()
                   ->property('sm')
                     ->property('orientation')->is('landscape')->end()
@@ -76,17 +77,12 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
   public function testImageBatchDeleting() {
     $client = $this->setupEmpty();
 
-    $filesystem = $this->storeFiles($client, [
+    $keys = $this->storeFiles($client, [
       'test-image.png' => 'tapire.png',
       'something/test-image2.png' => 'mini-single.png'
     ]);
 
-    $json = $this->parseJSON(<<<'JSON'
-{
-  "keys": ["test-image.png", "something/test-image2.png"]
-}
-JSON
-    );
+    $json = (object) ['keys'=>$keys];
 
     $this->sendJsonRequest($client, 'DELETE', '/cms/media', $json);
     $this->assertJsonResponse(200, $client)
@@ -94,8 +90,10 @@ JSON
         ->property('type', 'ROOT')->end()
         ->property('items')->isArray()->length(0);
 
-    $this->assertFalse($filesystem->has('test-image.png'));
-    $this->assertFalse($filesystem->has('something/test-image2.png'));
+    // this is a very internal test
+    $filesystem = $this->getFilesystem($client);
+    $this->assertFalse($filesystem->has($keys[0]));
+    $this->assertFalse($filesystem->has($keys[1]));
 
     $this->assertDatabaseBinaries($client, []);
   }
@@ -218,7 +216,7 @@ JSON
     $actualBinaries = array();
 
     foreach ($binaries as $binary) {
-      $actualBinaries[] = $binary->getGaufretteKey();
+      $actualBinaries[] = $binary->getMediaFileKey();
     }
 
     $this->assertArrayEquals(array_keys($files), $actualBinaries, 'gaufretteKeys from Binaries in Database:');
@@ -285,17 +283,22 @@ JSON
   }
 
   protected function storeFiles($client, Array $files) {
-    $filesystem = $this->getFilesystem($client);
 
     // this is a shortcut to insert binaries, we could query the mediaController dropboxUpload everytime (or use another web request here, or use fixtures) which would be cleaner
-    $storage = $client->getContainer()->get('webforge.media.persistent_storage');
+    $manager = $client->getContainer()->get('webforge.media.manager');
+    $manager->beginTransaction();
 
-    foreach ($files as $target => $source) {
-      $filesystem->write($target, $this->getResourceImage($source)->getContents(), $overwrite = true);
-      $storage->persistFile($target, 'original-name-'.$target);
+    $keys = array();
+    foreach ($files as $targetPath => $source) {
+      $targetPath = '/'.$targetPath;
+      $targetName = mb_substr($targetPath, strrpos($targetPath, '/')+1);
+      $targetPath = mb_substr($targetPath, 0, strrpos($targetPath, '/'));
+
+      $entity = $manager->addFile($targetPath, $targetName, $this->getResourceImage($source)->getContents());
+      $keys[] = $entity->getMediaFileKey();
     }
-    $storage->flush();
 
-    return $filesystem;
+    $manager->commitTransaction();
+    return $keys;
   }
 }
