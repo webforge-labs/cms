@@ -31,6 +31,7 @@ abstract class CompiledImage {
    * @ORM\JoinColumn(nullable=false)
    * @Serializer\Expose
    * @Serializer\Type("AppBundle\Entity\Binary")
+   * @Serializer\Inline
    */
   protected $binary;
   

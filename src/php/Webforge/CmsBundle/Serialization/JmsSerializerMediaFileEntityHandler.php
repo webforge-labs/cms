@@ -10,6 +10,7 @@ use Webforge\CmsBundle\Model\MediaFileInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Webforge\CmsBundle\Media\Manager as MediaManager;
+use Webforge\CmsBundle\Model\MediaFileEntityInterface;
 
 class JmsSerializerMediaFileEntityHandler {
 
@@ -19,18 +20,16 @@ class JmsSerializerMediaFileEntityHandler {
     $this->manager = $manager;
   }
 
-  public function serialize(JsonSerializationVisitor $visitor, GaufretteFileInterface $binary, array $type, Context $context)  {
+  public function serialize(JsonSerializationVisitor $visitor, MediaFileEntityInterface $binary, array $type, Context $context)  {
     // @TODO i want to export all serialized properties here, what should i use the visitor? the context?
     // $serialized = $visitor->getNavigator()->accept($binary, $type, $context);
 
     $file = new \stdClass;
     $file->id = $binary->getId();
-    $file->key = $binary->getGaufretteKey();
 
     try {
-      $mediaFile = $this->manager->getFile($binary->getGaufretteKey());
+      $this->manager->serializeFile($binary->getMediaFileKey(), $file);
 
-      $this->manager->serializeFile($mediaFile, $file);
       $file->isExisting = TRUE;
 
     } catch (\Webforge\CmsBundle\Media\FileNotFoundException $e) {

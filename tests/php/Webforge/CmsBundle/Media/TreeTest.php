@@ -3,8 +3,9 @@
 namespace Webforge\CmsBundle\Media;
 
 use Tree\Node\Node;
+use Webforge\Common\ArrayUtil as A;
 
-class NodeFinderVisitorTest extends \PHPUnit_Framework_TestCase {
+class TreeTest extends \PHPUnit_Framework_TestCase {
 
   public function setUp() {
     $builder = new \Tree\Builder\NodeBuilder;
@@ -21,6 +22,10 @@ class NodeFinderVisitorTest extends \PHPUnit_Framework_TestCase {
         ->end()
         ->tree('usa')
           ->leaf('this-is-wrong')
+          ->tree('wyoming')
+            ->leaf('east')
+            ->leaf('west')
+          ->end()
         ->end()
     ;
 
@@ -75,26 +80,98 @@ class NodeFinderVisitorTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testTreeCanAddNodes() {
-    $this->tree->addNode('/minis', new Node('mini-single'));
+    $this->tree->addNode('/minis', 'mini-single', '394x');
 
     $node = $this->find('/minis/mini-single');
     $this->assertFoundNode('mini-single', $node);
   }
 
   public function testTreeCanAddNodesToRoot() {
-    $this->tree->addNode('/', new Node('test'));
+    $this->tree->addNode('/', 'test', 'test-key');
     $this->assertNotEmpty($this->find('/test'));
   }
 
   public function testTreeWontOverwriteExisting() {
     $this->setExpectedException('LogicException', 'travel/usa/california');
-    $this->tree->addNode('/travel/usa', new Node('california'));
+    $this->tree->addNode('/travel/usa', 'california', 'california-key');
   }
 
   public function testTreeCanAddDeepNodesThatAreNotExising() {
-    $this->tree->addNode('/travel/usa/chicago', new Node('westside'));
+    $this->tree->addNode('/travel/usa/chicago', 'westside', 'westside-key');
 
     $this->assertNotEmpty($this->find('/travel/usa/chicago/westside'));
+  }
+
+  /**
+   * @group tree-move
+   */
+  public function testTreeCannotMovePartsThatAreNotExisting() {
+    $this->setExpectedException('LogicException', '"/not-existing/wyoming" is not existing');
+    $this->tree->moveNode('/not-existing/wyoming', '/travel/usa/');
+  }
+
+  /**
+   * @group tree-move
+   */
+  public function testTreeCanMoveNodesWithLeaves() {
+    $this->tree->moveNode('/usa/wyoming', '/travel/usa/');
+
+    $this->assertNotEmpty($this->find('/travel/usa/wyoming/east'), 'east should be moved through wyoming');
+    $this->assertNotEmpty($this->find('/travel/usa/wyoming/west'));
+
+    $this->assertEmpty($this->find('/usa/wyoming'), 'wyoming should be (re-)moved');
+  }
+
+  /**
+   * @group tree-move
+   */
+  public function testTreeIntegratesNodesToEqualNodes() {
+    $this->tree->moveNode('/usa', '/travel/');
+
+    $travel = $this->find('/travel');
+
+    $this->assertNotEmpty($this->find('/travel/usa/new-york'), 'new-york should be integrated while moving');
+    $this->assertNotEmpty($this->find('/travel/usa/wyoming'), 'wyoming should be integrated into travel/usa/');
+    $this->assertNotEmpty($this->find('/travel/usa/wyoming/east'), 'east should integrated into travel/usa/ through integrating wyoming');
+    $this->assertEquals(['usa', 'marocco'], A::pluck($travel->getChildren(), 'getValue'), 'marocco and usa should be the only child-nodes from travel');
+  }
+
+  /**
+   * @group tree-move
+   */
+  public function testTreeComplexIntegration() {
+    $builder = new \Tree\Builder\NodeBuilder;
+    $builder
+      ->value('root')
+      ->tree('minis')
+        ->tree('tapir')
+          ->leaf('image1.png')
+        ->end()
+      ->end()
+      ->tree('wrong')
+        ->tree('minis')
+          ->tree('tapir')
+            ->leaf('image2.png')
+          ->end()
+        ->end()
+      ->end()
+    ;
+
+    $tree = new Tree($builder->getNode());
+    $tree->moveNode('/wrong/minis', '/');
+
+    $this->assertEquals(<<<'TREE'
+
+root
+ minis
+  tapir
+   image1.png
+   image2.png
+ wrong
+TREE
+      ,
+      $tree->dump($advanced = FALSE)
+    );
   }
 
   protected function assertFoundNode($value, $node) {

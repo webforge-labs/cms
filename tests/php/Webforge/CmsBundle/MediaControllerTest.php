@@ -41,7 +41,6 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
     $this->sendJsonRequest($client, 'POST', '/cms/media/dropbox', $json);
 
     $dsc03281Key = $this->assertJsonResponse(201, $client)
-      ->debug()
       ->property('root')
         ->property('type', 'ROOT')->end()
         ->property('items')->isArray()
@@ -148,7 +147,7 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
     ]);
 
     $this->sendJsonRequest($client, 'POST', '/cms/media/move', (object) [
-      'keys'=>["other/mini.png"],
+      'sources'=>["other/mini.png"],
       'target'=>'folder1/folder2/'
     ]);
 
@@ -169,7 +168,7 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
     ]);
 
     $this->sendJsonRequest($client, 'POST', '/cms/media/move', (object) [
-      'keys'=>["folder1"],
+      'sources'=>["folder1"],
       'target'=>'otherroot/'
     ]);
 

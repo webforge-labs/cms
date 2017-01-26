@@ -41,7 +41,7 @@
       "properties": {
         "id": { "type": "DefaultId" },
 
-        "binary": { "type": "Binary" }
+        "binary": { "type": "Binary", "serializer": { "inline": true } }
       }
     }
 

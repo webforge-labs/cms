@@ -76,8 +76,8 @@ define(['jquery', 'knockout', 'lodash', 'amplify', 'bluebird', 'cms/modules/disp
       });
     };
 
-    this.moveFiles = function(fileKeys, targetDirKey, afterwards) {
-      dispatcher.sendPromised('POST', '/cms/media/move', { keys: fileKeys, target: targetDirKey }, 'json')
+    this.moveFiles = function(sourcePaths, targetPath, afterwards) {
+      dispatcher.sendPromised('POST', '/cms/media/move', { sources: sourcePaths, target: targetPath }, 'json')
         .then(function() {
           return dispatcher.sendPromised('GET', '/cms/media', undefined, 'json');
         }).then(function(response) {

@@ -95,8 +95,8 @@ class MediaController extends CommonController {
     $manager = $this->get('webforge.media.manager');
 
     $manager->beginTransaction();
-    foreach ($json->keys as $key) {
-      $manager->moveByKey($key, $json->target);
+    foreach ($json->sources as $path) {
+      $manager->moveByPath($path, $json->target);
     }
     $manager->commitTransaction();
 

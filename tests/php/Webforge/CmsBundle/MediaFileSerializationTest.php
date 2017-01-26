@@ -3,6 +3,8 @@
 namespace Webforge\CmsBundle\Media;
 
 use Symfony\Component\Process\Process;
+use AppBundle\Entity\Binary;
+use AppBundle\Entity\Image;
   
 class MediaFileSerializationTest extends \Webforge\Testing\WebTestCase {
 
@@ -21,7 +23,7 @@ class MediaFileSerializationTest extends \Webforge\Testing\WebTestCase {
     return $client;
   }
 
-  public function testDiscoverTree() {
+  public function testSerializeAndUnseralizeTheNodeBuilder() {
 
     $builder = new \Tree\Builder\NodeBuilder;
 
@@ -40,7 +42,7 @@ class MediaFileSerializationTest extends \Webforge\Testing\WebTestCase {
 
     $nodeA = $builder->getNode();
 
-    $dumper = new DumpVisitor();
+    $dumper = new DumpVisitor(FALSE);
 
     $str = serialize($nodeA);
 
@@ -54,16 +56,21 @@ class MediaFileSerializationTest extends \Webforge\Testing\WebTestCase {
 
     $manager = $client->getContainer()->get('webforge.media.manager');
     $manager->beginTransaction();
-    $mediaFile = $manager->addFile('die-minis/', 'mini.png', $GLOBALS['env']['root']->sub('Resources/img/')->getFile('mini-single.png')->getContents());
+    $binary = $manager->addFile('die-minis/', 'mini.png', $GLOBALS['env']['root']->sub('Resources/img/')->getFile('mini-single.png')->getContents());
     $manager->commitTransaction();
-
-    $binary = new Binary();
-    $binary->setMediaFileKey($mediaFile->getKey());
 
     $image = new Image();
     $image->setBinary($binary);
 
-    $this->markTestIncomplete('this should check if serialization works');
+    $og = new \Webforge\Symfony\ObjectGraph($client->getContainer()->get('jms_serializer'));
+    $this->assertThatObject($og->serialize($image))
+      ->property('id')->end()
+      ->property('key')->isNotEmpty()->end()
+      ->property('isExisting')->is(TRUE)->end()
+      ->property('thumbnails')->isObject()
+        ->property('xs')->isObject()->end()
+        ->property('sm')->isObject()->end()
+      ->end()
+    ;
   }
-  
 }

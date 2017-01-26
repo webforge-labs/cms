@@ -43,7 +43,6 @@ class PersistentStorage {
       $treeEntity = $this->treeRepository->findOneBy(array(), array('created'=>'DESC'));
 
       if ($treeEntity) {
-        new FileNode;
         $this->treeCache = unserialize($treeEntity->getContent());
       } else {
         $this->treeCache = Tree::createEmpty();
