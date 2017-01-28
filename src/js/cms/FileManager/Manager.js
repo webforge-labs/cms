@@ -9,7 +9,7 @@ define(function(require) {
   var FileManagerSync = require('./Sync');
   var FileManagerItem = require('./Item');
   var FileManagerFolderPicker = require('./FolderPicker');
-  var Promise = require('Bluebird');
+  var Promise = require('bluebird');
   require('bootstrap-notify');
 
   return function FileManagerManager(data) {
