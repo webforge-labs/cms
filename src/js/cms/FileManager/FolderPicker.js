@@ -15,18 +15,30 @@ define(['knockout'], function(ko) {
 
       if (!selected) return false;
 
-      var selectedPath = selected.path();
+      var targetPath = selected.path();
       // we cannot move an directory deeper into it's own sub-directories
       // files can be moved to anywhere
       var movingAllowed = true;
       ko.utils.arrayForEach(that.itemsToMove(), function(item) {
-        if (item.isDirectory()) {
-          console.log('from: '+item.path(), 'to:'+selectedPath);
+        if (item.isFile()) {
+          if (targetPath == item.parentItem.path()) {
+            movingAllowed = false;
+            return false;
+          }
+        } else { // isDirectory
+          if (targetPath === item.path() || targetPath == item.parentItem.path() || that.isSubdirectory(item.path(), targetPath)) {
+            movingAllowed = false;
+            return false;
+          }
         }
       });
 
       return movingAllowed;
     });
+
+    this.isSubdirectory = function(directory, subDirectory) {
+      return _.startsWith(subDirectory, directory);
+    };
 
     this.selectDirectory = function(directory) {
       that.selected(directory);

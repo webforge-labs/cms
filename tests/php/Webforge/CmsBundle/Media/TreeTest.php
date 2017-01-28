@@ -174,6 +174,14 @@ TREE
     );
   }
 
+  public function testTreeShouldNotAllowMovingToSelf() {
+    throw new Exception('Please implement me');
+  }
+
+  public function testTreeShouldNotAllowMovingChildrenToItsChildren() {
+    throw new Exception('Please implement me');
+  }
+
   protected function assertFoundNode($value, $node) {
     $this->assertNotEmpty($node, 'should have found: '.$value);
     $this->assertEquals($value, $node->getValue(), 'value of found node');

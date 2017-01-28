@@ -3,14 +3,15 @@ module.exports = function() {
   require('./setup')(this);
 
   this.When(/^I open the file-manager$/, function () {
+    console.log('step definition');
     client.url("/prototypes/file-manager");
 
-    this.context = this.css('.file-manager').exists();
+    this.context = this.css('.file-manager').waitForVisible();
   });
 
   this.When(/^I click on the folder "([^"]*)"$/, function (foldername) {
-    this.css('.folder-row .thumbnail:has(.filename:contains("'+foldername+'"))').exists()
-      .css('a.top').click();
+    this.css('.folder-row .thumbnail:has(.filename:contains("'+foldername+'"))').waitForVisible()
+      .css('a.top').waitForVisible().click();
   });
 
   this.When(/^I create a folder "([^"]*)"$/, function (foldername) {

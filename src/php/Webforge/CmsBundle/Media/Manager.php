@@ -68,11 +68,15 @@ class Manager {
 
     $tree = $this->storage->loadTree();
     $tree->removeNodeByKey($key);
+
+    $this->treeModified = $tree;
   }
 
   public function moveByPath($sourcePath, $targetPath) {
     $tree = $this->storage->loadTree();
     $tree->moveNode($sourcePath, $targetPath);
+
+    $this->treeModified = $tree;
   }
 
   public function serializeFile($mediaKey, \stdClass $file) {

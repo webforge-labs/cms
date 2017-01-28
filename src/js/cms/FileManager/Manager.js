@@ -95,15 +95,17 @@ define(function(require) {
       var order = 'asc';
  
       return _.orderBy(
-        that.currentItem().items(), 
-        // first level: directories before files
-        function(item) {
-          return item.isDirectory() ? 0 : 1;
-        },
-        // second level: alphabetically by name
-        function(item) {
-          return item.name();
-        },
+        that.currentItem().items(),
+        [
+          // first level: directories before files
+          function(item) {
+            return item.isDirectory() ? 0 : 1;
+          },
+          // second level: alphabetically by name
+          function(item) {
+            return item.name();
+          }
+        ],
         ['asc', order]
       );
     });
@@ -163,6 +165,7 @@ define(function(require) {
       if (that.folderPicker.hasValidDirectory()) {
         var targetDir = that.folderPicker.selected();
 
+        that.view("wait-moving");
         that.sync.moveFiles(moveFiles, targetDir.path(), function(response) {
           $.notify({
             message: "Okay, die Dateien habe ich verschoben."
@@ -171,6 +174,7 @@ define(function(require) {
           });
 
           that.refreshData(response.body);
+          that.toNavigator();
         });
       }
     }
@@ -260,7 +264,13 @@ define(function(require) {
     };
 
     this.refreshData = function(data) {
+      // if we refresh and wont set the currentItem accordingly, the stale currentItem will be displayed (containing stale files, etc)
+      var oldPath = that.currentItem().path();
+      
       koMapping.fromJS(data, mapping, that);
+
+      // @TODO search in whole directory structure if the oldPath exists, then set as currentitem
+      that.setCurrentItem(that.root);
     };
 
     amplify.subscribe('fileManager.deleted', function(item) {
@@ -284,6 +294,7 @@ define(function(require) {
       }
       that.selection.removeAll();
       that.chosenFiles.removeAll();
+      that.setCurrentItem(that.root);
     }
 
     this.toNavigator = function() {

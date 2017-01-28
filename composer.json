@@ -41,7 +41,7 @@
     },
     "require-dev": {
         "webforge/testdata-repository": "0.2.2-alpha",
-        "webforge/testing": "^1.0.0"
+        "webforge/testing": "^1.2.2"
     },
     "suggest": {
       "nelmio/alice": "to use alice-fixtures in your tests (use dev dependency version 2.x)"
@@ -59,7 +59,7 @@
         "symfony-app-dir": "app",
         "symfony-web-dir": "www",
         "branch-alias": {
-            "dev-master": "1.0.x-dev"
+            "dev-master": "1.9.x-dev"
         }
     }
 }

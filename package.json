@@ -53,18 +53,16 @@
     "superagent": "~1.4.0",
     "webforge-js-builder": "~1.1.8",
     "webforge-js-components": "^1.0.7",
-    "webforge-testing": "^1.1.5"
+    "webforge-testing": "~1.2.2"
   },
   "devDependencies": {
     "amplify": "0.0.11",
     "chai": "^3.4.1",
-    "cuked-zombie": "~3.0.1",
     "gulp": "^3.9.0",
     "jquery-deferred": "^0.3.0",
     "json-diff": "^0.3.1",
     "mocha": "^2.3.3",
     "npm-run-all": "^3.0.0",
-    "webforge-testing": "~1.2.1",
     "xpath-builder": "0.0.7",
     "yargs": "^3.29.0"
   }

@@ -6,4 +6,10 @@
   <!-- ko if: view() == "folder-picker" -->
     {% include 'WebforgeCmsBundle:components:file-manager/folder-picker.html.twig' %}
   <!-- /ko -->
+
+  <!-- ko if: view() == "wait-moving" -->
+    <div class="alert alert-warning m-t-1">
+      <strong><i class="fa fa-spinner fa-spin"></i> Bitte warte kurz..</strong> Ich verschiebe gerade die Dateien und Ordner..<br />
+    </div>
+  <!-- /ko -->
 </div>

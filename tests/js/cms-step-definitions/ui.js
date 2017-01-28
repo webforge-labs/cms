@@ -55,7 +55,7 @@ module.exports = function() {
     if (reversed) {
       text.count(0)
     } else {
-      text.atLeast(1);
+      text.count(1);
     }
   });
 
