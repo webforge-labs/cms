@@ -9,7 +9,7 @@
     "test-entity-form": "mocha tests/js/mocha/EntityFormTest.js",
     "test-nav": "mocha tests/js/mocha/NavigationTest.js",
     "test-fm": "mocha tests/js/mocha/FileManagerTest.js",
-    "test": "npm-run-all --parallel test-tabs test-form test-entity-form test-nav test-fm",
+    "test": "npm-run-all --parallel test-tabs test-form test-entity-form test-fm",
     "build": "gulp build",
     "build-dev": "gulp build --dev"
   },
