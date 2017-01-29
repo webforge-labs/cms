@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 class TestController extends CommonController {
 
   /**
-   * @Route("/", name="test_index")
+   * @Route("/cms", name="test_index")
    * @Method("GET")
    */
   public function indexAction() {
@@ -57,7 +57,7 @@ class TestController extends CommonController {
   }
 
   /**
-   * @Route("/dashboard", name="test_dashboard")
+   * @Route("/cms/dashboard", name="test_dashboard")
    * @Method("GET")
    */
   public function dashboardAction() {
@@ -75,7 +75,7 @@ class TestController extends CommonController {
   }
 
   /**
-   * @Route("/users/list", name="test_users_list")
+   * @Route("/cms/users/list", name="test_users_list")
    * @Method("GET")
    */
   public function usersListAction() {
@@ -83,7 +83,7 @@ class TestController extends CommonController {
   }
 
   /**
-   * @Route("/pages/list", name="test_pages_list")
+   * @Route("/cms/pages/list", name="test_pages_list")
    * @Method("GET")
    */
   public function pagesListAction() {
@@ -110,6 +110,12 @@ class TestController extends CommonController {
    * @Method("GET")
    */
   public function protoFileManagerAction() {
-    return $this->render('WebforgeCmsBundle:test/prototypes:file-manager.html.twig', array());
+    return $this->render('WebforgeCmsBundle:test/prototypes:file-manager.html.twig', array(
+      'cms'=>array(
+        'title'=>'CMS Intern',
+        'xsTitle'=>'CMS Intern'
+      )
+
+    ));
   }
 }

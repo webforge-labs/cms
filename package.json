@@ -9,7 +9,7 @@
     "test-entity-form": "mocha tests/js/mocha/EntityFormTest.js",
     "test-nav": "mocha tests/js/mocha/NavigationTest.js",
     "test-fm": "mocha tests/js/mocha/FileManagerTest.js",
-    "test": "npm-run-all --parallel test-tabs test-form test-entity-form test-nav test-fm",
+    "test": "npm-run-all --parallel test-tabs test-form test-entity-form test-fm",
     "build": "gulp build",
     "build-dev": "gulp build --dev"
   },
@@ -52,12 +52,12 @@
     "shimney-superagent": "~1.4.0-build.2",
     "superagent": "~1.4.0",
     "webforge-js-builder": "~1.1.8",
-    "webforge-js-components": "^1.0.7"
+    "webforge-js-components": "^1.0.7",
+    "webforge-testing": "~1.2.2"
   },
   "devDependencies": {
     "amplify": "0.0.11",
     "chai": "^3.4.1",
-    "cuked-zombie": "~3.0.1",
     "gulp": "^3.9.0",
     "jquery-deferred": "^0.3.0",
     "json-diff": "^0.3.1",

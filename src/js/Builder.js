@@ -107,9 +107,13 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
     builder.add('js', 'urlify')
       .src(cmsDir+'/src/js/lib/urlify.js');
 
-    builder.add('js', 'uikit')
+    builder.add('js', 'uikit-src')
       .src(cmsDir+'/src/js/lib/uikit-src/**/*')
       .pipe(builder.dest, 'uikit-src');
+
+    builder.add('js', 'uikit')
+      .src(cmsDir+'/src/js/lib/uikit-module.js')
+      .pipe(rename, 'uikit.js');
 
     builder.add('js', 'bootstrap-select')
       .src(builder.resolveModule('bootstrap-select')+'/bootstrap-select.js');

@@ -1,0 +1,49 @@
+{
+  "namespace": "AppBundle\\Entity",
+
+  "entities": [
+    {
+      "name": "User",
+      "extends": "Webforge\\CmsBundle\\Entity\\User",
+    
+      "properties": {
+        "id": { "type": "DefaultId" },
+        "firstName": { "type": "String" },
+        "lastName": { "type": "String" }
+      }
+    },
+
+    {
+      "name": "Binary",
+
+      "properties": {
+        "id": { "type": "DefaultId" },
+
+        "mediaFileKey": { "type": "String" },
+        "mediaName": { "type": "String" }
+      }
+    },
+
+    {
+      "name": "MediaTree",
+
+      "properties": {
+        "id": { "type": "DefaultId" },
+
+        "content": { "type": "Text" },
+        "created": { "type": "DateTime" }
+      }
+    },
+
+    {
+      "name": "Image",
+
+      "properties": {
+        "id": { "type": "DefaultId" },
+
+        "binary": { "type": "Binary", "serializer": { "inline": true } }
+      }
+    }
+
+  ]
+}

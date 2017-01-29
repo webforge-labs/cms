@@ -14,8 +14,3 @@ web_profiler:
 
 swiftmailer:
     disable_delivery: true
-
-services:
-    now: 
-        class: "Webforge\\Common\\DateTime\\DateTime"
-        arguments: ['08.10.2015 10:11']

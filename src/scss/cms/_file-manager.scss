@@ -62,4 +62,27 @@
       }
     }
   }
+
+  .folder-tree {
+    ul.root {
+      ul {
+        li {
+          list-style-type: none;
+        }
+      }
+
+      li a {
+        display: block;
+        padding: 3px 8px;
+      }
+
+      li.active {
+        
+        > a {
+          background-color: #fff;
+          color: #f0ad4e;
+        }
+      }
+    }
+  }
 }

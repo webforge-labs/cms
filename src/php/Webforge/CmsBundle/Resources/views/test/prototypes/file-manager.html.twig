@@ -18,39 +18,607 @@
 
 {% block requirejs %}
  <script type="text/javascript">
-   require(['cms/FileManager/ns', 'jquery'], function(FileManager, $) {
+   require(['cms/FileManager/ns', 'jquery', 'knockout'], function(FileManager, $, ko) {
      var model = new FileManager.Manager({
-       root: {
-         name: 'home',
-         type: 'ROOT',
-         items: [
-           {
-             name: '2016-03-27',
-             type: 'directory',
-             items: [
-               {
-                 'name': 'Foto 27.03.16, 16 14 18.jpg'
-               },
-               {
-                 'name': 'Foto 27.03.16, 16 14 21 (1).jpg'
-               },
-               {
-                 'name': 'Foto 27.03.16, 16 14 21.jpg'
-               },
-               {
-                 'name': 'Foto 27.03.16, 16 14 54.jpg'
-               },
-               {
-                 'name': 'Neuer Ordner',
-                 'type': 'directory',
-                 'items': []
-               }
-             ]
-           }
-         ]
-       }
-     });
-
+  "root": {
+    "name": "home",
+    "type": "ROOT",
+    "key": "",
+    "items": [{
+        "name": "About",
+        "type": "directory",
+        "key": "About\/",
+        "items": [{
+          "name": "imme-usa.jpg",
+          "type": "file",
+          "key": "About\/imme-usa.jpg",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2FAbout%2Fimme-usa.jpg",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/About\/imme-usa.jpg",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "worklunch-1000x667.jpg",
+          "type": "file",
+          "key": "About\/worklunch-1000x667.jpg",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2FAbout%2Fworklunch-1000x667.jpg",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/About\/worklunch-1000x667.jpg",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "worklunch-zugeschnitten.jpg",
+          "type": "file",
+          "key": "About\/worklunch-zugeschnitten.jpg",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2FAbout%2Fworklunch-zugeschnitten.jpg",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/About\/worklunch-zugeschnitten.jpg",
+              "name": "xs"
+            }
+          }
+        }]
+      }, {
+        "name": "chia-marmelade",
+        "type": "directory",
+        "key": "chia-marmelade\/",
+        "items": [{
+          "name": "IMGP5909.JPG",
+          "type": "file",
+          "key": "chia-marmelade\/IMGP5909.JPG",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fchia-marmelade%2FIMGP5909.JPG",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/chia-marmelade\/IMGP5909.JPG",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "IMGP5918.JPG",
+          "type": "file",
+          "key": "chia-marmelade\/IMGP5918.JPG",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fchia-marmelade%2FIMGP5918.JPG",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/chia-marmelade\/IMGP5918.JPG",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "IMGP5919.JPG",
+          "type": "file",
+          "key": "chia-marmelade\/IMGP5919.JPG",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fchia-marmelade%2FIMGP5919.JPG",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/chia-marmelade\/IMGP5919.JPG",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "IMGP9336.JPG",
+          "type": "file",
+          "key": "chia-marmelade\/IMGP9336.JPG",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fchia-marmelade%2FIMGP9336.JPG",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/chia-marmelade\/IMGP9336.JPG",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "IMGP9342.JPG",
+          "type": "file",
+          "key": "chia-marmelade\/IMGP9342.JPG",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fchia-marmelade%2FIMGP9342.JPG",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/chia-marmelade\/IMGP9342.JPG",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "chia-ausschnitt.jpg",
+          "type": "file",
+          "key": "chia-marmelade\/chia-ausschnitt.jpg",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fchia-marmelade%2Fchia-ausschnitt.jpg",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/chia-marmelade\/chia-ausschnitt.jpg",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "chiasamen-ausschnitt.jpg",
+          "type": "file",
+          "key": "chia-marmelade\/chiasamen-ausschnitt.jpg",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fchia-marmelade%2Fchiasamen-ausschnitt.jpg",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/chia-marmelade\/chiasamen-ausschnitt.jpg",
+              "name": "xs"
+            }
+          }
+        }]
+      }, {
+        "name": "kale-essen-in-sf",
+        "type": "directory",
+        "key": "kale-essen-in-sf\/",
+        "items": [{
+          "name": "20160109-IMGP5844.jpg",
+          "type": "file",
+          "key": "kale-essen-in-sf\/20160109-IMGP5844.jpg",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fkale-essen-in-sf%2F20160109-IMGP5844.jpg",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/kale-essen-in-sf\/20160109-IMGP5844.jpg",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "20160109-IMGP5853.jpg",
+          "type": "file",
+          "key": "kale-essen-in-sf\/20160109-IMGP5853.jpg",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fkale-essen-in-sf%2F20160109-IMGP5853.jpg",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/kale-essen-in-sf\/20160109-IMGP5853.jpg",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "20160109-P1020842.jpg",
+          "type": "file",
+          "key": "kale-essen-in-sf\/20160109-P1020842.jpg",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fkale-essen-in-sf%2F20160109-P1020842.jpg",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/kale-essen-in-sf\/20160109-P1020842.jpg",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "IMGP4510.JPG",
+          "type": "file",
+          "key": "kale-essen-in-sf\/IMGP4510.JPG",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fkale-essen-in-sf%2FIMGP4510.JPG",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/kale-essen-in-sf\/IMGP4510.JPG",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "IMGP4518 - Kopie.JPG",
+          "type": "file",
+          "key": "kale-essen-in-sf\/IMGP4518 - Kopie.JPG",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fkale-essen-in-sf%2FIMGP4518+-+Kopie.JPG",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/kale-essen-in-sf\/IMGP4518 - Kopie.JPG",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "IMGP4523_Teaser.JPG",
+          "type": "file",
+          "key": "kale-essen-in-sf\/IMGP4523_Teaser.JPG",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fkale-essen-in-sf%2FIMGP4523_Teaser.JPG",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/kale-essen-in-sf\/IMGP4523_Teaser.JPG",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "IMGP4554.JPG",
+          "type": "file",
+          "key": "kale-essen-in-sf\/IMGP4554.JPG",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fkale-essen-in-sf%2FIMGP4554.JPG",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/kale-essen-in-sf\/IMGP4554.JPG",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "IMGP4562.JPG",
+          "type": "file",
+          "key": "kale-essen-in-sf\/IMGP4562.JPG",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fkale-essen-in-sf%2FIMGP4562.JPG",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/kale-essen-in-sf\/IMGP4562.JPG",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "IMGP4565.JPG",
+          "type": "file",
+          "key": "kale-essen-in-sf\/IMGP4565.JPG",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fkale-essen-in-sf%2FIMGP4565.JPG",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/kale-essen-in-sf\/IMGP4565.JPG",
+              "name": "xs"
+            }
+          }
+        }]
+      }, {
+        "name": "maronen-rosenkohl-pfanne",
+        "type": "directory",
+        "key": "maronen-rosenkohl-pfanne\/",
+        "items": [{
+          "name": "20131019-p1010586.jpg",
+          "type": "file",
+          "key": "maronen-rosenkohl-pfanne\/20131019-p1010586.jpg",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fmaronen-rosenkohl-pfanne%2F20131019-p1010586.jpg",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/maronen-rosenkohl-pfanne\/20131019-p1010586.jpg",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "20151101-imgp5229.jpg",
+          "type": "file",
+          "key": "maronen-rosenkohl-pfanne\/20151101-imgp5229.jpg",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fmaronen-rosenkohl-pfanne%2F20151101-imgp5229.jpg",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/maronen-rosenkohl-pfanne\/20151101-imgp5229.jpg",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "20151101-imgp5257.jpg",
+          "type": "file",
+          "key": "maronen-rosenkohl-pfanne\/20151101-imgp5257.jpg",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fmaronen-rosenkohl-pfanne%2F20151101-imgp5257.jpg",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/maronen-rosenkohl-pfanne\/20151101-imgp5257.jpg",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "zuschnitt-teaserbild.jpg",
+          "type": "file",
+          "key": "maronen-rosenkohl-pfanne\/zuschnitt-teaserbild.jpg",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fmaronen-rosenkohl-pfanne%2Fzuschnitt-teaserbild.jpg",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/maronen-rosenkohl-pfanne\/zuschnitt-teaserbild.jpg",
+              "name": "xs"
+            }
+          }
+        }]
+      }, {
+        "name": "montpellier",
+        "type": "directory",
+        "key": "montpellier\/",
+        "items": [{
+          "name": "20151108-montpellier_hotel-magnol.jpg",
+          "type": "file",
+          "key": "montpellier\/20151108-montpellier_hotel-magnol.jpg",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fmontpellier%2F20151108-montpellier_hotel-magnol.jpg",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/montpellier\/20151108-montpellier_hotel-magnol.jpg",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "20151130-antigone.jpg",
+          "type": "file",
+          "key": "montpellier\/20151130-antigone.jpg",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fmontpellier%2F20151130-antigone.jpg",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/montpellier\/20151130-antigone.jpg",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "20151229-les arceaux.jpg",
+          "type": "file",
+          "key": "montpellier\/20151229-les arceaux.jpg",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fmontpellier%2F20151229-les+arceaux.jpg",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/montpellier\/20151229-les arceaux.jpg",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "20151229-les etangs palavas.jpg",
+          "type": "file",
+          "key": "montpellier\/20151229-les etangs palavas.jpg",
+          "isExisting": true,
+          "url": "\/cms\/media?download=1\u0026file=%2Fmontpellier%2F20151229-les+etangs+palavas.jpg",
+          "mimeType": "image\/jpeg",
+          "thumbnails": {
+            "xs": {
+              "isPortrait": false,
+              "isLandscape": false,
+              "orientation": "landscape",
+              "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/montpellier\/20151229-les etangs palavas.jpg",
+              "name": "xs"
+            }
+          }
+        }, {
+          "name": "traeumen-nach-disney",
+          "type": "directory",
+          "key": "montpellier\/traeumen-nach-disney\/",
+          "items": [{
+            "name": "20131123-P1010671_Seifenblase.jpg",
+            "type": "file",
+            "key": "traeumen-nach-disney\/20131123-P1010671_Seifenblase.jpg",
+            "isExisting": true,
+            "url": "\/cms\/media?download=1\u0026file=%2Ftraeumen-nach-disney%2F20131123-P1010671_Seifenblase.jpg",
+            "mimeType": "image\/jpeg",
+            "thumbnails": {
+              "xs": {
+                "isPortrait": false,
+                "isLandscape": false,
+                "orientation": "landscape",
+                "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/traeumen-nach-disney\/20131123-P1010671_Seifenblase.jpg",
+                "name": "xs"
+              }
+            }
+          }, {
+            "name": "20140825-img4127-kaernten.jpg",
+            "type": "file",
+            "key": "montpellier\/traeumen-nach-disney\/20140825-img4127-kaernten.jpg",
+            "isExisting": true,
+            "url": "\/cms\/media?download=1\u0026file=%2Ftraeumen-nach-disney%2F20140825-img4127-kaernten.jpg",
+            "mimeType": "image\/jpeg",
+            "thumbnails": {
+              "xs": {
+                "isPortrait": false,
+                "isLandscape": false,
+                "orientation": "landscape",
+                "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/traeumen-nach-disney\/20140825-img4127-kaernten.jpg",
+                "name": "xs"
+              }
+            }
+          }, {
+            "name": "20150821-IMGP5122.jpg",
+            "type": "file",
+            "key": "montpellier\/traeumen-nach-disney\/20150821-IMGP5122.jpg",
+            "isExisting": true,
+            "url": "\/cms\/media?download=1\u0026file=%2Ftraeumen-nach-disney%2F20150821-IMGP5122.jpg",
+            "mimeType": "image\/jpeg",
+            "thumbnails": {
+              "xs": {
+                "isPortrait": false,
+                "isLandscape": false,
+                "orientation": "landscape",
+                "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/traeumen-nach-disney\/20150821-IMGP5122.jpg",
+                "name": "xs"
+              }
+            }
+          }, {
+            "name": "20160109-IMGP5853-heller.jpg",
+            "type": "file",
+            "key": "montpellier\/traeumen-nach-disney\/20160109-IMGP5853-heller.jpg",
+            "isExisting": true,
+            "url": "\/cms\/media?download=1\u0026file=%2Ftraeumen-nach-disney%2F20160109-IMGP5853-heller.jpg",
+            "mimeType": "image\/jpeg",
+            "thumbnails": {
+              "xs": {
+                "isPortrait": false,
+                "isLandscape": false,
+                "orientation": "landscape",
+                "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/traeumen-nach-disney\/20160109-IMGP5853-heller.jpg",
+                "name": "xs"
+              }
+            }
+          }, {
+            "name": "colourful-disney-disney-quote-dream.jpg",
+            "type": "file",
+            "key": "montpellier\/traeumen-nach-disney\/colourful-disney-disney-quote-dream.jpg",
+            "isExisting": true,
+            "url": "\/cms\/media?download=1\u0026file=%2Ftraeumen-nach-disney%2Fcolourful-disney-disney-quote-dream.jpg",
+            "mimeType": "image\/jpeg",
+            "thumbnails": {
+              "xs": {
+                "isPortrait": false,
+                "isLandscape": false,
+                "orientation": "landscape",
+                "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/traeumen-nach-disney\/colourful-disney-disney-quote-dream.jpg",
+                "name": "xs"
+              }
+            }
+          }, {
+            "name": "mickey mouse dreaming.jpg",
+            "type": "file",
+            "key": "montpellier\/traeumen-nach-disney\/mickey mouse dreaming.jpg",
+            "isExisting": true,
+            "url": "\/cms\/media?download=1\u0026file=%2Ftraeumen-nach-disney%2Fmickey+mouse+dreaming.jpg",
+            "mimeType": "image\/jpeg",
+            "thumbnails": {
+              "xs": {
+                "isPortrait": false,
+                "isLandscape": false,
+                "orientation": "landscape",
+                "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/traeumen-nach-disney\/mickey mouse dreaming.jpg",
+                "name": "xs"
+              }
+            }
+          }, {
+            "name": "never stop dreaming.png",
+            "type": "file",
+            "key": "traeumen-nach-disney\/never stop dreaming.png",
+            "isExisting": true,
+            "url": "\/cms\/media?download=1\u0026file=%2Ftraeumen-nach-disney%2Fnever+stop+dreaming.png",
+            "mimeType": "image\/png",
+            "thumbnails": {
+              "xs": {
+                "isPortrait": false,
+                "isLandscape": false,
+                "orientation": "landscape",
+                "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/traeumen-nach-disney\/never stop dreaming.png",
+                "name": "xs"
+              }
+            }
+          }, {
+            "name": "seifenblase-quadratisch.jpg",
+            "type": "file",
+            "key": "traeumen-nach-disney\/seifenblase-quadratisch.jpg",
+            "isExisting": true,
+            "url": "\/cms\/media?download=1\u0026file=%2Ftraeumen-nach-disney%2Fseifenblase-quadratisch.jpg",
+            "mimeType": "image\/jpeg",
+            "thumbnails": {
+              "xs": {
+                "isPortrait": false,
+                "isLandscape": false,
+                "orientation": "landscape",
+                "url": "http:\/\/sprotten-stories.com\/images\/cache\/xs\/traeumen-nach-disney\/seifenblase-quadratisch.jpg",
+                "name": "xs"
+              }
+            }
+          }]
+        }]
+      }
+    ]
+   }
+ });
+ 
      ko.applyBindings(model, $('body').get(0));
    });
  </script>

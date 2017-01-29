@@ -5,8 +5,10 @@ namespace Webforge\CmsBundle;
 use Symfony\Component\Process\Process;
 
 class MediaControllerTest extends \Webforge\Testing\WebTestCase {
-  
-  public function testImagesAndOtherStuffSaving() {
+
+  use \Webforge\Testing\TestTrait;
+
+  protected function setupEmpty() {
     $client = self::makeClient($this->credentials['petra']);
 
     $this->loadAliceFixtures(
@@ -18,10 +20,27 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
 
     $this->emptyFileSystemAndCache();
 
+    return $client;
+  }
+
+  public function testMediaControllerReturnsTheEmptyStructure() {
+    $client = $this->setupEmpty();
+
+    $this->sendJsonRequest($client, 'GET', '/cms/media');
+
+    $this->assertJsonResponse(200, $client)
+      ->property('root')
+        ->property('type', 'ROOT')->end()
+        ->property('items')->isArray()->length(0);
+  }
+  
+  public function testImagesAndOtherStuffSaving() {
+    $client = $this->setupEmpty();
+
     $json = $this->getDropboxFiles();
     $this->sendJsonRequest($client, 'POST', '/cms/media/dropbox', $json);
 
-    $this->assertJsonResponse(201, $client)
+    $dsc03281Key = $this->assertJsonResponse(201, $client)
       ->property('root')
         ->property('type', 'ROOT')->end()
         ->property('items')->isArray()
@@ -30,71 +49,61 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
             ->property('type', 'directory')->end()
             ->property('items')->isArray()
               ->key(0)
-                ->property('name', 'DSC03281.JPG')->end()
-                ->property('url')->is($this->logicalNot($this->isEmpty()))->end()
+                ->property('name', 'dsc03281.jpg')->end()
+                ->property('url')->isNotEmpty()->end()
                 ->property('thumbnails')->isObject()
                   ->property('big')
                     ->property('orientation')->is('landscape')->end()
                     ->property('isPortrait')->is(false)->end()
                     ->property('isLandscape')->is(true)->end()
-                    ->property('url')->contains('/images/cache/big/2016-03-27/DSC03281.JPG')->end()
+                    ->property('url')->contains('/images/cache/big')->contains('dsc03281.jpg')->end()
                   ->end()
                   ->property('sm')
                     ->property('orientation')->is('landscape')->end()
                   ->end()
                 ->end()
-                ->property('key', '2016-03-27/DSC03281.JPG')->end()
-              ->end()
-            ->end()
-          ->end()
-        ->end()
+                ->property('key')->isNotEmpty()->get()
     ;
+
+    $filesystem = $this->getFilesystem($client);
+    $this->assertTrue($filesystem->has($dsc03281Key));
+
+    $this->assertDatabaseBinaries($client, [
+      $dsc03281Key => TRUE
+    ]);
   }
 
   public function testImageBatchDeleting() {
-    $client = self::makeClient($this->credentials['petra']);
+    $client = $this->setupEmpty();
 
-    $this->loadAliceFixtures(
-      array(
-        'users'
-      ),
-      $client
-    );
+    $keys = $this->storeFiles($client, [
+      'test-image.png' => 'tapire.png',
+      'something/test-image2.png' => 'mini-single.png'
+    ]);
 
-    $filesystem = $this->getContainer()->get('knp_gaufrette.filesystem_map')->get('cms_media');
-    $filesystem->write('test-image.png', $this->getResourceImage('tapire.png')->getContents(), $overwrite = true);
-    $filesystem->write('something/test-image2.png', $this->getResourceImage('mini-single.png')->getContents(), $overwrite = true);
-
-    $json = $this->parseJSON(<<<'JSON'
-{
-  "keys": ["test-image.png", "something/test-image2.png"]
-}
-JSON
-    );
+    $json = (object) ['keys'=>$keys];
 
     $this->sendJsonRequest($client, 'DELETE', '/cms/media', $json);
     $this->assertJsonResponse(200, $client)
       ->property('root')
         ->property('type', 'ROOT')->end()
-        ->property('items')->isArray();
+        ->property('items')->isArray()->length(0);
 
-    $this->assertFalse($filesystem->has('test-image.png'));
-    $this->assertFalse($filesystem->has('something/test-image2.png'));
+    // this is a very internal test
+    $filesystem = $this->getFilesystem($client);
+    $this->assertFalse($filesystem->has($keys[0]));
+    $this->assertFalse($filesystem->has($keys[1]));
+
+    $this->assertDatabaseBinaries($client, []);
   }
 
   public function testExistingImagesWillNotBeOverwritten_AndNoticed() {
-    $client = self::makeClient($this->credentials['petra']);
+    $client = $this->setupEmpty();
 
-    $this->loadAliceFixtures(
-      array(
-        'users'
-      ),
-      $client
-    );
-
-    $filesystem = $this->getContainer()->get('knp_gaufrette.filesystem_map')->get('cms_media');
-    $filesystem->write('folder/tapire.png', $this->getResourceImage('tapire.png')->getContents(), $overwrite = true);
-    $filesystem->write('folder/mini-single.png', $this->getResourceImage('mini-single.png')->getContents(), $overwrite = true);
+    $this->storeFiles($client, [
+      'folder/tapire.png' => 'tapire.png',
+      'folder/mini-single.png' => 'mini-single.png'
+    ]);
 
     $json = $this->getDropboxFiles();
     $json->dropboxFiles[0]->name = 'mini-single.png';
@@ -112,16 +121,7 @@ JSON
   }
 
   public function testThatImagesWithBadNamesWillBeUrlified() {
-    $client = self::makeClient($this->credentials['petra']);
-
-    $this->loadAliceFixtures(
-      array(
-        'users'
-      ),
-      $client
-    );
-
-    $this->emptyFileSystemAndCache();
+    $client = $this->setupEmpty();
 
     $json = $this->getDropboxFiles();
     $json->dropboxFiles[0]->name = '20140825-IMGP4127_Käernten superpilß.jpg';
@@ -132,10 +132,93 @@ JSON
       ->property('root')
         ->property('items')->isArray()
           ->key(0)
-            ->property('key', 'folder2/')->end()
+            ->property('name', 'folder2')->end()
             ->property('items')->isArray()
-              ->key(0)->property('key', 'folder2/20140825-imgp4127-kaeernten-superpilss.jpg')
+              ->key(0)->property('name', '20140825-imgp4127-kaeernten-superpilss.jpg')
     ;
+  }
+
+  public function testMovingASingleFileFromOneToAnotherDirectory() {
+    $client = $this->setupEmpty();
+
+    $this->storeFiles($client, [
+      'folder1/folder2/tapire.png' => 'tapire.png',
+      'other/mini.png' => 'mini-single.png'
+    ]);
+
+    $this->sendJsonRequest($client, 'POST', '/cms/media/move', (object) [
+      'sources'=>["other/mini.png"],
+      'target'=>'folder1/folder2/'
+    ]);
+
+    $response = $this->assertJsonResponse(200, $client);
+
+    $this->assertMediaFiles($response, [
+      'folder1/folder2/tapire.png',
+      'folder1/folder2/mini.png'
+    ]);
+  }
+
+  public function testMovingCompleteFolderToAnother() {
+    $client = $this->setupEmpty();
+
+    $filesystem = $this->storeFiles($client, [
+      'folder1/folder2/tapire.png'=>'tapire.png',
+      'folder1/mini.png'=>'mini-single.png'
+    ]);
+
+    $this->sendJsonRequest($client, 'POST', '/cms/media/move', (object) [
+      'sources'=>["folder1"],
+      'target'=>'otherroot/'
+    ]);
+
+    $response = $this->assertJsonResponse(200, $client);
+
+    $this->assertMediaFiles($response, [
+      'otherroot/folder1/folder2/tapire.png',
+      'otherroot/folder1/mini.png'
+    ]);
+  }
+
+  private function assertMediaFiles($response, array $flatFiles) {
+    $root = $response->property('root')
+      ->property('items')->end()
+      ->get();
+
+    // do the tree => flat conversion (Tiefensuche)
+    $files = [];
+    $stack = [$root];
+    $path = [];
+    while (count($stack) > 0) {
+      $item = array_pop($stack);
+
+      if ($item->type === 'directory' || $item->type === 'ROOT') {
+        foreach ($item->items as $child) {
+          $stack[] = $child;
+        }
+
+        if ($item->type === 'directory') {
+          $path[] = $item->name;
+        }
+      } else {
+        $files[] = $f = implode('/', $path).'/'.$item->name;
+      }
+    }
+
+    $this->assertArrayEquals($flatFiles, $files);
+  }
+
+  private function assertDatabaseBinaries($client, array $files) {
+    $dc = $client->getContainer()->get('dc');
+
+    $binaries = $dc->getRepository('Binary')->findAll();
+    $actualBinaries = array();
+
+    foreach ($binaries as $binary) {
+      $actualBinaries[] = $binary->getMediaFileKey();
+    }
+
+    $this->assertArrayEquals(array_keys($files), $actualBinaries, 'gaufretteKeys from Binaries in Database:');
   }
 
   private function getDropboxFiles() {
@@ -171,14 +254,50 @@ JSON
   protected function emptyFileSystemAndCache() {
     $filesystem = $this->getContainer()->get('knp_gaufrette.filesystem_map')->get('cms_media');
 
+    $dirs = array();
     foreach ($filesystem->keys() as $key) {
       if (!$filesystem->isDirectory($key)) {
         $filesystem->delete($key);
+      } else {
+        $dirs[] = $key;
       }
+    }
+    
+    // order longest to first
+    usort($dirs, function($a, $b) {
+      return strlen($b) - strlen($a);
+    });
+
+    foreach ($dirs as $key) {
+      $filesystem->delete($key);
     }
 
     // clearing the thumbnails cache is important: otherwise we'll get the "no meta cache key"
     $GLOBALS['env']['root']->sub('www/images/cache/')->delete();
     $GLOBALS['env']['root']->sub('files/cache/imagine-meta')->delete();
+  }
+
+  protected function getFilesystem($client) {
+    return $client->getContainer()->get('knp_gaufrette.filesystem_map')->get('cms_media');
+  }
+
+  protected function storeFiles($client, Array $files) {
+
+    // this is a shortcut to insert binaries, we could query the mediaController dropboxUpload everytime (or use another web request here, or use fixtures) which would be cleaner
+    $manager = $client->getContainer()->get('webforge.media.manager');
+    $manager->beginTransaction();
+
+    $keys = array();
+    foreach ($files as $targetPath => $source) {
+      $targetPath = '/'.$targetPath;
+      $targetName = mb_substr($targetPath, strrpos($targetPath, '/')+1);
+      $targetPath = mb_substr($targetPath, 0, strrpos($targetPath, '/'));
+
+      $entity = $manager->addFile($targetPath, $targetName, $this->getResourceImage($source)->getContents());
+      $keys[] = $entity->getMediaFileKey();
+    }
+
+    $manager->commitTransaction();
+    return $keys;
   }
 }

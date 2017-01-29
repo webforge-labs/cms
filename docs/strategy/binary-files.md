@@ -15,7 +15,7 @@ There is a `Model\GaufretteFileInterface` which represents an entity with a gauf
     }
 ```
 
-There is a `Webforge\CmsBundle\Serialization\GaufretteBinaryHandler` which handles the serializiation for such an entity and exports images with its thumbnails. Thumbnails are generated with the liip_imagine_bundle. The configuration for gaufrette and liip_imagine resides under `vendors.yml`
+There is a `Webforge\CmsBundle\Serialization\JmsSerializerGaufretteBinaryHandler` which handles the serializiation for such an entity and exports images with its thumbnails. Thumbnails are generated with the liip_imagine_bundle. The configuration for gaufrette and liip_imagine resides under `vendors.yml`
 
 ## frontend
 

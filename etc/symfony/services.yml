@@ -1,15 +1,5 @@
-# Learn more about services, parameters and containers at
-# http://symfony.com/doc/current/book/service_container.html
-parameters:
-    entities_namespace: 'Webforge\CmsBundle\Entity'
-
 services:
     now: 
         class: "Webforge\\Common\\DateTime\\DateTime"
         factory_class: "Webforge\\Common\\DateTime\\DateTime"
         factory_method: now
-
-#    graph:
-#        class: MyTTT\Ticker\Graph
-#        arguments: ["@jms_serializer"]
-

@@ -6,7 +6,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use URLify;
 
 class MediaController extends CommonController {
 
@@ -31,9 +30,9 @@ class MediaController extends CommonController {
   }
 
   protected function getIndex() {
-    $handler = $this->get('webforge.serialization.gaufrette_binary_handler');
+    $manager = $this->get('webforge.media.manager');
 
-    return $handler->asTree();
+    return $manager->asTree();
   }
 
   /**
@@ -41,30 +40,28 @@ class MediaController extends CommonController {
    * @Method("POST")
    */
   public function uploadMediaFromDropboxAction(Request $request) {
-    $filesystem = $this->get('knp_gaufrette.filesystem_map')->get('cms_media');
+    $manager = $this->get('webforge.media.manager');
 
     $user = $this->getUser();
     $json = $this->retrieveJsonBody($request);
 
-    $path = trim($json->path, '/').'/'; // store without leadingslash
+    $manager->beginTransaction();
     $warnings = array();
     foreach ($json->dropboxFiles as $dbFile) {
-      $filename = $this->normalizeFilename($dbFile->name);
       try {
-        $filesystem->write($path.$filename, file_get_contents($dbFile->link));
-      } catch (\Gaufrette\Exception\FileAlreadyExists $e) {
-        $warnings[] = sprintf('Die Datei %s existiert bereits und wird nicht von mir überschrieben. Du musst sie erst löschen, um sie zu ersetzen', $path.$filename);
+        $manager->addFile($json->path, $dbFile->name, file_get_contents($dbFile->link));
+
+      } catch (\Webforge\CmsBundle\Media\FileAlreadyExistsException $e) {
+        $warnings[] = sprintf('Die Datei %s existiert bereits und wird nicht von mir überschrieben. Du musst sie erst löschen, um sie zu ersetzen', $e->getPath());
       }
     }
+
+    $manager->commitTransaction();
 
     $data = $this->getIndex();
     $data->warnings = $warnings;
 
     return new JsonResponse($data, 201);
-  }
-
-  private function normalizeFilename($name) {
-    return URLify::filter($name, 120, 'de', $isFilanme = true);
   }
 
   /**
@@ -75,11 +72,33 @@ class MediaController extends CommonController {
     $user = $this->getUser();
     $json = $this->retrieveJsonBody($request);
 
-    $filesystem = $this->get('knp_gaufrette.filesystem_map')->get('cms_media');
+    $manager = $this->get('webforge.media.manager');
+
+    $manager->beginTransaction();
 
     foreach ($json->keys as $key) {
-      $filesystem->delete($key);
+      $manager->deleteFileByKey($key);
     }
+
+    $manager->commitTransaction();
+
+    return $this->indexAction();
+  }
+
+  /**
+   * @Route("/media/move")
+   * @Method("POST")
+   */
+  public function moveFiles(Request $request) {
+    $user = $this->getUser();
+    $json = $this->retrieveJsonBody($request);
+    $manager = $this->get('webforge.media.manager');
+
+    $manager->beginTransaction();
+    foreach ($json->sources as $path) {
+      $manager->moveByPath($path, $json->target);
+    }
+    $manager->commitTransaction();
 
     return $this->indexAction();
   }

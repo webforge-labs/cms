@@ -36,3 +36,34 @@ cmsBuilder.addTabModule('admin/post/list', { include: ['cms/ko-components/multip
 - create html
 - create js module (returns: `{ viewModel: function(params) {}, template: htmlString }` )
 - add name to `src\js\cms\ko-components\index.js`
+
+
+# save images
+
+- create mediaTree and binary in model.json
+
+```
+    {
+      "name": "Binary",
+
+      "properties": {
+        "id": { "type": "DefaultId" },
+
+        "mediaFileKey": { "type": "String" },
+        "mediaName": { "type": "String" }
+      }
+    },
+
+    {
+      "name": "MediaTree",
+
+      "properties": {
+        "id": { "type": "DefaultId" },
+
+        "content": { "type": "Text" },
+        "created": { "type": "DateTime" }
+      }
+    },
+```
+
+- binary  `implements \Webforge\CmsBundle\Model\MediaFileEntityInterface`

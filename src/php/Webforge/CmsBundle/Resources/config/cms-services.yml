@@ -3,6 +3,10 @@ services:
   #imports:
   #  - { resource: '../../vendor/webforge/symfony/Resources/config/services.yml' }
 
+  dc:
+    class: Webforge\Doctrine\Entities
+    arguments: ["@doctrine.orm.entity_manager", "%entities_namespace%"]
+
   webforge.liip_imagine.binary.loader.stream.cms_media:
     class: "%liip_imagine.binary.loader.stream.class%"
     arguments:
@@ -10,25 +14,22 @@ services:
     tags:
       - { name: 'liip_imagine.binary.loader', loader: 'stream.cms_media' }
 
-
-  dc:
-    class: Webforge\Doctrine\Entities
-    arguments: ["@doctrine.orm.entity_manager", "%entities_namespace%"]
-
-  webforge.serialization.gaufrette_binary_handler:
-    class:      Webforge\CmsBundle\Serialization\GaufretteBinaryHandler
-    arguments: ['@knp_gaufrette.filesystem_map', 'cms_media', '@liip_imagine.cache.manager', '@liip_imagine.data.manager', '@liip_imagine.filter.manager', '@liip_imagine', '@liip_imagine.filter.configuration']
+  webforge.serialization.jms_serializer_media_file_entity_handler:
+    class:      Webforge\CmsBundle\Serialization\JmsSerializerMediaFileEntityHandler
+    arguments: [@webforge.media.manager]
     tags: 
-      - { name: jms_serializer.handler, direction: 'serialization', format: 'json', type: 'WebforgeGaufretteBinary', method: 'serialize' }
-#    tags: 
-#      - { name: jms_serializer.event_listener, event: serializer.post_serialize, class: WebforgeGaufretteBinary }
+      - { name: jms_serializer.handler, direction: 'serialization', format: 'json', type: 'WebforgeMediaFileEntity', method: 'serialize' }
 
   webforge.serialization.special_types_listener:
     class:      Webforge\CmsBundle\Serialization\SpecialTypesListener
     arguments:
-      - { Webforge\CmsBundle\Model\GaufretteFileInterface: WebforgeGaufretteBinary }
+      - { Webforge\CmsBundle\Model\MediaFileEntityInterface: WebforgeMediaFileEntity }
     tags: 
       - { name: jms_serializer.event_listener, event: serializer.pre_serialize }
+
+  webforge.serialization.imagine_thumbnails_file_handler:
+    class: Webforge\CmsBundle\Serialization\ImagineThumbnailsFileHandler
+    arguments: ['@liip_imagine.cache.manager', '@liip_imagine.data.manager', '@liip_imagine.filter.manager', '@liip_imagine', '@liip_imagine.filter.configuration']
 
   webforge.imagine.meta_web_path_resolver:
     class: Webforge\CmsBundle\Imagine\MetaWebPathResolver
@@ -37,10 +38,26 @@ services:
       - [setImagine, ['@liip_imagine']]
     tags:
       - { name: 'liip_imagine.cache.resolver', resolver: 'webforge_meta_web_path' }
-
   
   webforge.cache.imagine_cache_warmer:
     class: Webforge\CmsBundle\Cache\ImagineCacheWarmer
-    arguments: ['@webforge.serialization.gaufrette_binary_handler']
+    arguments: ['@webforge.serialization.jms_serializer_media_file_entity_handler']
     tags:
       - { name: kernel.cache_warmer, priority: 1 }
+
+  webforge.media.persistent_storage:
+    class: Webforge\CmsBundle\Media\PersistentStorage
+    arguments: ['@dc', 'Binary', 'MediaTree']
+
+  webforge.media.filesystem:
+    class: Gaufrette\Filesystem
+    factory: 'knp_gaufrette.filesystem_map:get'
+    arguments: ['cms_media']
+
+  webforge.gaufrette_index:
+    class: Webforge\Gaufrette\Index
+    arguments: ['@webforge.media.filesystem']
+
+  webforge.media.manager:
+    class: Webforge\CmsBundle\Media\Manager
+    arguments: ['@webforge.media.filesystem', '@webforge.gaufrette_index', '@webforge.media.persistent_storage', [@webforge.serialization.imagine_thumbnails_file_handler]]
