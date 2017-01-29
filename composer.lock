@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5c5228349b842024f48d169001589f74",
-    "content-hash": "a0b576d017515ad361872dd65b609b73",
+    "hash": "816ee8516f09c6ba5f82057c042446a9",
+    "content-hash": "5d8b7cdef6fbec7de6026539a3fbc5ff",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -3108,16 +3108,16 @@
         },
         {
             "name": "webforge/testing",
-            "version": "1.0.1",
+            "version": "v1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webforge-labs/testing.git",
-                "reference": "3b4ccd4f1651d9e65208898017d38765c9ea5909"
+                "reference": "500c4022384ead7c21478a4444adb0d7a6fcfe6b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webforge-labs/testing/zipball/3b4ccd4f1651d9e65208898017d38765c9ea5909",
-                "reference": "3b4ccd4f1651d9e65208898017d38765c9ea5909",
+                "url": "https://api.github.com/repos/webforge-labs/testing/zipball/500c4022384ead7c21478a4444adb0d7a6fcfe6b",
+                "reference": "500c4022384ead7c21478a4444adb0d7a6fcfe6b",
                 "shasum": ""
             },
             "require": {
@@ -3126,7 +3126,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -3146,7 +3146,7 @@
                     "email": "p.scheit@ps-webforge.com"
                 }
             ],
-            "time": "2016-09-28 10:29:38"
+            "time": "2017-01-26 18:19:40"
         }
     ],
     "aliases": [],

@@ -34,7 +34,7 @@
         "webforge/symfony": "~1.4.3",
         "liip/functional-test-bundle": "1.3.*@dev",
         "knplabs/knp-gaufrette-bundle": "^0.3.0",
-        "liip/imagine-bundle": "^1.5",
+        "liip/imagine-bundle": "~1.6.0",
         "nelmio/alice": "^2.2",
         "ramsey/uuid": "^3.5",
         "nicmart/tree": "^0.2.7"
