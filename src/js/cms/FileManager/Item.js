@@ -1,4 +1,4 @@
-define(['knockout', 'knockout-mapping', 'amplify'], function(ko, koMapping, amplify) {
+define(['knockout', 'knockout-mapping', 'amplify', 'lodash'], function(ko, koMapping, amplify, _) {
 
   return function FileManagerItem(data, parentItem) {
     var that = this;

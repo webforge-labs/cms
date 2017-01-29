@@ -5,6 +5,7 @@ define(function(require) {
   var _ = require('lodash');
   var ui = require('cms/modules/ui');
   var urlify = require('urlify');
+  var amplify = require('amplify');
   var Dropbox = require('cms/modules/dropbox-chooser');
   var FileManagerSync = require('./Sync');
   var FileManagerItem = require('./Item');
@@ -201,7 +202,7 @@ define(function(require) {
     }
 
     this.newFolder = function() {
-      that.createDirectoryIn(that.currentItem())
+      return that.createDirectoryIn(that.currentItem())
         .then(function(item) {
           that.setCurrentItem(item);
         });

@@ -130,17 +130,17 @@ describe('FileManager', function() {
 
       process.nextTick(function() {
         d.resolve("Neuer Ordner");
-
-        var item = that.fm.currentItem();
-        expect(item).to.be.ok;
-        expect(item.label()).to.be.equal('neuer-ordner');
-        done();
       });
 
       return d.promise();
     };
 
-    this.fm.newFolder();
+    this.fm.newFolder().then(function() {
+      var item = that.fm.currentItem();
+      expect(item).to.be.ok;
+      expect(item.label()).to.be.equal('neuer-ordner');
+      done();
+    });
   });
 
   it('uploads files from dropbox, which are then displayed', function (done) {
