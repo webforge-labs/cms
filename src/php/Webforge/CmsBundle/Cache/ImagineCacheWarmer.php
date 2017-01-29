@@ -6,14 +6,14 @@ use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
 class ImagineCacheWarmer implements CacheWarmerInterface {
 
-  protected $binaryHandler;
+  protected $manager;
 
-  public function __construct($binaryHandler) {
-    $this->binaryHandler = $binaryHandler;
+  public function __construct($manager) {
+    $this->manager = $manager;
   }
 
   public function warmUp($cacheDir) {
-    $this->binaryHandler->asTree();
+    $this->manager->asTree();
   }
 
   public function isOptional() {

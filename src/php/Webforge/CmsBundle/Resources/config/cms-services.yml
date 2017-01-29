@@ -41,7 +41,7 @@ services:
   
   webforge.cache.imagine_cache_warmer:
     class: Webforge\CmsBundle\Cache\ImagineCacheWarmer
-    arguments: ['@webforge.serialization.jms_serializer_media_file_entity_handler']
+    arguments: ['@webforge.media.manager']
     tags:
       - { name: kernel.cache_warmer, priority: 1 }
 
