@@ -61,3 +61,9 @@ services:
   webforge.media.manager:
     class: Webforge\CmsBundle\Media\Manager
     arguments: ['@webforge.media.filesystem', '@webforge.gaufrette_index', '@webforge.media.persistent_storage', [@webforge.serialization.imagine_thumbnails_file_handler]]
+
+  webforge.media.alice_fixtures_provider:
+    class: Webforge\CmsBundle\Media\AliceFixturesProvider
+    arguments: ['@webforge.media.manager']
+    tags: 
+      - { name: webforge_cms.alice_fixtures_provider }
