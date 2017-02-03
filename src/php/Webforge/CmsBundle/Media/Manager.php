@@ -62,6 +62,10 @@ class Manager {
     $this->treeModified = $tree;
   }
 
+  public function findFiles(Array $keys) {
+    return $this->storage->loadFiles($keys);
+  }
+
   public function deleteFileByKey($key) {
     $this->filesystem->delete($key);
     $this->storage->deleteFileByKey($key);
@@ -81,10 +85,12 @@ class Manager {
 
   public function serializeFile($mediaKey, \stdClass $file) {
     $mediaEntity = $this->storage->loadFile($mediaKey);
-    $gaufretteFile = $this->filesystem->get($mediaKey);
+
 
     try {
       $mimeType = $this->filesystem->mimeType($mediaKey);
+    } catch (\Gaufrette\Exception\FileNotFound $e) {
+      throw new FileNotFoundException('file with: '.$mediaKey.' not found', 0, $e);
     } catch (\LogicException $e) {
       $mimeType = NULL;
     }
@@ -94,6 +100,7 @@ class Manager {
     $file->url = '/cms/media?download=1&file='.urlencode($mediaFile->getKey());
     $file->mimeType = $mediaFile->getMimeType();
     $file->key = $mediaFile->getKey();
+    $file->isExisting = TRUE;
 
     foreach ($this->serializeHandlers as $handler) {
       $handler->serializeToFile($mediaFile, $file);

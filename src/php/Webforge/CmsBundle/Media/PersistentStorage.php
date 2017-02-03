@@ -72,6 +72,10 @@ class PersistentStorage {
     return $this->fileRepository->findOneBy(array('mediaFileKey'=>$key));
   }
 
+  public function loadFiles(Array $keys) {
+    return $this->fileRepository->findBy(array('mediaFileKey'=>$keys));
+  }
+
   public function deleteFileByKey($key) {
     $file = $this->loadFile($key);
 

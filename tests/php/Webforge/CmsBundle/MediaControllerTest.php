@@ -51,6 +51,7 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
               ->key(0)
                 ->property('name', 'dsc03281.jpg')->end()
                 ->property('url')->isNotEmpty()->end()
+                ->property('isExisting')->is(TRUE)->end()
                 ->property('thumbnails')->isObject()
                   ->property('big')
                     ->property('orientation')->is('landscape')->end()
