@@ -113,18 +113,22 @@ define(function(require) {
     });
 
     this.removeItem = function(item) {
-      if (!item.unsynced()) {
-        if (item.isDirectory()) {
-          ko.utils.arrayForEach(item.items(), function(childItem) {
-            that.removeItem(childItem);
-          });
-        } else {
-          that.sync.removeFile(item);
-          that.removeFromChosen(item);
- 
-          if (that.currentItem() === item) {
-            that.setCurrentItem(item.parentItem);
-          }
+      if (item.unsynced()) {
+        item.parentItem.removeChild(item);
+        that.removeFromChosen(item);
+        return;
+      }
+
+      if (item.isDirectory()) {
+        ko.utils.arrayForEach(item.items(), function(childItem) {
+          that.removeItem(childItem);
+        });
+      } else {
+        that.sync.removeFile(item);
+        that.removeFromChosen(item);
+
+        if (that.currentItem() === item) {
+          that.setCurrentItem(item.parentItem);
         }
       }
     };
@@ -206,8 +210,9 @@ define(function(require) {
           });
 
           return args.response;
-        }).catch(function() {
+        }).catch(function(err) {
           that.renaming(false);
+          throw err;
         });
       }
     };

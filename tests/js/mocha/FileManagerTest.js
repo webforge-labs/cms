@@ -116,9 +116,23 @@ describe('FileManager', function() {
 
     this.selectItem = function(name) {
       var item = that.findItem(name);
+      expect(item, 'finding '+name).to.be.ok;
+
       that.fm.selection.push(item);
       return item;
     };
+
+    this.promptAnswer = function(value) {
+      ui.prompt = function() {
+        var d = require('jquery-deferred').Deferred();
+
+        process.nextTick(function() {
+          d.resolve(value);
+        });
+
+        return d.promise();
+      };
+    }
 
     this.changeFolder = function(name) {
       var folder = this.findItem(name);
@@ -138,15 +152,7 @@ describe('FileManager', function() {
   it('creates a new folder and normalizes its name to an urlsafe one', function(done) {
     var that = this;
 
-    ui.prompt = function() {
-      var d = require('jquery-deferred').Deferred();
-
-      process.nextTick(function() {
-        d.resolve("Neuer Ordner");
-      });
-
-      return d.promise();
-    };
+    this.promptAnswer('Neuer Ordner');
 
     this.fm.newFolder().then(function() {
       var item = that.fm.currentItem();
@@ -253,15 +259,7 @@ describe('FileManager', function() {
     var fm = this.fm;
     var item = this.selectItem('neuer-ordner');
 
-    ui.prompt = function() {
-      var d = require('jquery-deferred').Deferred();
-
-      process.nextTick(function() {
-        d.resolve('renamed');
-      });
-
-      return d.promise();
-    };
+    this.promptAnswer('renamed');
 
     /*
     var renamedRootResponse = clone(this.rootResponse);
@@ -285,15 +283,7 @@ describe('FileManager', function() {
     var fm = this.fm;
     var item = this.selectItem('renamed');
 
-    ui.prompt = function() {
-      var d = require('jquery-deferred').Deferred();
-
-      process.nextTick(function() {
-        d.resolve('renamed');
-      });
-
-      return d.promise();
-    };
+    this.promptAnswer('renamed');
 
     dispatcher.expect('POST').to.respond(500, { msg: 'this is the error' });
 
@@ -312,15 +302,7 @@ describe('FileManager', function() {
     this.changeFolder('2016-03-27');
     var item = this.selectItem('Foto 27.03.16, 16 14 54.jpg');
 
-    ui.prompt = function() {
-      var d = require('jquery-deferred').Deferred();
-
-      process.nextTick(function() {
-        d.resolve('foto-27-03-16.jpg');
-      });
-
-      return d.promise();
-    };
+    this.promptAnswer('foto-27-03-16.jpg');
 
     dispatcher.expect('POST').to.respond(200, {});
 
@@ -332,6 +314,21 @@ describe('FileManager', function() {
     }).catch(function(exc) {
       done(exc);
     });
+  });
+
+  it('can delete a non synced folder', function(done) {
+    var that = this;
+
+    this.promptAnswer('new');
+
+    this.fm.newFolder().then(function() {
+      that.fm.setCurrentItem(that.fm.root);
+      var item = that.selectItem('new');
+      that.fm.removeItem(item);
+
+      expect(that.findItem('new')).to.be.undefined;
+      done();
+    }).catch(done);
   });
 
 });

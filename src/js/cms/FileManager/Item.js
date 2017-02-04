@@ -73,6 +73,10 @@ define(['knockout', 'knockout-mapping', 'amplify', 'lodash'], function(ko, koMap
      that.items.push(item);
     };
 
+    this.removeChild = function(item) {
+      that.items.remove(item);
+    };
+
     this.rename = function(newName) {
       that.name(newName);
     };
