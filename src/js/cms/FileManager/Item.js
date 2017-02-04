@@ -91,9 +91,5 @@ define(['knockout', 'knockout-mapping', 'amplify', 'lodash'], function(ko, koMap
  
       return path;
     });
-
-    this.key = ko.computed(function() {
-      return that.path().substr(1);
-    });
   };
 });
