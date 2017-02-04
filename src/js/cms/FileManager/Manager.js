@@ -22,6 +22,7 @@ define(function(require) {
     this.chosenFiles = new KnockoutCollection([], {key: 'path'});
     this.processing = ko.observable(false);
     this.renaming = ko.observable(false);
+    this.deleting = ko.observable(false);
     this.view = ko.observable("navigator");
     this.error = ko.observable();
     this.filesProgress = ko.observable(0);
@@ -143,7 +144,7 @@ define(function(require) {
           that.removeItem(item);
         });
  
-        that.sync.commitRemoveBatch(that.processing)
+        that.sync.commitRemoveBatch(that.deleting)
           .done(function(response) {
             that.refreshData(response.body);
           });

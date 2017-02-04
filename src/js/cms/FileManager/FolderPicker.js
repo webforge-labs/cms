@@ -58,7 +58,7 @@ define(['knockout'], function(ko) {
         var selected = that.selected();
         if (!selected) return false;
 
-        return selected.key() === dir.key();
+        return selected.path() === dir.path();
       });
     };
 
