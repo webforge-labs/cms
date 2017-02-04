@@ -47,6 +47,24 @@ class Manager {
     return $entity;
   }
 
+  public function migrateEntity(\Webforge\CmsBundle\Model\MediaFileEntityInterface $entity, $path, $name, $oldKey, \Webforge\Doctrine\Entities $dc) {
+    $path = trim($path, '/').'/'; // store without leadingslash but with trailingslash
+    $name = $this->normalizeFilename($name);
+
+    $mediaKey = $this->createMediaKey($path, $name, NULL);
+
+    $this->filesystem->rename($oldKey, $mediaKey);
+
+    $entity->setMediaFileKey($mediaKey);
+    $entity->setMediaName($name);
+    $dc->persist($entity);
+
+    // index entity in tree
+    $this->indexFile($entity, $path, $name);
+
+    return $mediaKey;
+  }
+
   protected function indexFile(\Webforge\CmsBundle\Model\MediaFileEntityInterface $entity, $path, $name) {
     $tree = $this->storage->loadTree();
 
