@@ -150,6 +150,10 @@ define(['jquery', 'bluebird', 'lodash'], function($, Promise, _) {
     that.reset = function() {
       expectations = [];
     };
+
+    that.getExpectations = function() {
+      return expectations;
+    };
   };
 
   return FakeDispatcher;

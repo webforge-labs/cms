@@ -21,6 +21,7 @@ define(function(require) {
     this.selection =  ko.observableArray([]); // selection on one page
     this.chosenFiles = new KnockoutCollection([], {key: 'path'});
     this.processing = ko.observable(false);
+    this.renaming = ko.observable(false);
     this.view = ko.observable("navigator");
     this.error = ko.observable();
     this.filesProgress = ko.observable(0);
@@ -162,6 +163,55 @@ define(function(require) {
       }
     };
 
+    this.renameItem = function() {
+      var selection = that.selection();
+ 
+      if (selection.length == 1) {
+        var item = that.selection.pop();
+
+        return Promise.resolve(ui.prompt("Wie ist der neue Name?", item.name())).then(function(name) {
+          var extension = '', point;
+
+          if (name == "") {
+            throw new Error("name cannot be empty");
+          }
+
+          name = _.trim(name);
+
+          if (item.isFile() && (point = name.indexOf('.')) !== undefined) {
+            extension = name.substring(point, name.length);
+            name = name.substring(0, point);
+          }
+
+          name = urlify(name, 120, false);
+          name += extension;
+
+          if (item.unsynced()) {
+            return {
+              response: {},
+              name: name
+            }
+          }
+
+          that.renaming(true);
+          return that.sync.rename(item.path(), name);
+        }).then(function(args) {
+          item.rename(args.name);
+          that.renaming(false);
+
+          $.notify({
+            message: "Okay, das habe ich umbenannt."
+          },{
+            type: 'success'
+          });
+
+          return args.response;
+        }).catch(function() {
+          that.renaming(false);
+        });
+      }
+    };
+
     this.confirmMoveItems = function() {
       if (that.folderPicker.hasValidDirectory()) {
         var targetDir = that.folderPicker.selected();
@@ -211,6 +261,10 @@ define(function(require) {
     this.hasSelection = ko.computed(function () {
       return that.selection().length > 0;
     });
+
+    this.hasSingleSelection = ko.computed(function () {
+      return that.selection().length == 1;
+    });
  
      this.hasChosenFiles = ko.computed(function () {
       return that.chosenFiles.toArray().length > 0;
@@ -229,9 +283,7 @@ define(function(require) {
  
       if (ci) {
         ko.utils.arrayForEach(ci.items(), function(item) {
-          if (item.isFile()) {
-            that.selection.push(item);
-          }
+          that.selection.push(item);
         });
       }
     };

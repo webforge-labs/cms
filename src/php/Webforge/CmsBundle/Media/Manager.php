@@ -83,6 +83,18 @@ class Manager {
     $this->treeModified = $tree;
   }
 
+  public function renameByPath($sourcePath, $name) {
+    $tree = $this->storage->loadTree();
+    $node = $tree->renameNode($sourcePath, $name);
+
+    if ($node instanceof FileNode) {
+      $entity = $this->storage->loadFile($node->getMediaKey());
+      $entity->setMediaName($name);
+    }
+
+    $this->treeModified = $tree;
+  }
+
   public function serializeFile($mediaKey, \stdClass $file) {
     $mediaEntity = $this->storage->loadFile($mediaKey);
 

@@ -91,5 +91,22 @@ define(['jquery', 'knockout', 'lodash', 'amplify', 'bluebird', 'cms/modules/disp
          }
       });
     };
+
+    this.rename = function(path, newName) {
+      return dispatcher.sendPromised('POST', '/cms/media/rename', { path: path, name: newName }, 'json')
+        .then(function(response) {
+          return {
+            response: response,
+            name: newName
+          };
+        })
+       .catch(function(err) {
+         if (err.response) {
+           amplify.publish('cms.ajax.error', err.response);
+         }
+
+         throw err;
+       });
+    };
   };
 }); 

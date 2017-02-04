@@ -65,6 +65,18 @@ class Tree {
     }
   }
 
+  public function renameNode($path, $name) {
+    $node = $this->root->accept(new NodeFinderVisitor($path));
+
+    if (!$node) {
+      throw new \LogicException('Node with path: "'.$path.'" is not existing and cannot be renamed.');
+    }
+
+    $node->setValue($name);
+
+    return $node;
+  }
+
   protected function hasChild(\Tree\Node\NodeInterface $node, $childValue) {
     foreach ($node->getChildren() as $child) {
       if ($child->getValue() === $childValue) {

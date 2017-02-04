@@ -28,6 +28,9 @@ boot.define('jquery', function() {
 
   return $;
 });
+boot.define('bootstrap-notify', ['jquery'], function($) {
+  return $;
+});
 
 boot.define('cms/modules/dropbox-chooser', function() {
   return {
@@ -77,16 +80,20 @@ describe('FileManager', function() {
             type: 'directory',
             items: [
               {
-                'name': 'Foto 27.03.16, 16 14 18.jpg'
+                'name': 'Foto 27.03.16, 16 14 18.jpg',
+                'key': '0b65b7a3-3b4f-4b41-8a06-db148bb77b24'
               },
               {
-                'name': 'Foto 27.03.16, 16 14 21 (1).jpg'
+                'name': 'Foto 27.03.16, 16 14 21 (1).jpg',
+                'key': '0d9ae567-f598-43ba-a6ad-ff9f5944d02f'
               },
               {
-                'name': 'Foto 27.03.16, 16 14 21.jpg'
+                'name': 'Foto 27.03.16, 16 14 21.jpg',
+                'key': '0d21f563-c09b-4abc-9f4d-6cf5b5660c99'
               },
               {
-                'name': 'Foto 27.03.16, 16 14 54.jpg'
+                'name': 'Foto 27.03.16, 16 14 54.jpg',
+                'key': '1e3a3e68-130a-4f14-85d8-6bfba5ffed90'
               }
             ]
           },
@@ -107,6 +114,12 @@ describe('FileManager', function() {
       });
     };
 
+    this.selectItem = function(name) {
+      var item = that.findItem(name);
+      that.fm.selection.push(item);
+      return item;
+    };
+
     this.changeFolder = function(name) {
       var folder = this.findItem(name);
       expect(folder, 'folder with name "'+name+'"').to.be.ok;
@@ -120,7 +133,7 @@ describe('FileManager', function() {
   beforeEach(function() {
     this.fm.setCurrentItem(this.fm.root);
     dispatcher.reset();
-  })
+  });
 
   it('creates a new folder and normalizes its name to an urlsafe one', function(done) {
     var that = this;
@@ -225,4 +238,100 @@ describe('FileManager', function() {
     expect(item.selected(), 'item.selected after reset').to.be.false;
     expect(item2.selected(), 'item.selected after reset').to.be.false;
   });
+
+  it('marks all items if selectAll is used', function() {
+    var fm = this.fm;
+
+    this.changeFolder('2016-03-27');
+    fm.selectAll();
+
+    expect(fm.selection()).to.have.length(4);
+  });
+
+  it('renames a folder', function(done) {
+    var that = this;
+    var fm = this.fm;
+    var item = this.selectItem('neuer-ordner');
+
+    ui.prompt = function() {
+      var d = require('jquery-deferred').Deferred();
+
+      process.nextTick(function() {
+        d.resolve('renamed');
+      });
+
+      return d.promise();
+    };
+
+    /*
+    var renamedRootResponse = clone(this.rootResponse);
+    renamedRootResponse.root.items[1].name = 'renamed';
+    */
+
+    dispatcher.expect('POST').to.respond(200, {});
+
+    fm.renameItem().then(function(response) {
+      expect(that.findItem('renamed')).to.be.ok;
+
+      expect(dispatcher.getExpectations()).to.have.length(0);
+      done();
+    }).catch(function(exc) {
+      done(exc);
+    });
+  });
+
+  it('renames not, if server error occurs', function(done) {
+    var that = this;
+    var fm = this.fm;
+    var item = this.selectItem('renamed');
+
+    ui.prompt = function() {
+      var d = require('jquery-deferred').Deferred();
+
+      process.nextTick(function() {
+        d.resolve('renamed');
+      });
+
+      return d.promise();
+    };
+
+    dispatcher.expect('POST').to.respond(500, { msg: 'this is the error' });
+
+    fm.renameItem().then(function(response) {
+      expect(false, 'this should not be called').to.be.true;
+    }).catch(function(error) {
+      expect(error).to.be.ok;
+      expect(error.response.ok).to.be.false;
+      done();
+    });
+  });
+
+  it('renames a file with extension', function(done) {
+    var that = this;
+    var fm = this.fm;
+    this.changeFolder('2016-03-27');
+    var item = this.selectItem('Foto 27.03.16, 16 14 54.jpg');
+
+    ui.prompt = function() {
+      var d = require('jquery-deferred').Deferred();
+
+      process.nextTick(function() {
+        d.resolve('foto-27-03-16.jpg');
+      });
+
+      return d.promise();
+    };
+
+    dispatcher.expect('POST').to.respond(200, {});
+
+    fm.renameItem().then(function(response) {
+      expect(that.findItem('foto-27-03-16.jpg')).to.be.ok;
+
+      expect(dispatcher.getExpectations()).to.have.length(0);
+      done();
+    }).catch(function(exc) {
+      done(exc);
+    });
+  });
+
 });

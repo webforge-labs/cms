@@ -73,6 +73,10 @@ define(['knockout', 'knockout-mapping', 'amplify', 'lodash'], function(ko, koMap
      that.items.push(item);
     };
 
+    this.rename = function(newName) {
+      that.name(newName);
+    };
+
     // returns the path as string seperated with / starting with /
     this.path = ko.computed(function() {
       var pathItem = that, path = '';

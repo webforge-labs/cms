@@ -9,6 +9,11 @@
     Ich habe schon <strong data-bind="text: filesProgress"></strong> von <strong data-bind="text: filesTotal"></strong> bearbeitet.
   </div>
 
+  <div class="alert alert-warning m-t-1" data-bind="visible: renaming">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <strong><i class="fa fa-spinner fa-spin"></i> Bitte warte kurz..</strong> Ich benenne um...
+  </div>
+
   <!-- ko if: error -->
   <div class="alert alert-danger m-t-1" data-bind="with: error">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -26,6 +31,21 @@
     <li><a href="#" data-bind="click: $parent.clickItem, text: label"></a></li>
     <!-- /ko -->
   </ol>
+
+  <div class="btn-toolbar m-b">
+    <div class="btn-group">
+      <button type="button" data-bind="click: selectAll" class="btn btn-xs btn-primary"><i class="fa fa-check-circle-o" aria-hidden="true"></i> Alle markieren</button>
+    </div>
+    <div class="btn-group">
+    <!--ko if: hasSelection() -->
+      <button type="button" data-bind="click: removeItems" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i> löschen <i class="fa fa-warning" title="Dateien werden sofort gelöscht"></i></button>
+      <button type="button" data-bind="click: moveItems" class="btn btn-xs btn-warning"><i class="fa fa-arrows"></i> verschieben</button>
+    <!--/ko-->
+    <!--ko if: hasSingleSelection() -->
+      <button type="button" data-bind="click: renameItem" class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i> umbenennen</button>
+    <!--/ko-->
+    </div>
+  </div>
 
   <!--ko if: hasItems -->
   <div class="folder-row" data-bind="foreach: sortedItems">
@@ -59,13 +79,6 @@
 
   <!--ko ifnot: hasItems -->
   <div class="well">Dieser Ordner ist leer</div>
-  <!--/ko-->
-
-  <!--ko if: hasSelection() -->
-  <p>
-    <button type="button" data-bind="click: removeItems" class="btn btn-danger"><i class="fa fa-trash"></i> Dateien löschen <i class="fa fa-warning" title="Dateien werden sofort gelöscht"></i></button>
-    <button type="button" data-bind="click: moveItems" class="btn btn-warning"><i class="fa fa-arrows"></i> Dateien verschieben</button>
-  </p>
   <!--/ko-->
 
   <!--ko if: isInChoosingMode() -->

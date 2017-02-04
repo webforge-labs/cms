@@ -4,10 +4,10 @@ define(['jquery'], function($) {
   function UI() {
     var that = this;
 
-    this.prompt = function(question) {
+    this.prompt = function(question, value) {
       var d = $.Deferred();
 
-      var answer = prompt(question);
+      var answer = prompt(question, value);
 
       if (answer === false) {
         d.reject();

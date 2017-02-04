@@ -102,4 +102,20 @@ class MediaController extends CommonController {
 
     return $this->indexAction();
   }
+
+  /**
+   * @Route("/media/rename")
+   * @Method("POST")
+   */
+  public function renameFile(Request $request) {
+    $user = $this->getUser();
+    $json = $this->retrieveJsonBody($request);
+    $manager = $this->get('webforge.media.manager');
+
+    $manager->beginTransaction();
+    $manager->renameByPath($json->path, $json->name);
+    $manager->commitTransaction();
+
+    return $this->indexAction();
+  }
 }

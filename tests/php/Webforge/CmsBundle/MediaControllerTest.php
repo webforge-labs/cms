@@ -163,7 +163,7 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
   public function testMovingCompleteFolderToAnother() {
     $client = $this->setupEmpty();
 
-    $filesystem = $this->storeFiles($client, [
+    $this->storeFiles($client, [
       'folder1/folder2/tapire.png'=>'tapire.png',
       'folder1/mini.png'=>'mini-single.png'
     ]);
@@ -179,6 +179,49 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
       'otherroot/folder1/folder2/tapire.png',
       'otherroot/folder1/mini.png'
     ]);
+  }
+
+  public function testRenamingAFolderInPath() {
+    $client = $this->setupEmpty();
+
+    $keys = $this->storeFiles($client, [
+      'folder1/folder2/tapire.png'=>'tapire.png',
+      'folder1/mini.png'=>'mini-single.png'
+    ]);
+
+    $this->sendJsonRequest($client, 'POST', '/cms/media/rename', (object) [
+      'path'=>"folder1/",
+      'name'=>'tapire'
+    ]);
+
+    $response = $this->assertJsonResponse(200, $client);
+
+    $this->assertMediaFiles($response, [
+      'tapire/folder2/tapire.png',
+      'tapire/mini.png'
+    ]);
+  }
+
+  public function testRenamingAfile() {
+    $client = $this->setupEmpty();
+
+    $keys = $this->storeFiles($client, [
+      'folder1/mini.png'=>'mini-single.png'
+    ]);
+
+    $this->sendJsonRequest($client, 'POST', '/cms/media/rename', (object) [
+      'path'=>"folder1/mini.png",
+      'name'=>'mini-360px.png'
+    ]);
+
+    $response = $this->assertJsonResponse(200, $client);
+
+    $this->assertMediaFiles($response, [
+      'folder1/mini-360px.png'
+    ]);
+
+     $binaries = $client->getContainer()->get('webforge.media.manager')->findFiles($keys);
+     $this->assertEquals('mini-360px.png', $binaries[0]->getMediaName(), 'name in entity should be changed as well');
   }
 
   private function assertMediaFiles($response, array $flatFiles) {
