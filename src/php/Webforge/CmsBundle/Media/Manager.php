@@ -109,6 +109,12 @@ class Manager {
 
   public function serializeEntity(MediaFileEntityInterface $entity, \stdClass $file) {
     $mediaKey = $entity->getMediaFileKey();
+
+    // those properties will be defined for non existing files
+    $file->key = $mediaKey;
+    $file->url = '/cms/media?download=1&file='.urlencode($mediaKey);
+    $file->name = $entity->getMediaName();
+
     try {
       $mimeType = $this->filesystem->mimeType($mediaKey);
     } catch (\Gaufrette\Exception\FileNotFound $e) {
@@ -118,11 +124,7 @@ class Manager {
     }
 
     $mediaFile = new File($entity->getMediaFileKey(), $entity->getMediaName(), $mimeType);
-
-    $file->name = $mediaFile->getName();
-    $file->url = '/cms/media?download=1&file='.urlencode($mediaFile->getKey());
     $file->mimeType = $mediaFile->getMimeType();
-    $file->key = $mediaFile->getKey();
     $file->isExisting = TRUE;
 
     foreach ($this->serializeHandlers as $handler) {
