@@ -6,6 +6,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints as Assert;
+use Webforge\Symfony\FormError;
 
 class MediaController extends CommonController {
 
@@ -146,13 +148,39 @@ class MediaController extends CommonController {
    */
   public function renameFile(Request $request) {
     $user = $this->getUser();
-    $json = $this->retrieveJsonBody($request);
-    $manager = $this->get('webforge.media.manager');
+    $this->convertJsonToForm($request);
 
-    $manager->beginTransaction();
-    $manager->renameByPath($json->path, $json->name);
-    $manager->commitTransaction();
+    $json = (object) [
+      'name'=>NULL,
+      'path'=>NULL
+    ];
 
-    return $this->indexAction();
+    $form = $this->get('form.factory')->createNamedBuilder(null, 'form', $json, array('csrf_protection'=>false))
+      ->add('name', 'text', array(
+        'constraints'=>array(new Assert\NotBlank())
+      ))
+      ->add('path', 'text', array(
+        'constraints'=>array(new Assert\NotBlank())
+      ))
+      ->getForm();
+
+    $form->bind($request);
+
+    if ($form->isValid()) {
+      $manager = $this->get('webforge.media.manager');
+
+      $manager->beginTransaction();
+      $manager->renameByPath($json->path, $json->name);
+      $manager->commitTransaction();
+
+      return $this->indexAction();
+    }
+
+    $formError = new FormError();
+
+    return new JsonResponse(
+      (object) $formError->wrap($form),
+      400
+    );
   }
 }

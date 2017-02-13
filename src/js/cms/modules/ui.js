@@ -7,13 +7,15 @@ define(['jquery'], function($) {
     this.prompt = function(question, value) {
       var d = $.Deferred();
 
-      var answer = prompt(question, value);
+      setTimeout(function() {
+        var answer = prompt(question, value);
 
-      if (answer === false) {
-        d.reject();
-      } else {
-        d.resolve(answer);
-      }
+        if (answer == false || answer == null) {
+          d.reject(new Error("user canceled"));
+        } else {
+          d.resolve(answer);
+        }
+      }, 10);
 
       return d.promise();
     }

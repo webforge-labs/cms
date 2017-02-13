@@ -177,11 +177,11 @@ define(function(require) {
         return Promise.resolve(ui.prompt("Wie ist der neue Name?", item.name())).then(function(name) {
           var extension = '', point;
 
+          name = _.trim(name);
+
           if (name == "") {
             throw new Error("name cannot be empty");
           }
-
-          name = _.trim(name);
 
           if (item.isFile() && (point = name.indexOf('.')) !== undefined) {
             extension = name.substring(point, name.length);
@@ -213,7 +213,10 @@ define(function(require) {
           return args.response;
         }).catch(function(err) {
           that.renaming(false);
-          throw err;
+
+          if (err.message != "user canceled") {
+            throw err;
+          }
         });
       }
     };
@@ -261,6 +264,10 @@ define(function(require) {
       return that.createDirectoryIn(that.currentItem())
         .then(function(item) {
           that.setCurrentItem(item);
+        }).catch(function(err) {
+          if (err.message != "user canceled") {
+            throw err;
+          }
         });
     };
  

@@ -225,6 +225,28 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
      $this->assertEquals('mini-360px.png', $binaries[0]->getMediaName(), 'name in entity should be changed as well');
   }
 
+  public function testRenamingAfileWithoutNameMakesNoSense() {
+    $client = $this->setupEmpty();
+
+    $keys = $this->storeFiles($client, [
+      'folder1/mini.png'=>'mini-single.png'
+    ]);
+
+    $this->sendJsonRequest($client, 'POST', '/cms/media/rename', (object) [
+      'path'=>"folder1/mini.png",
+      'name'=>''
+    ]);
+
+    $this->assertJsonResponse(400, $client)
+      ->property('validation')
+        ->property('errors')
+          ->isArray()->length(1)
+            ->key(0)
+              ->property('field')
+                ->property('path', 'name')->end()
+     ;
+  }
+
   public function testUploadingFilesConventional() {
     $client = $this->setupEmpty();
 

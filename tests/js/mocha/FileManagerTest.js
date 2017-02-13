@@ -331,4 +331,25 @@ describe('FileManager', function() {
     }).catch(done);
   });
 
+  it('does not rename when prompt is cancelled', function(done) {
+    var that = this;
+    this.changeFolder('2016-03-27');
+    var item = this.selectItem('Foto 27.03.16, 16 14 21 (1).jpg');
+
+    ui.prompt = function() {
+      var d = require('jquery-deferred').Deferred();
+
+      process.nextTick(function() {
+        d.reject(new Error("user cancelled"));
+      });
+
+      return d.promise();
+    };
+
+    this.fm.renameItem().catch(function(err) {
+      expect(err).to.be.ok;
+      expect(err.toString()).to.contain("user cancelled");
+      done();
+    });
+  });
 });
