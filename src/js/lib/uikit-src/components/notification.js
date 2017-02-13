@@ -1,4 +1,4 @@
-/*! UIkit 3.0.0-beta.5 | http://www.getuikit.com | (c) 2014 - 2016 YOOtheme | MIT License */
+/*! UIkit 3.0.0-beta.9 | http://www.getuikit.com | (c) 2014 - 2016 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(require('uikit')) :
@@ -7,6 +7,7 @@
 }(this, (function (uikit) { 'use strict';
 
 var $ = uikit.util.$;
+var each = uikit.util.each;
 var Transition = uikit.util.Transition;
 
 var containers = {};
@@ -100,14 +101,11 @@ UIkit.component('notification', {
 });
 
 UIkit.notification.closeAll = function (group, immediate) {
-
-    var notification;
-    UIkit.elements.forEach(function (el) {
-        if ((notification = UIkit.getComponent(el, 'notification')) && (!group || group === notification.group)) {
-            notification.close(immediate);
+    each(UIkit.instances, function (_, component) {
+        if (component.$options.name === 'notification' && (!group || group === component.group)) {
+            component.close(immediate);
         }
-    });
-
+    })
 };
 
 })));

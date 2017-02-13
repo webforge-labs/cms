@@ -1,4 +1,4 @@
-/*! UIkit 3.0.0-beta.5 | http://www.getuikit.com | (c) 2014 - 2016 YOOtheme | MIT License */
+/*! UIkit 3.0.0-beta.9 | http://www.getuikit.com | (c) 2014 - 2016 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(require('uikit')) :
@@ -7,11 +7,9 @@
 }(this, (function (uikit) { 'use strict';
 
 var $ = uikit.util.$;
-var createEvent = uikit.util.createEvent;
 var doc = uikit.util.docElement;
 var extend = uikit.util.extend;
 var isWithin = uikit.util.isWithin;
-var Observer = uikit.util.Observer;
 var on = uikit.util.on;
 var off = uikit.util.off;
 var pointerDown = uikit.util.pointerDown;
@@ -71,25 +69,17 @@ UIkit.component('sortable', {
         });
     },
 
-    connected: function connected() {
-        var this$1 = this;
-
-
-        on(this.$el, pointerDown, this.init);
-
-        if (this.clsEmpty) {
-            var empty = function () { return this$1.$el.toggleClass(this$1.clsEmpty, !this$1.$el.children().length); };
-            (this._observer = new Observer(empty)).observe(this.$el[0], {childList: true});
-            empty();
-        }
-
-    },
+    events: ( obj = {}, obj[pointerDown] = 'init', obj ),
 
     update: {
 
         write: function write() {
             var this$1 = this;
 
+
+            if (this.clsEmpty) {
+                this.$el.toggleClass(this.clsEmpty, !this.$el.children().length);
+            }
 
             if (!this.drag) {
                 return;
@@ -305,7 +295,6 @@ UIkit.component('sortable', {
 
 
             var props = [],
-                event = createEvent('update', true, false, {sync: true}),
                 children = this.$el.children().toArray().map(function (el) {
                     el = $(el);
                     props.push(extend({
@@ -322,7 +311,7 @@ UIkit.component('sortable', {
 
             children.forEach(function (el) { return el.stop(); });
             this.$el.children().css(reset);
-            this.$update(event, true);
+            this.$updateSync('update', true);
 
             this.$el.css('min-height', this.$el.height());
 
@@ -330,23 +319,15 @@ UIkit.component('sortable', {
             $.when.apply($, children.map(function (el, i) { return el.css(props[i]).animate(positions[i], this$1.animation).promise(); }))
                 .then(function () {
                     this$1.$el.css('min-height', '').children().css(reset);
-                    this$1.$update(event, true);
+                    this$1.$updateSync('update', true);
                 });
 
         }
 
-    },
-
-    disconnected: function disconnected() {
-
-        off(this.$el, pointerDown, this.init);
-
-        if (this._observer) {
-            this._observer.disconnect()
-        }
     }
 
 });
+var obj;
 
 function getSortable(element) {
     return UIkit.getComponent(element, 'sortable') || element.parentNode && getSortable(element.parentNode);

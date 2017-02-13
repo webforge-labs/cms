@@ -1,4 +1,4 @@
-/*! UIkit 3.0.0-beta.5 | http://www.getuikit.com | (c) 2014 - 2016 YOOtheme | MIT License */
+/*! UIkit 3.0.0-beta.9 | http://www.getuikit.com | (c) 2014 - 2016 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(require('uikit')) :
@@ -52,23 +52,48 @@ UIkit.component('lightbox', {
         var this$1 = this;
 
 
-        this.toggles = $(this.toggle, this.$el);
-
-        this.toggles.each(function (i, el) {
-            el = $(el);
-            this$1.items.push({
-                source: el.attr('href'),
-                title: el.attr('title'),
-                type: el.attr('type')
-            })
-        });
-
-        this.$el.on('click', ((this.toggle) + ":not(.uk-disabled)"), function (e) {
-            e.preventDefault();
-            this$1.show(this$1.toggles.index(e.currentTarget));
-        });
+        this.toggles = $(this.toggle, this.$el).each(function (_, el) { return this$1.items.push({
+            source: el.getAttribute('href'),
+            title: el.getAttribute('title'),
+            type: el.getAttribute('type')
+        }); });
 
     },
+
+    events: [
+
+        {
+
+            name: 'click',
+
+            delegate: function delegate() {
+                return ((this.toggle) + ":not(.uk-disabled)");
+            },
+
+            handler: function handler(e) {
+                e.preventDefault();
+                this.show(this.toggles.index(e.currentTarget));
+            }
+
+        },
+
+        {
+
+            name: 'showitem',
+
+            handler: function handler(e) {
+
+                var item = this.getItem();
+
+                if (item.content) {
+                    this.$update();
+                    e.stopImmediatePropagation();
+                }
+            }
+
+        }
+
+    ],
 
     update: {
 
@@ -114,20 +139,6 @@ UIkit.component('lightbox', {
 
     },
 
-    events: {
-
-        showitem: function showitem(e) {
-
-            var item = this.getItem();
-
-            if (item.content) {
-                this.$update();
-                e.stopImmediatePropagation();
-            }
-        }
-
-    },
-
     methods: {
 
         show: function show(index) {
@@ -143,7 +154,7 @@ UIkit.component('lightbox', {
                 this.modal.caption = $('<div class="uk-modal-caption" uk-transition-hide></div>').appendTo(this.modal.panel);
 
                 if (this.items.length > 1) {
-                    $(("<div class=\"" + (this.dark ? 'uk-dark' : 'uk-light') + "\" uk-transition-hide>\n                            <a href=\"#\" class=\"uk-position-center-left\" uk-slidenav=\"previous\" uk-lightbox-item=\"previous\"></a>\n                            <a href=\"#\" class=\"uk-position-center-right\" uk-slidenav=\"next\" uk-lightbox-item=\"next\"></a>\n                        </div>\n                    ")).appendTo(this.modal.panel.addClass('uk-slidenav-position'));
+                    $(("<div class=\"" + (this.dark ? 'uk-dark' : 'uk-light') + "\" uk-transition-hide>\n                            <a href=\"#\" class=\"uk-position-center-left\" uk-slidenav-previous uk-lightbox-item=\"previous\"></a>\n                            <a href=\"#\" class=\"uk-position-center-right\" uk-slidenav-next uk-lightbox-item=\"next\"></a>\n                        </div>\n                    ")).appendTo(this.modal.panel.addClass('uk-slidenav-position'));
                 }
 
                 this.modal.$el
