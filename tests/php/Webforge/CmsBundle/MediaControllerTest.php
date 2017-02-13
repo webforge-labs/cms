@@ -3,6 +3,7 @@
 namespace Webforge\CmsBundle;
 
 use Symfony\Component\Process\Process;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class MediaControllerTest extends \Webforge\Testing\WebTestCase {
 
@@ -222,6 +223,71 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
 
      $binaries = $client->getContainer()->get('webforge.media.manager')->findFiles($keys);
      $this->assertEquals('mini-360px.png', $binaries[0]->getMediaName(), 'name in entity should be changed as well');
+  }
+
+  public function testUploadingFilesConventional() {
+    $client = $this->setupEmpty();
+
+    $file = $this->getResourceImage('background.jpg');
+    $photo = new UploadedFile(
+      (string) $file,
+      'background.jpg',
+      'image/jpeg',
+      123
+    );
+
+    $client->request(
+      'POST',
+      '/cms/media/upload',
+      array('path' => 'uploaded/2017/02/'),
+      array('files' => [$photo])
+    );
+
+    $response = $this->assertJsonResponse(201, $client);
+
+    $this->assertMediaFiles($response, [
+      'uploaded/2017/02/background.jpg'
+    ]);
+
+    $response
+      ->property('files')->isArray()->length(1)
+        ->key(0)
+          ->property('name')->isNotEmpty()->end()
+          ->property('key')->isNotEmpty()->end()
+          ->property('isExisting')->is(TRUE)->end()
+        ->end();
+  }
+
+  public function testUploadingAlreadyExistingFilesConventional() {
+    $client = $this->setUpEmpty();
+    $json = $this->getDropboxFiles();
+    $this->sendJsonRequest($client, 'POST', '/cms/media/dropbox', $json);
+
+    $file = $this->getResourceImage('mini-single.png');
+    $photo = new UploadedFile(
+      (string) $file,
+      'DSC03281.JPG',
+      'image/jpeg',
+      123
+    );
+
+    $client->request(
+      'POST',
+      '/cms/media/upload',
+      array('path' => '/2016-03-27'),
+      array('files' => [$photo])
+    );
+
+    $response = $this->assertJsonResponse(201, $client);
+
+    $response
+      ->property('warnings')->isArray()->length(1)->end()
+      ->property('files')->isArray()->length(1)
+        ->key(0)
+          ->property('name')->is('dsc03281.jpg')->end()
+          ->property('key')->isNotEmpty()->end()
+          ->property('isExisting')->is(TRUE)->end()
+        ->end();
   }
 
   private function assertMediaFiles($response, array $flatFiles) {

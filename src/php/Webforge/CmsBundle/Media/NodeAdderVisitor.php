@@ -57,7 +57,10 @@ class NodeAdderVisitor implements \Tree\Visitor\Visitor {
 
     foreach ($node->getChildren() as $child) {
       if ($child->getValue() === $this->nodeToAdd->getValue()) {
-        throw new \LogicException('Node with path: '.$this->fullPath.' is already existing and will not be overriden.');
+        $e = new \LogicException('Node with path: '.$this->fullPath.' is already existing and will not be overriden.');
+        $e->path = $this->fullPath;
+        $e->mediaKey = $child instanceof FileNode ? $child->getMediaKey() : NULL;
+        throw $e;
       }
     }
 

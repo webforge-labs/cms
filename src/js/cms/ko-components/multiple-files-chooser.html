@@ -10,4 +10,18 @@
 <!--ko if: addedFiles().length == 0 -->
 <p>Es sind keine Bilder verknüpft</p>
 <!--/ko-->
-<button type="button" data-bind="click: chooseFiles, disable: isLoading" class="btn btn-large btn-block btn-primary"><i data-bind="visible: isLoading" class="fa fa-spinner fa-spin"></i> Dateien auswählen</button>
+<progress class="uk-progress" value="0" max="100" hidden style="width: 100%"></progress>
+
+<div class="upload-well uk-placeholder uk-text-center">
+  <p>
+    <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+    <span class="uk-text-middle">Lade Bilder direkt hoch, indem Du sie hierher ziehst</span>
+    <span uk-form-custom>
+        <input type="file" multiple>
+        <span class="uk-link">oder von deinem Gerät auswählst</span>
+    </span>
+  </p>
+  <p class="text-smaller m-t-2">Die Bilder werden in den Ordner <code data-bind="text: uploadPath()"></code> gespeichert.</p>
+</div>
+
+<button type="button" data-bind="click: chooseFiles, disable: isLoading" class="btn btn-large btn-block btn-info"><i data-bind="visible: isLoading" class="fa fa-spinner fa-spin"></i> oder verwende Bilder aus dem Datei-Manager</button>

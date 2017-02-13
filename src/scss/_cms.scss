@@ -36,3 +36,8 @@ $spacer-y:                   $spacer;
 }
 
 @import 'vendor/uikit';
+@import 'cms/upload';
+
+.text-smaller {
+  font-size: 90%;
+}

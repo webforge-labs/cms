@@ -40,10 +40,9 @@ class MediaController extends CommonController {
    * @Method("POST")
    */
   public function uploadMediaFromDropboxAction(Request $request) {
-    $manager = $this->get('webforge.media.manager');
-
     $user = $this->getUser();
     $json = $this->retrieveJsonBody($request);
+    $manager = $this->get('webforge.media.manager');
 
     $manager->beginTransaction();
     $warnings = array();
@@ -60,6 +59,44 @@ class MediaController extends CommonController {
 
     $data = $this->getIndex();
     $data->warnings = $warnings;
+
+    return new JsonResponse($data, 201);
+  }
+
+  /**
+   * @Route("/media/upload")
+   * @Method("POST")
+   */
+  public function uploadMediaFromAjaxAction(Request $request) {
+    $user = $this->getUser();
+    $manager = $this->get('webforge.media.manager');
+
+    $manager->beginTransaction();
+    $warnings = array();
+    $files = array();
+    foreach ($request->files->get('files') as $uploadedFile) {
+      $export = new \stdClass;
+
+      try {
+        $entity = $manager->addFile(
+          $request->request->get('path'),
+          $uploadedFile->getClientOriginalName(), 
+          file_get_contents($uploadedFile->getPathName())
+        );
+  
+        $manager->serializeEntity($entity, $export);
+      } catch (\Webforge\CmsBundle\Media\FileAlreadyExistsException $e) {
+        $warnings[] = sprintf('Die Datei %s existiert bereits und wird nicht von mir überschrieben. Du musst sie erst löschen, um sie zu ersetzen', $e->getPath());
+        $manager->serializeFile($e->mediaKey, $export);
+      }
+
+      $files[] = $export;
+    }
+    $manager->commitTransaction();
+
+    $data = $this->getIndex();
+    $data->warnings = $warnings;
+    $data->files = $files;
 
     return new JsonResponse($data, 201);
   }

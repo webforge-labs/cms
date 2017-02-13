@@ -1,0 +1,10 @@
+
+.upload-area-hover {
+  .upload-well {
+    @extend .uk-dragover;
+  }
+}
+
+.multiple-files-chooser.uk-sortable-empty {
+  min-height: auto;
+}

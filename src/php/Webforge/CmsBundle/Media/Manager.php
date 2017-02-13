@@ -6,6 +6,7 @@ use URLify;
 use Gaufrette\Filesystem;
 use Webforge\Gaufrette\Index;
 use Ramsey\Uuid\Uuid;
+use Webforge\CmsBundle\Model\MediaFileEntityInterface;
 
 class Manager {
 
@@ -47,16 +48,17 @@ class Manager {
     return $entity;
   }
 
-  protected function indexFile(\Webforge\CmsBundle\Model\MediaFileEntityInterface $entity, $path, $name) {
+  protected function indexFile(MediaFileEntityInterface $entity, $path, $name) {
     $tree = $this->storage->loadTree();
 
     try {
       $tree->addNode($path, $name, $entity->getMediaFileKey());
     } catch (\LogicException $e) {
       $fullPath = $path.$name;
-      $e = new FileAlreadyExistsException(sprintf('File "%s" does already exist and will not be overriden', $fullPath), 0, $e);
-      $e->path = $fullPath;
-      throw $e;
+      $alreadyExists = new FileAlreadyExistsException(sprintf('File "%s" does already exist and will not be overriden', $fullPath), 0, $e);
+      $alreadyExists->path = $fullPath;
+      $alreadyExists->mediaKey = $e->mediaKey;
+      throw $alreadyExists;
     }
 
     $this->treeModified = $tree;
@@ -96,9 +98,17 @@ class Manager {
   }
 
   public function serializeFile($mediaKey, \stdClass $file) {
-    $mediaEntity = $this->storage->loadFile($mediaKey);
+    $entity = $this->storage->loadFile($mediaKey);
 
+    if (!$entity) {
+      throw new \RuntimeException(sprintf('Entity not found with mediaKey: "%s"', $mediaKey));
+    }
 
+    return $this->serializeEntity($entity, $file);
+  }
+
+  public function serializeEntity(MediaFileEntityInterface $entity, \stdClass $file) {
+    $mediaKey = $entity->getMediaFileKey();
     try {
       $mimeType = $this->filesystem->mimeType($mediaKey);
     } catch (\Gaufrette\Exception\FileNotFound $e) {
@@ -107,8 +117,9 @@ class Manager {
       $mimeType = NULL;
     }
 
-    $mediaFile = new File($mediaEntity->getMediaFileKey(), $mediaEntity->getMediaName(), $mimeType);
+    $mediaFile = new File($entity->getMediaFileKey(), $entity->getMediaName(), $mimeType);
 
+    $file->name = $mediaFile->getName();
     $file->url = '/cms/media?download=1&file='.urlencode($mediaFile->getKey());
     $file->mimeType = $mediaFile->getMimeType();
     $file->key = $mediaFile->getKey();
