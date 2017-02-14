@@ -1,5 +1,10 @@
 .file-manager {
 
+  .tab-content & {
+    /* increase height in tab to have more space to drop the upload files to */
+    min-height: 600px;
+  }
+
   .folder-row > div {
     padding-left: 2px;
     padding-right: 2px;

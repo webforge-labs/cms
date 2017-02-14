@@ -84,8 +84,6 @@ define(['require', 'knockout', 'jquery', 'uikit-src/uikit-core'], function(requi
       });
     },
     update: function(element, valueAccessor, allBindingsAccessor, data, context) {
-      console.log('update', element, valueAccessor());
-      //ko.bindingHandlers.template.update(element, function() { return templateOptions; }, allBindingsAccessor, data, context);
     }
   };
 

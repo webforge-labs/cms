@@ -1,0 +1,21 @@
+.uk-offcanvas {
+  z-index: 4000; /* over modal*/
+}
+
+.help-offcanvas {
+  article {
+    margin-bottom: 1.5em;
+    padding-top: 1.5em;
+  }
+  article+article {
+    border-top: 1px solid $gray-light;
+  }
+}
+
+.btn-help {
+  @extend .btn-default;
+
+  .fa {
+    font-size: 1.5em;
+  }
+}

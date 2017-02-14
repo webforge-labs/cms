@@ -5,6 +5,10 @@
   }
 }
 
+.upload-well {
+  border: 1px dashed $gray-light;
+}
+
 .multiple-files-chooser.uk-sortable-empty {
   min-height: auto;
 }
