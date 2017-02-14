@@ -24,6 +24,11 @@ define(['jquery', 'knockout', './MainModel', 'amplify', './ko-bindings/cms-tab',
       amplify.subscribe('cms.close-the-nav', function(e) {
         $('.navbar-collapse:first').collapse('hide');
       });
+
+
+      $.notifyDefaults({
+        z_index: 2000 // bootstrap-modal is like 1050
+      });
     });
   };
 });

@@ -12,6 +12,7 @@ define(function(require) {
   var FileManagerFolderPicker = require('./FolderPicker');
   var Promise = require('bluebird');
   require('bootstrap-notify');
+  require('cms/ko-bindings/uk-upload');
 
   return function FileManagerManager(data) {
     var that = this;
@@ -327,6 +328,20 @@ define(function(require) {
         // see File types below. By default, all extensions are allowed.
         extensions: []
       });
+    };
+
+    this.getCurrentUploadPath = function() {
+      var item = that.currentItem();
+      return item.path();
+    };
+
+    this.addUploadedFiles = function(files, lastXhr) {
+      that.refreshData(lastXhr.responseJSON);
+      /*
+      ko.utils.arrayForEach(files, function(file) {
+        that.currentItem().addFile(file);
+      });
+      */
     };
 
     this.refreshData = function(data) {

@@ -1,4 +1,6 @@
-<div class="file-manager">
+<div class="file-manager" data-bind="ukUpload: { multiple: true, url: '/cms/media/upload', path: getCurrentUploadPath, completed: addUploadedFiles }">
+  <progress class="uk-progress" value="0" max="100" hidden></progress>
+
   <!-- ko if: view() == "navigator" -->
     {% include 'WebforgeCmsBundle:components:file-manager/navigator.html.twig' %}
   <!-- /ko -->
@@ -12,4 +14,18 @@
       <strong><i class="fa fa-spinner fa-spin"></i> Bitte warte kurz..</strong> Ich verschiebe gerade die Dateien und Ordner..<br />
     </div>
   <!-- /ko -->
+</div>
+
+<div id="offcanvas-help-upload" uk-offcanvas>
+  <div class="uk-offcanvas-bar">
+    <h3>Hilfe zum Datei-Manager</h3>
+    
+    <h4>Dateien hochladen</h4>
+    <p>Du kannst einfach von Deinem Desktop eine oder mehrere Dateien in den weißen Bereich des aktuellen Ordners ziehen. Auf Deinem Smartphone benutzt Du den Button <kbd>Dateien hochladen</kbd></p>
+
+    <h4>Dateien löschen oder verschieben</h4>
+    <p>Um Dateien oder Ordner verschieben oder löschen zu können, wähle sie zuerst aus, und benutze dann einen der Buttons <kbd>verschieben</kbd> oder <kbd>löschen</kbd>.<p>
+
+    <button type="button" class="btn btn-large btn-block btn-default uk-offcanvas-close">Schließen</button>
+  </div>
 </div>

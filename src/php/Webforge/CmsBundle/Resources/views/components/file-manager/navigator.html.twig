@@ -1,6 +1,10 @@
   <div class="btn-group">
-    <a data-bind="click: addFilesFromDropbox" class="btn btn-default"><i class="fa fa-dropbox"></i> Dateien hinzufügen</a>
-    <a data-bind="click: newFolder" class="btn btn-default"><i class="fa fa-folder"></i> Neuer Ordner</a>
+    <span uk-form-custom>
+      <input type="file" multiple>
+      <button class="btn btn-default"><i class="fa fa-upload" aria-hidden="true"></i> Dateien hochladen</button>
+    </span>
+    <a data-bind="click: newFolder" class="btn btn-default pull-right"><i class="fa fa-folder"></i> Neuer Ordner</a>
+    <a data-bind="click: addFilesFromDropbox" class="btn btn-default pull-right"><i class="fa fa-dropbox"></i> Dateien hinzufügen</a>
   </div>
 
   <div class="alert alert-warning m-t-1" data-bind="visible: processing">
@@ -50,6 +54,9 @@
       <button type="button" data-bind="click: renameItem" class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i> umbenennen</button>
     <!--/ko-->
     </div>
+    <div class="btn-group pull-right">
+      <a uk-toggle href="#offcanvas-help-upload" type="button" class="btn btn-xs btn-info"><i class="fa fa-2x fa-question-circle"></i></a>
+    </div>
   </div>
 
   <!--ko if: hasItems -->
@@ -85,6 +92,7 @@
   <!--ko ifnot: hasItems -->
   <div class="well">Dieser Ordner ist leer</div>
   <!--/ko-->
+
 
   <!--ko if: isInChoosingMode() -->
   <fieldset class="m-t">
