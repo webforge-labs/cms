@@ -1,6 +1,4 @@
 <div class="file-manager" data-bind="ukUpload: { multiple: true, url: '/cms/media/upload', path: getCurrentUploadPath, completed: addUploadedFiles }">
-  <progress class="uk-progress" value="0" max="100" hidden></progress>
-
   <!-- ko if: view() == "navigator" -->
     {% include 'WebforgeCmsBundle:components:file-manager/navigator.html.twig' %}
   <!-- /ko -->
