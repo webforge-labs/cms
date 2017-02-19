@@ -11,6 +11,7 @@ define(function(require) {
   var FileManagerItem = require('./Item');
   var FileManagerFolderPicker = require('./FolderPicker');
   var Promise = require('bluebird');
+  var $ = require('jquery');
   require('bootstrap-notify');
   require('cms/ko-bindings/uk-upload');
 
@@ -31,18 +32,31 @@ define(function(require) {
     this.isInChoosingMode = ko.observable(true);
     this.folderPicker = new FileManagerFolderPicker(that);
 
+    this.index = new KnockoutCollection([], {key: 'path'});
+
+    var indexByPath = function(item) {
+      that.index.add(item);
+
+      if (item.hasItems()) {
+       ko.utils.arrayForEach(item.items(), function(child) {
+         indexByPath(child);
+       });
+      }
+    };
+
     var mapping = {
      root: {
        create: function(options) {
+         // remember: this isn called on refresh data!
          return new FileManagerItem(options.data, null);
-       },
-       key: function(data) {
-         return ko.unwrap(data.path);
        }
+        // we dont use key here, because a key with path would make sense, but does not work (it is to dynamic)
+        // so on every refresh all objects are recreated(!)
      }
     };
 
     koMapping.fromJS(data, mapping, that);
+    indexByPath(that.root);
 
     this.currentItem = ko.observable();
 
@@ -75,6 +89,28 @@ define(function(require) {
     };
 
     this.setCurrentItem(that.root);
+
+    this.refreshData = function(data) {
+      // if we refresh and wont set the currentItem accordingly, an stale (newly mapped) currentItem might be displayed
+      var oldPath = that.currentItem().path();
+
+      that.index.removeAll();
+      koMapping.fromJS(data, mapping, that);
+      indexByPath(that.root);
+
+      if (that.index.containsKey(oldPath)) {
+        that.setCurrentItem(that.index.get(oldPath));
+      } else {
+        that.setCurrentItem(that.root);
+      }
+    };
+
+    amplify.subscribe('fileManager.deleted', function(item) {
+      var ci = that.currentItem();
+      if (ci && item === ci) {
+       that.setCurrentItem(ci.parentItem);
+      }
+    });
 
     this.clickItem = function(item) {
       if (item.isDirectory()) {
@@ -264,7 +300,7 @@ define(function(require) {
     this.newFolder = function() {
       return that.createDirectoryIn(that.currentItem())
         .then(function(item) {
-          that.setCurrentItem(item);
+
         }).catch(function(err) {
           if (err.message != "user canceled") {
             throw err;
@@ -331,8 +367,7 @@ define(function(require) {
     };
 
     this.getCurrentUploadPath = function() {
-      var item = that.currentItem();
-      return item.path();
+      return that.path();
     };
 
     this.addUploadedFiles = function(files, lastXhr) {
@@ -343,23 +378,6 @@ define(function(require) {
       });
       */
     };
-
-    this.refreshData = function(data) {
-      // if we refresh and wont set the currentItem accordingly, the stale currentItem will be displayed (containing stale files, etc)
-      var oldPath = that.currentItem().path();
-      
-      koMapping.fromJS(data, mapping, that);
-
-      // @TODO search in whole directory structure if the oldPath exists, then set as currentitem
-      that.setCurrentItem(that.root);
-    };
-
-    amplify.subscribe('fileManager.deleted', function(item) {
-      var ci = that.currentItem();
-      if (ci && item === ci) {
-       that.setCurrentItem(ci.parentItem);
-      }
-    });
 
     this.confirmChosenFiles = function () {
       var chosen = that.chosenFiles.toArray();

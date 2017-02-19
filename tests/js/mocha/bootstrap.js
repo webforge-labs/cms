@@ -49,12 +49,20 @@ module.exports = function(options) {
 
     return boot.requirejs('cms/modules/dispatcher'); // notice: this is the FakeDispatcher already injected
   };
+  
+  var jsdom = require("jsdom").jsdom;
+  var doc = jsdom("", options);
+  global.document = doc;
+  global.window = doc.defaultView;
 
-  global.window = {
-    location: {
-      search: ''
-    }
-  };
+  // stuff for uikit to work
+  global.navigator = {};
+  global.DOMParser = global.window.DOMParser;
+  global.Node = global.window.Node;
+
+  boot.define('jquery', function() {
+    return require('jquery');
+  });
 
   return boot;
 };

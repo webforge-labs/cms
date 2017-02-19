@@ -18,10 +18,9 @@ define(['knockout', 'knockout-mapping', 'amplify', 'lodash'], function(ko, koMap
           if (event === 'deleted') {
             amplify.publish('fileManager.deleted', item);
           }
-        },
-        key: function(data) {
-          return ko.unwrap(data.path);
         }
+        // we dont use key here, because a key with path would make sense, but does not work (it is to dynamic)
+        // so on every refresh all objects are recreated(!)
       }
     };
 
@@ -84,6 +83,7 @@ define(['knockout', 'knockout-mapping', 'amplify', 'lodash'], function(ko, koMap
     // returns the path as string seperated with / starting with /
     this.path = ko.computed(function() {
       var pathItem = that, path = '';
+
  
        while (pathItem && !pathItem.isRoot()) {
          path = pathItem.name()+'/'+path;

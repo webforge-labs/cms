@@ -17,18 +17,12 @@ boot.define('amplify', function() {
   }
 });
 
-// we fake jQuery
-boot.define('jquery', function() {
-  $ = require('jquery-deferred');
-
+boot.define('bootstrap-notify', ['jquery'], function($) {
   $.notifications = [];
   $.notify = function(message, type) {
     $.notifications.push({  message: message, type: type });
   };
 
-  return $;
-});
-boot.define('bootstrap-notify', ['jquery'], function($) {
   return $;
 });
 
@@ -155,9 +149,7 @@ describe('FileManager', function() {
     this.promptAnswer('Neuer Ordner');
 
     this.fm.newFolder().then(function() {
-      var item = that.fm.currentItem();
-      expect(item).to.be.ok;
-      expect(item.label()).to.be.equal('neuer-ordner');
+      expect(that.findItem("neuer-ordner"), "searched for 'neuer-ordner' in: "+that.fm.currentItem().path()).to.be.ok;
       done();
     });
   });
@@ -167,7 +159,8 @@ describe('FileManager', function() {
 
     var uploadedRootResponse = clone(this.rootResponse);
     uploadedRootResponse.root.items[1].items.push({
-      'name': 'uploaded.png'
+      'name': 'uploaded.png',
+      'key': 'key-for-uploaded.png'
     });
 
     // this is indeed not used, yet. Its just the response from the POST call (which returns the index as well)
@@ -199,7 +192,8 @@ describe('FileManager', function() {
 
     var uploadedRootResponse = clone(this.rootResponse);
     uploadedRootResponse.root.items[1].items.push({
-      'name': 'uploaded.png'
+      'name': 'uploaded.png',
+      'key': 'key-for-uploaded.png'
     });
 
     var msg, uploadWithWarnings = clone(uploadedRootResponse);
@@ -208,10 +202,12 @@ describe('FileManager', function() {
     dispatcher.expect('POST').to.respond(201, uploadWithWarnings);
     dispatcher.expect('GET').to.respond(200, uploadedRootResponse);
 
+    this.changeFolder('neuer-ordner');
     fm.addFilesFromDropbox();
 
     setTimeout(function() {
-      that.changeFolder('neuer-ordner');
+      var ci = fm.currentItem();
+      expect(fm.currentItem().path()).to.be.equal('/neuer-ordner/');
 
       expect(fm.error(), 'fm.error').to.be.ok
         .and.to.have.property('message').to.contain(msg);
@@ -322,7 +318,6 @@ describe('FileManager', function() {
     this.promptAnswer('new');
 
     this.fm.newFolder().then(function() {
-      that.fm.setCurrentItem(that.fm.root);
       var item = that.selectItem('new');
       that.fm.removeItem(item);
 
