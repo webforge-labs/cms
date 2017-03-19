@@ -18,7 +18,7 @@
         "php": ">=5.4.0",
         
         "doctrine/orm": ">=2.2.3,<2.5",
-        "webforge/utils": "^1.0@dev",
+        "webforge/utils": "~1.1.0",
         "symfony/symfony": "2.7.*",
         "doctrine/doctrine-bundle": "^1.6@dev",
         "symfony/swiftmailer-bundle": "^2.3@dev",
@@ -59,7 +59,7 @@
         "symfony-app-dir": "app",
         "symfony-web-dir": "www",
         "branch-alias": {
-            "dev-master": "1.9.x-dev"
+            "dev-master": "1.11.x-dev"
         }
     }
 }

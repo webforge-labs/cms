@@ -175,11 +175,11 @@ TREE
   }
 
   public function testTreeShouldNotAllowMovingToSelf() {
-    throw new Exception('Please implement me');
+    throw new \Exception('Please implement me');
   }
 
   public function testTreeShouldNotAllowMovingChildrenToItsChildren() {
-    throw new Exception('Please implement me');
+    throw new \Exception('Please implement me');
   }
 
   protected function assertFoundNode($value, $node) {

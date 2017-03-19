@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "816ee8516f09c6ba5f82057c042446a9",
-    "content-hash": "5d8b7cdef6fbec7de6026539a3fbc5ff",
+    "hash": "7a0283b3b2ad1024c5ca29edbe07f32d",
+    "content-hash": "8d9f48272bf8eb96d089ad7b41a228fd",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2856,32 +2856,31 @@
         },
         {
             "name": "webforge/utils",
-            "version": "1.0.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webforge-labs/webforge-utils.git",
-                "reference": "140d36d9556f3cb244ee3769cce589eb7eeca941"
+                "reference": "a476eeec046c22ad91794b0ab9fe15a1d3f92bfc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webforge-labs/webforge-utils/zipball/140d36d9556f3cb244ee3769cce589eb7eeca941",
-                "reference": "140d36d9556f3cb244ee3769cce589eb7eeca941",
+                "url": "https://api.github.com/repos/webforge-labs/webforge-utils/zipball/a476eeec046c22ad91794b0ab9fe15a1d3f92bfc",
+                "reference": "a476eeec046c22ad91794b0ab9fe15a1d3f92bfc",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
-                "php": ">=5.3.2"
+                "php": ">=5.6.0"
             },
             "require-dev": {
                 "mikey179/vfsstream": "1.2.*@stable",
                 "mockery/mockery": "@stable",
-                "satooshi/php-coveralls": "dev-master",
                 "webforge/collections": "^1.0@dev"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -2909,7 +2908,7 @@
                 "system",
                 "util"
             ],
-            "time": "2015-07-20 16:44:33"
+            "time": "2017-03-19 14:56:11"
         },
         {
             "name": "webmozart/assert",
@@ -3152,7 +3151,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "webforge/utils": 20,
         "doctrine/doctrine-bundle": 20,
         "symfony/swiftmailer-bundle": 20,
         "symfony/monolog-bundle": 20,
