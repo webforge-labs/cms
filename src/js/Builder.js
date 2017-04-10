@@ -3,6 +3,7 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
   var rename = require('gulp-rename');
   var sass = require('gulp-sass');
   var sourcemaps = require('gulp-sourcemaps');
+  var autoprefixer = require('gulp-autoprefixer');
   var fs = require('fs');
   var WebforgeBuilder = require('webforge-js-builder');
   var _ = require('lodash');
@@ -14,6 +15,7 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
   // we pass "our" require here on purpose (but i have forgotten why)
   this.jsBuilder = new WebforgeBuilder(gulp, { root: rootDir, dest: "www/assets", moduleSearchPaths: [cmsDir] }, require);
 
+  this.autoprefixer = {};
   this.jsNamespaces = [];
   this.mainTasks = ['javascript', 'fonts', 'sass', 'images'];
   this.requirejs = {
@@ -171,6 +173,7 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
            sass(sassOptions)
              .on('error', sass.logError)
          )
+        .pipe(autoprefixer(that.autoprefixerOptions))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(builder.config.dest+'/css'))
       } catch (exc) {

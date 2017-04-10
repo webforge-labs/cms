@@ -16,7 +16,7 @@ services:
 
   webforge.serialization.jms_serializer_media_file_entity_handler:
     class:      Webforge\CmsBundle\Serialization\JmsSerializerMediaFileEntityHandler
-    arguments: [@webforge.media.manager]
+    arguments: ['@webforge.media.manager']
     tags: 
       - { name: jms_serializer.handler, direction: 'serialization', format: 'json', type: 'WebforgeMediaFileEntity', method: 'serialize' }
 
@@ -60,7 +60,7 @@ services:
 
   webforge.media.manager:
     class: Webforge\CmsBundle\Media\Manager
-    arguments: ['@webforge.media.filesystem', '@webforge.gaufrette_index', '@webforge.media.persistent_storage', [@webforge.serialization.imagine_thumbnails_file_handler]]
+    arguments: ['@webforge.media.filesystem', '@webforge.gaufrette_index', '@webforge.media.persistent_storage', ['@webforge.serialization.imagine_thumbnails_file_handler']]
 
   webforge.media.alice_fixtures_provider:
     class: Webforge\CmsBundle\Media\AliceFixturesProvider
