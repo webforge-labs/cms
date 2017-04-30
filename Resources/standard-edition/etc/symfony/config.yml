@@ -1,0 +1,16 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: services.yml }
+    - { resource: parts/images.yml }
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: de
+    jms_serializer.serialized_name_annotation_strategy.class: 'JMS\Serializer\Naming\IdenticalPropertyNamingStrategy'
+    entities_namespace: '%project.bundle_name%\Entity'
+    frontend_debug: false
+# @FIXME
+    mail_from: 'info@ps-webforge.com'
+    mail_from_name: 'Webforge'
+    mail_replyto: 'info@ps-webforge.com'

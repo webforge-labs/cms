@@ -1,0 +1,10 @@
+{% extends '%project.bundle_name%::base.html.twig' %}
+
+{% block bodycss %}home{% endblock %}
+
+{% block body %}
+
+<h2>{{sayhi}}</h2>
+<p class="author">{{ "by_author"|trans({'%name%': '<a href="#" title="Author: Philipp">Philipp</a>'}, 'site')|raw }}</p>
+
+{% endblock %}

@@ -1,0 +1,6 @@
+<script type="text/javascript">
+  require(['{{module}}', 'cms/modules/main', 'jquery'], function(controller, main, $) {
+    // workaround: https://github.com/assaf/zombie/pull/978
+    controller({{data|json_encode(constant('JSON_PRETTY_PRINT'))|raw}}, main, $('#{{id}}'));
+  });
+</script>

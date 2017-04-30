@@ -1,0 +1,31 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/book/service_container.html
+services:
+    now: 
+        class: "Webforge\\Common\\DateTime\\DateTime"
+        factory_class: "Webforge\\Common\\DateTime\\DateTime"
+        factory_method: now
+
+    markdowner:
+       alias: markdown.parser
+#       class: %project.bundle_namespace%\Twig\Markdowner
+#       arguments: ["@markdown.parser"]
+
+    object_graph:
+        class: %project.bundle_namespace%\Model\ObjectGraph
+        arguments: ["@jms_serializer", "@router", "@markdowner"]
+
+    globals_twig_extension:
+        class: %project.bundle_namespace%\Twig\GlobalVariablesExtension
+        arguments: ["@dc", "@object_graph", "@site", "%frontend_debug%"]
+        tags:
+            - { name: twig.extension }
+
+    twig.extension.intl:
+        class: Twig_Extensions_Extension_Intl
+        tags:
+            - { name: twig.extension }
+
+    site:
+        class: %project.bundle_namespace%\Site
+        arguments: ["@dc", "@now", "@router"]

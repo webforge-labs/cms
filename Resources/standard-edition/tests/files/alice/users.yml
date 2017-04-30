@@ -1,0 +1,9 @@
+%project.bundle_namespace%\Entity\User:
+  petra_platzhalter: 
+    username: petraplatzhalter
+    firstName: Petra
+    lastName: Platzhalter
+    email: petra.platzhalter@ps-webforge.net
+    plainPassword: secret
+    enabled: true
+    roles: [ 'ROLE_ADMIN' ]

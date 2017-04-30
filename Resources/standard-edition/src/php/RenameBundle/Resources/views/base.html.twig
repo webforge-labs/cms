@@ -1,0 +1,41 @@
+{% trans_default_domain "site" %}
+<!DOCTYPE html>
+<html lang="de-DE">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="{{page.description|default(site.defaultDescription) }}">
+    <meta name="author" content="{{site.author}}">
+
+    <title>{{page.title}}</title>
+
+    <link rel="canonical" href="{{ app.request.getUri }}">
+    <link rel="alternate" type="application/rss+xml" title="{{site.title}} &ndash; Feed" href="{{site.feedUrl}}" />
+
+    <link href="/assets/css/app.css" rel="stylesheet">
+
+    {% include '%project.bundle_name%:web/parts:site-meta.html.twig' %}
+    
+    <script src="/assets/js/load-require.js"></script>
+  </head>
+
+  <body class="{% block bodycss%}{% endblock %}">
+    {% if frontendDebug %}
+      {% include '%project.bundle_name%:web/parts:responsive-debug.html.twig' %}
+    {% endif %}
+
+    {% include '%project.bundle_name%:web/parts:google-analytics.html.twig' %}
+
+    {% include '%project.bundle_name%:web/parts:header.html.twig' %}
+
+    {% block body %}{% endblock %}
+
+    <footer class="site">
+      Copyright {{site.name}}
+    </footer>
+
+    <script type="text/javascript">
+      require(['web/main']);
+    </script>
+  </body>
+</html>

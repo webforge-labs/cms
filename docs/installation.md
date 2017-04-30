@@ -1,5 +1,15 @@
 # Installation
 
+## Step by Step
+
+- create an empty composer.json (no requires, no require devs, with autoloading)
+- run cms install command
+- search for @FIXME in created Bundle
+
+
+
+
+
 ## composer-packages
 
  - doctrine/orm

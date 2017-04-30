@@ -1,0 +1,28 @@
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{twitter.title|default(site.title)}}">
+    <meta property="og:description" content="{{page.description|default(site.defaultDescription) }}">
+    <meta property="og:url" content="{{ app.request.getUri }}">
+    <meta property="og:site_name" content="{{site.name}}">
+    <meta property="og:image" content="{{ twitter.image.url|default(app.request.getUriForPath("/assets/img/logo.png")) }}">
+
+    {% if site.twitterHandle is defined %}
+      <meta name="twitter:site" content="{{site.twitterHandle}}">
+      {% if twitter.image.url is defined %}
+      <meta name="twitter:card" content="summary_large_image">
+      {% else %}
+      <meta name="twitter:card" content="summary">
+      {% endif %}
+      <meta name="twitter:title" content="{{twitter.title|default(site.title)}}" />
+      <meta name="twitter:description" content="{{twitter.description|default(site.defaultDescription) }}" />
+      <meta name="twitter:image" content="{{ twitter.image.url|default(app.request.getUriForPath("/assets/img/logo-plain-square.jpg")) }}" /> {# @FIXME #}
+    {% endif %}
+
+    {# @FIXME #}
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="apple-mobile-web-app-title" content="{{site.name}}">
+    <meta name="application-name" content="{{site.name}}">
+    <meta name="theme-color" content="#ffffff">
