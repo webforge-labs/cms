@@ -4,6 +4,7 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
   var sass = require('gulp-sass');
   var sourcemaps = require('gulp-sourcemaps');
   var autoprefixer = require('gulp-autoprefixer');
+  var gulpif = require('gulp-if');
   var fs = require('fs');
   var WebforgeBuilder = require('webforge-js-builder');
   var _ = require('lodash');
@@ -71,7 +72,7 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
 
     that.jsNamespaces.forEach(function(ns) {
       builder.add('js', ns.name)
-        .src(ns.dir+'/**/*')
+        .src(ns.dir+'/**/*.*') // using online /**/* will produce dirname. directories in output (.. dont know?)
         .pipe(builder.dest, ns.name)
     });
 
@@ -162,19 +163,21 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
         }
 
         return sass.compiler.NULL; // do nothing
-      }
+      },
+
+      outputStyle: isDevelopment ? 'nested' : 'compressed'
     };
 
     var sassTask = function() {
       try {
         return gulp.src('src/scss/*.scss')
-        .pipe(sourcemaps.init())
+        .pipe(gulpif(isDevelopment, sourcemaps.init()))
         .pipe(
            sass(sassOptions)
              .on('error', sass.logError)
          )
         .pipe(autoprefixer(that.autoprefixerOptions))
-        .pipe(sourcemaps.write('./'))
+        .pipe(gulpif(isDevelopment, sourcemaps.write('./')))
         .pipe(gulp.dest(builder.config.dest+'/css'))
       } catch (exc) {
         console.log(exc);
