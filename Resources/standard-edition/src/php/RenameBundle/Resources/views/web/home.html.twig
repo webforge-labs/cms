@@ -4,7 +4,9 @@
 
 {% block body %}
 
-<h2>{{sayhi}}</h2>
-<p class="author">{{ "by_author"|trans({'%name%': '<a href="#" title="Author: Philipp">Philipp</a>'}, 'site')|raw }}</p>
+  <div class="container">
+    <h2>{{sayhi}}</h2>
+    <p class="author">{{ "by_author"|trans({'%name%': '<a href="#" title="Author: Philipp">Philipp</a>'}, 'site')|raw }}</p>
+  </div>
 
 {% endblock %}

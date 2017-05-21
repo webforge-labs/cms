@@ -1,0 +1,14 @@
+@import 'mixins';
+@import 'bootstrap-variables';
+@import '../../Resources/bootstrap/scss/bootstrap'; // @FIXME
+@import 'font-awesome';
+@import 'layout';
+
+.responsive-debug {
+  z-index: 30001;
+  display: inline-block;
+  position: fixed;
+  font-size: 80%;
+  top: 10px;
+  right: 20px;
+}

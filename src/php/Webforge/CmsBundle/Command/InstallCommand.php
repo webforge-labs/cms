@@ -85,6 +85,7 @@ class InstallCommand extends ContainerAwareCommand {
     $this->installAndConfigureWithComposer();
     $this->copySymfonyBasicFiles($output);
     $this->configureSymfonyParameters($input, $output);
+    $this->configureScss();
 
     $formatter = $this->getHelper('formatter');
     $output->writeln($formatter->formatBlock(
@@ -94,7 +95,7 @@ class InstallCommand extends ContainerAwareCommand {
   }
 
   protected function configureSymfonyParameters($input, $output) {
-    file_put_contents((string) $this->target->getFile('.gitignore'), '/etc/symfony/parameters.yml', FILE_APPEND);
+    file_put_contents((string) $this->target->getFile('.gitignore'), "\n.env\n/etc/symfony/parameters.yml", FILE_APPEND);
 
     $output->writeln('<info>Configure Symfony Parameters</info>');
 
@@ -161,7 +162,7 @@ class InstallCommand extends ContainerAwareCommand {
     $this->completes[] = 'git add bin/cli.sh';
     $this->completes[] = 'git update-index --chmod=+x bin/cli.sh';
 
-    file_put_contents((string) $this->target->getFile('.gitignore'), '.env', FILE_APPEND);
+    file_put_contents((string) $this->target->getFile('.gitignore'), "\n/files/logs\n/files/cache", FILE_APPEND);
 
     $this->output->writeln('<info>copied and configured symfony standard edition</info>');
   }
@@ -226,8 +227,14 @@ class InstallCommand extends ContainerAwareCommand {
     $this->completes[] = 'composer update --prefer-dist -o';
   }
 
+  protected function configureScss() {
+    $this->completes[] = 'npm install';
+
+    file_put_contents((string) $this->target->getFile('.gitignore'), "\n/www/assets", FILE_APPEND);
+  }
+
   protected function askStringValue($question, $default) {
-    $question = new Question(sprintf('%s ( default: %s ): ', $question, $default));
+    $question = new Question(sprintf('%s ( default: %s ): ', $question, $default), $default);
     $question->setNormalizer(function ($value) use ($default) {
       if ($value == "") {
         return $default;

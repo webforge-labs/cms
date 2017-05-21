@@ -31,8 +31,7 @@
         "updated": { "type": "DateTime", "nullable": true },
 
         "images": { "type": "Collection<PostImage>", "nullable": true, "orderBy": { "position": "ASC" }, "serializer": { "groups": ["post-details"] } },
-        "categories": { "type": "Collection<Category>", "serializer": { "groups": ["post-details"] } },
-        "relations": { "type": "Collection<PostRelation>", "serializer": { "groups": ["none"] } }
+        "categories": { "type": "Collection<Category>", "serializer": { "groups": ["post-details"] } }
       }
     },
 
@@ -51,20 +50,6 @@
       "constructor": ["binary", "post", "position"]
     },
 
-    {
-      "name": "PostRelation",
-
-      "properties": {
-        "id": { "type": "DefaultId", "serializer": { "groups": ["relation"] } },
-        "priority": { "type": "Integer", "nullable": true, "serializer": { "groups": ["relation"] } },
-
-        "post": { "type": "Post", "onDelete": "cascade", "relation": "relations" },
-        "relatedPost": { "type": "Post", "onDelete": "cascade", "serializer": { "groups": ["relation"] } }
-      },
-
-      "constructor": ["post", "relatedPost", "priority"]
-    },
-    
     {
       "name": "Binary",
       "serializer": { "defaultGroups": ["post-details"] },
@@ -98,21 +83,6 @@
         "title": { "type":"String" },
         "slug": { "type":"String" },
         "visible": { "type": "Boolean", "defaultValue": "TRUE" }
-      }
-    },
-
-    {
-      "name": "Quote",
-      "serializer": { "defaultGroups": ["quote-details", "quote-list"] },
-
-      "properties": {
-        "id": { "type": "DefaultId" },
-
-        "author": { "type":"String" },
-        "quote": { "type": "Text" },
-        "reason": { "type": "Text", "nullable": true },
-
-        "activated": { "type": "DateTime", "nullable": true }
       }
     }
   ]

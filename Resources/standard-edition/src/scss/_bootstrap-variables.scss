@@ -1,0 +1,26 @@
+$grid-breakpoints: (
+  xs: 0,
+  sm: 370px,
+  md: 640px,
+  lg: 992px,
+  xl: 1200px
+);
+
+// Grid columns
+//
+// Set the number of columns and specify the width of the gutters.
+
+$grid-gutter-width-base:     30px;
+$grid-gutter-widths: (
+  xs: 20px,
+  sm: 24px,
+  md: $grid-gutter-width-base,
+  lg: $grid-gutter-width-base,
+  xl: $grid-gutter-width-base
+);
+
+$spacer: 1rem;
+
+// Navbar
+$navbar-padding-x:                  $spacer;
+$navbar-padding-y:                  ($spacer / 2);

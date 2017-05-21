@@ -1,0 +1,29 @@
+{
+  "name": "%project.nicename%",
+  "private": true,
+  "version": "1.0.0",
+  "description": "%project.name%",
+  "main": "gulpfile.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "gulp build",
+    "build-dev": "gulp build --dev",
+    "test": "wdio tests/js/webdriverio/wdio.cucumber.conf.js"
+  },
+  "author": "Philipp Scheit",
+  "license": "ISC",
+  "dependencies": {
+    "tether": "^1.4.0",
+    "webforge-cms": "~%version%"
+  },
+  "devDependencies": {
+    "gulp": "~3.9.0",
+    "yargs": "^4.3.1"
+  },
+  "browserlist": [
+    "last 2 versions",
+    "safari >= 4"
+  ]
+}

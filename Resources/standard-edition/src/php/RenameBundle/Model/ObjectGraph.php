@@ -2,6 +2,8 @@
 
 namespace %project.bundle_namespace%\Model;
 
+use %project.bundle_namespace%\Entity\Post;
+
 class ObjectGraph extends \Webforge\Symfony\ObjectGraph {
 
   private $router;
@@ -13,11 +15,26 @@ class ObjectGraph extends \Webforge\Symfony\ObjectGraph {
     parent::__construct($serializer);
   }
 
-  public function serializeSomething($entity, Array $groups = NULL) {
-    $exported = $this->serialize($entity, $groups);
+  public function serializePosts($posts, Array $groups = NULL) {
+    $export = array();
 
-    $exported->html = $this->markdowner->transformMarkdown($exported->markdown);
+    foreach ($posts as $post) {
+      $export[] = $this->serializePost($post, $groups);
+    }
 
-    return $exported;
+    return $export;
+  }
+
+  public function serializePost(Post $post, Array $groups = NULL) {
+    $exportedPost = $this->serialize($post, $groups);
+
+    if (in_array('post-details', $groups)) {
+      // fix that jms serializer is too stupid to serialize objects from stdClass
+      $exportedPost->contents = $post->getContents();
+    }
+
+    $exportedPost->url = $this->router->generate('post', array('postSlug'=>$post->getSlug()));
+
+    return $exportedPost;
   }
 }
