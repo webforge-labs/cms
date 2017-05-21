@@ -52,7 +52,7 @@
     "shimney-requirejs-json": "~1.0.3",
     "shimney-superagent": "~1.4.0-build.2",
     "superagent": "~1.4.0",
-    "webforge-js-builder": "~1.1.8",
+    "webforge-js-builder": "~1.2.0",
     "webforge-js-components": "^1.0.7",
     "webforge-testing": "~1.2.2"
   },
