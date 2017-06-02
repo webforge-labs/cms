@@ -20,6 +20,10 @@ chimp
 
 A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsoring a free Live account, that allows us to test on Iphones and other devices.
 
+## BC Breaks for 1.11.x
+
+Rename Webforge\Common\String into Webforge\Common\StringUtil (because of PHP 7.x)
+
 ## BC Breaks for 1.7.x
 
 - A link in the CMS adds and activates the tab with one click (instead of two). So calling tabs.open() was changed. add and select will still work.
