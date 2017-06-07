@@ -1,0 +1,15 @@
+fos_user:
+  db_driver: orm
+  firewall_name: main
+  user_class: Webforge\CmsBundle\Entity\User
+
+  # make fixtures work for alice
+  use_listener: true
+
+#  resetting:
+#      email:
+#          template: ':mails:resetting.txt.mustache'
+
+  from_email:
+    address: %mail_from%
+    sender_name: %mail_from_name%

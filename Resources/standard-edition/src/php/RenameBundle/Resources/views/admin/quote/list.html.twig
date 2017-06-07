@@ -1,0 +1,41 @@
+{% import 'WebforgeCmsBundle:form/bootstrap3:elements.html.twig' as bs3 %}
+
+<div id="{{id}}" data-bind="with: quotesList">
+<h2>Zitate
+  <div class="btn-group pull-right" role="group" aria-label="controls">
+    <button type="button" data-bind="cmsTab: createTab()" class="btn btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i> Neu erstellen</button>
+    <button type="button" data-bind="click: reloadTab" class="btn btn-info"><i class="fa fa-refresh" aria-hidden="true"></i> aktualisieren</button>
+  </div>
+</h2>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Zitat</th>
+      <th>veröffentlicht</th>
+      <th>Autor</th>
+    </tr>
+  </thead>
+  <tbody data-bind="foreach: {data: quotes, as: 'entity'}">
+    <tr>
+      <td><a href="#" data-bind="text: quoteShortened, cmsTab: editTab()"></a></td>
+      <td><div class="btn-toolbar">
+          <div class="btn-group btn-group">
+            <button type="button" data-bind="cmsTab: editTab()" class="btn btn-info" title="bearbeiten"><i class="fa fa-pencil"></i></button>
+          </div>
+        </div>
+      </td>
+      <td data-bind="text: formattedActivatedDate"></td>
+      <td><input type="checkbox" data-bind="checked: $parent.selection, checkedValue: entity"></td>
+    </tr>
+  </tbody>
+  <!-- ko if: selection().length > 0 -->
+  <tfoot>
+    <tr>
+      <td colspan="4" class="text-right">{{ bs3.selection_delete_button() }}</td>
+    </tr>
+  </tfoot>
+  <!-- /ko -->
+</table>
+</div>
+{{ include('%project.bundle_name%:admin:js-controller.html.twig', {module: 'admin/quote/list', data: data, id: id}) }}

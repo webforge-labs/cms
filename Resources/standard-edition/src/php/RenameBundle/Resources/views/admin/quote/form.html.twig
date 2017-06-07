@@ -1,0 +1,24 @@
+{% import 'WebforgeCmsBundle:form/bootstrap3:elements.html.twig' as form %}
+
+{% embed "WebforgeCmsBundle:form/bootstrap3:body.html.twig" 
+   with {
+    'module': 'admin/quote/form',
+    'dependencies': [
+      'cms/ko-bindings/markdown-editor',
+      'cms/ko-bindings/date-picker'
+    ]
+  }
+%}
+
+  {% block body %}
+    <div data-bind="with: entity">
+      {{ form.datetime('Aktivierung', 'activated') }}
+      {{ form.markdown('Zitat', 'quote') }}
+      {{ form.input_text('Autor', 'author', 'text') }}
+      {{ form.markdown('Begründung', 'reason') }}
+    </div>
+
+    {{ form.submit('Speichern', 'save') }}
+  {% endblock %}
+
+{% endembed %}

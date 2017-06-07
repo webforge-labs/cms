@@ -1,0 +1,89 @@
+{
+  "namespace": "%project.bundle_namespace%\\Entity",
+
+  "entities": [
+    {
+      "name": "User",
+      "extends": "Webforge\\CmsBundle\\Entity\\User",
+    
+      "properties": {
+        "id": { "type": "DefaultId" },
+        "firstName": { "type": "String" },
+        "lastName": { "type": "String" }
+      }
+    },
+
+    {
+      "name": "Post",
+      "serializer": { "defaultGroups": ["post-details", "post-list"] },
+
+      "properties": {
+        "id": { "type": "DefaultId", "serializer": { "groups": ["post-details", "post-list", "relation"] } },
+
+        "title": { "type":"String", "serializer": { "groups": ["post-details", "post-list", "relation"] } },
+        "slug": { "type":"String", "nullable": true, "serializer": { "groups": ["post-details", "post-list", "relation"] } },
+
+        "contentsJson": { "type": "Text", "nullable": true, "serializer": { "groups": ["post-details"] } },
+        "teaserMarkdown": { "type":"Text", "nullable": true, "serializer": { "groups": ["post-details"] } },
+
+        "published": { "type": "DateTime", "nullable": true },
+        "created": { "type": "DateTime" },
+        "updated": { "type": "DateTime", "nullable": true },
+
+        "images": { "type": "Collection<PostImage>", "nullable": true, "orderBy": { "position": "ASC" }, "serializer": { "groups": ["post-details"] } },
+        "categories": { "type": "Collection<Category>", "serializer": { "groups": ["post-details"] } }
+      }
+    },
+
+    {
+      "name": "PostImage",
+      "serializer": { "defaultGroups": ["post-details"] },
+    
+      "properties": {
+        "id": { "type": "DefaultId" },
+        "position": { "type": "Integer" },
+        "post": { "type": "Post", "onDelete": "cascade" },
+
+        "binary": { "type": "Binary", "serializer": { "inline": true, "groups": ["post-details"] }, "onDelete": "cascade" }
+      },
+
+      "constructor": ["binary", "post", "position"]
+    },
+
+    {
+      "name": "Binary",
+      "serializer": { "defaultGroups": ["post-details"] },
+
+      "properties": {
+        "id": { "type": "DefaultId" },
+
+        "mediaFileKey": { "type": "String" },
+        "mediaName": { "type": "String" }
+      }
+    },
+
+    {
+      "name": "MediaTree",
+
+      "properties": {
+        "id": { "type": "DefaultId" },
+
+        "content": { "type": "Text" },
+        "created": { "type": "DateTime" }
+      }
+    },
+
+    {
+      "name": "Category",
+      "serializer": { "defaultGroups": ["post-details"] },
+
+      "properties": {
+        "id": { "type": "DefaultId" },
+
+        "title": { "type":"String" },
+        "slug": { "type":"String" },
+        "visible": { "type": "Boolean", "defaultValue": "TRUE" }
+      }
+    }
+  ]
+}

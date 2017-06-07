@@ -1,0 +1,99 @@
+\%project.bundle_namespace%\Entity\Post:
+  post (template):
+    created: <webforgeDateTimeBetween('-30 days', 'now')>
+
+  food (template):
+    categories: ['@category_food']
+
+  travel (template):
+    categories: ['@category_travel']
+
+  vivre (template):
+    categories: ['@category_vivre']
+
+  shop (template):
+    categories: ['@category_shop']
+
+  general (template):
+    categories: ['@category_general']
+
+  post1 (extends post, extends food):
+    title: Selbstgemachtes Brioche
+    published: <webforgeDateTime('12.10.2016')>
+
+  post2 (extends post, extends travel):
+    title: 'USA - Californien'
+    published: <webforgeDateTime('09.10.2016')>
+    teaserMarkdown: 'Californiiiaaaa, here i cooooome'
+
+  post3 (extends post, extends vivre):
+    title: Arganöl aus Marokko
+    published: <webforgeDateTime('08.10.2016')>
+
+  post4 (extends post, extends shop):
+    title: Arganöl 200 ml
+    published: <webforgeDateTime('07.10.2016')>
+
+  post{5..8} (extends post):
+    title: <words(5, true)>
+    published: null
+
+  post9 (extends post, extends food):
+    title: geplanter Post
+    published: <webforgeDateTime('+9 days')>
+
+  post10 (extends post):
+    title: 'About'
+    published: <webforgeDateTime('-2 days')>
+    contentsJson: |
+      { 
+        "blocks": [
+          {
+            "type": "markdown",
+            "markdown": "Sprotten Stories - Hungry for Lifestyle ist allen gewidmet, die immerzu Hunger nach neuen Ideen verspüren. Ein Ort für die wunderbaren, großartigen und ausprobierenswerten Dingen im Leben, die es erst so richtig lebenswert machen. Ein Hub für diejenigen, die ihre Leidenschaft für gutes Essen, Reisen und besonders schöne Momente mit Freunden teilen möchten. Für einen inspirierten Lifestyle. xx, Eure Imme"
+           }
+        ]
+      }
+    categories: ['@category_general']
+
+  post11 (extends post, extends food):
+    title: Reibekuchen selbstgemacht
+    published: <webforgeDateTime('01.10.2016')>
+
+  post12 (extends post, extends general):
+    title: Rechtliche Hinweise
+    slug: legal
+    published: <webforgeDateTime('17.11.2016')>
+    contentsJson: |
+      { 
+        "blocks": [
+          {
+            "type": "markdown",
+            "label": "Text 1",
+            "markdown": "## Google Analytics"
+           }
+        ]
+      }
+
+  post13 (extends post, extends general):
+    title: Impressum
+    slug: Impressum
+    published: <webforgeDateTime('17.11.2016')>
+    contentsJson: |
+      { 
+        "blocks": [
+          {
+            "type": "markdown",
+            "label": "Text 1",
+            "markdown": "## Sprotten Stories\nImme Scheit"
+           }
+        ]
+      }
+
+  post14 (extends post, extends food):
+    title: Future post with image
+    published: <webforgeDateTime('+2 days')>
+
+  post{15..40} (extends post):
+    title: <words(5, true)>
+    published: null

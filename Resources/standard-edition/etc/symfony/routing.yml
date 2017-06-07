@@ -1,0 +1,10 @@
+# add this first to allow overrides by other bundles
+cms:
+  resource: "@WebforgeCmsBundle/Resources/config/routing/all.yml"
+
+home:
+  path: /
+
+%project.bundle_name_dashed%:
+  resource: "@%project.bundle_name%/Controller"
+  type:     annotation

@@ -1,0 +1,10 @@
+parameters:
+    secret: 2df04fb13bf0a3d075b6ff2a1e10090dee191acc
+    database_host: 127.0.0.1
+    database_name: ps-webforge
+    database_user: ps-webforge
+    database_password: b60f3ae
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null

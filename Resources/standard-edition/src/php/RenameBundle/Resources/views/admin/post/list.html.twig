@@ -1,0 +1,44 @@
+{% import 'WebforgeCmsBundle:form/bootstrap3:elements.html.twig' as bs3 %}
+
+<div id="{{id}}" data-bind="with: postsList">
+<h2>Posts
+  <div class="btn-group pull-right" role="group" aria-label="controls">
+    <button type="button" data-bind="cmsTab: createTab()" class="btn btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i> Neu erstellen</button>
+    <button type="button" data-bind="click: reloadTab" class="btn btn-info"><i class="fa fa-refresh" aria-hidden="true"></i> aktualisieren</button>
+  </div>
+</h2>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Titel</th>
+      <th></th>
+      <th>veröffentlicht</th>
+      <th>erstellt</th>
+    </tr>
+  </thead>
+  <tbody data-bind="foreach: {data: posts, as: 'post'}">
+    <tr>
+      <td><a href="#" data-bind="text: title, cmsTab: editTab()"></a></td>
+      <td style="width: 100px"><div class="btn-toolbar">
+          <div class="btn-group btn-group">
+            <button type="button" data-bind="cmsTab: editTab()" class="btn btn-info" title="bearbeiten"><i class="fa fa-pencil"></i></button>
+            <a type="button" target="_blank" data-bind="attr: { href: url }" class="btn btn-default" title="vorschau"><i class="fa fa-television"></i></a>
+          </div>
+        </div>
+      </td>
+      <td data-bind="text: formattedPublishedDate"></td>
+      <td data-bind="text: formattedCreateDate"></td>
+      <td><input type="checkbox" data-bind="checked: $parent.selection, checkedValue: post"></td>
+    </tr>
+  </tbody>
+  <!-- ko if: selection().length > 0 -->
+  <tfoot>
+    <tr>
+      <td colspan="4" class="text-right">{{ bs3.selection_delete_button() }}</td>
+    </tr>
+  </tfoot>
+  <!-- /ko -->
+</table>
+</div>
+{{ include('%project.bundle_name%:admin:js-controller.html.twig', {module: 'admin/post/list', data: data, id: id}) }}

@@ -1,3 +1,5 @@
 var require = {
-  baseUrl: '/assets/js'
+  baseUrl: '/assets/js',
+
+  waitSeconds: 20
 };

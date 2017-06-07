@@ -1,0 +1,50 @@
+liip_imagine:
+  filter_sets:
+    # outbound: crop, inset: no crop
+    xs:
+      quality: 75
+      filters:
+        auto_rotate: ~
+        thumbnail: { size: [120, 120], mode: outbound }
+
+    sm:
+      quality: 75
+      filters:
+        auto_rotate: ~
+        thumbnail: { size: [620, 400], mode: inset }
+
+    square150:
+      quality: 90
+      filters:
+        auto_rotate: ~
+        thumbnail: { size: [150, 150], mode: outbound }
+
+    square660:
+      quality: 90
+      filters:
+        auto_rotate: ~
+        thumbnail: { size: [660, 660], mode: outbound }
+
+    square373:
+      quality: 90
+      filters:
+        auto_rotate: ~
+        thumbnail: { size: [373, 373], mode: outbound }
+
+    landscape300:
+      quality: 100
+      filters:
+        auto_rotate: ~
+        thumbnail: { size: [300, 200], mode: inset }
+
+    landscape1000:
+      quality: 100
+      filters:
+        auto_rotate: ~
+        thumbnail: { size: [1000, 667], mode: outbound, allow_upscale: true }
+
+    inpost1000:
+      quality: 100
+      filters:
+        auto_rotate: ~
+        thumbnail: { size: [1000, 2000], mode: inset }

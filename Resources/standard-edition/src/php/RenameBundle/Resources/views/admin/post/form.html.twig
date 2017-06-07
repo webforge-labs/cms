@@ -1,0 +1,42 @@
+{% import 'WebforgeCmsBundle:form/bootstrap3:elements.html.twig' as form %}
+
+{% embed "WebforgeCmsBundle:form/bootstrap3:body.html.twig" 
+   with {
+    'module': 'admin/post/form',
+    'dependencies': [
+      'cms/ko-bindings/markdown-editor',
+      'cms/ko-bindings/date-picker',
+      'cms/modules/bootstrap-select',
+      'admin/content-manager-blocks'
+    ]
+  }
+%}
+
+  {% block body %}
+    <div data-bind="with: entity">
+      {{ form.input_text('Überschrift', 'title', 'text', NULL, {'binding': 'textInput'}) }}
+      {{ form.datetime('Veröffentlichung', 'published') }}
+      {{ form.single_entity_chooser('Kategorie', 'categories') }}
+      {{ form.textarea('Teaser', 'teaserMarkdown') }}
+      {{ form.content_manager('Inhalt', 'contents') }}
+      <!-- ko ifnot: $parent.areImagesUploadable() -->
+      <div class="form-group">
+        <div class="alert alert-info col-sm-10 col-sm-offset-2">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <strong>Du möchtest Bilder hinzufügen?</strong>
+          <br/>Lege bitte erst eine Überschrift, eine Kategorie und ein Veröffentlichungsdatum fest, um Bilder hinzufügen zu können.
+        </div>
+      </div>
+      <!-- /ko -->
+
+      <!-- ko if: $parent.areImagesUploadable() -->
+      {{ form.multiple_files_chooser('Bilder', 'images') }}
+      <!-- /ko -->
+
+      {{ form.multiple_entity_chooser('Verwandte Artikel', 'relations', { 'search': true }) }}
+    </div>
+
+    {{ form.submit('Speichern', 'save') }}
+  {% endblock %}
+
+{% endembed %}
