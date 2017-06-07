@@ -2,13 +2,27 @@
 
 ## Step by Step
 
-- create an empty composer.json (no requires, no require devs, with autoloading)
+- create an empty composer.json (no requires, no require devs, without autoloading)
+```json
+{
+    "name": "iwep/website",
+    "description": "The official website",
+    "authors": [
+        {
+            "name": "p.scheit",
+            "email": "p.scheit@ps-webforge.com"
+        }
+    ]
+}
+```
+- a package json will be created
 - run cms install command
+- webforge register-package .
+- run post-install.bat after revision
 - search for @FIXME in created Bundle
 
 
-
-
+# Infos (might be outdated)
 
 ## composer-packages
 

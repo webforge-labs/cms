@@ -92,6 +92,8 @@ class InstallCommand extends ContainerAwareCommand {
       $this->completes,
       'comment'
     ));
+    $this->target->getFile('post-install.bat')->writeContents(implode("\n".$this->completes)."\n");
+    $output->writeln('<info>this commands are written to post-install.bat</info>');
   }
 
   protected function configureSymfonyParameters($input, $output) {
@@ -261,9 +263,6 @@ class InstallCommand extends ContainerAwareCommand {
   }
 
   protected function generateNewSecret() {
-    //@FIXME
-    return '84f7681aaede458b091f6f58efb045f07x';
-
     if (function_exists('openssl_random_pseudo_bytes')) {
       return hash('sha1', openssl_random_pseudo_bytes(23));
     }

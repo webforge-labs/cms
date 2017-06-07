@@ -7,9 +7,8 @@ services:
         factory_method: now
 
     markdowner:
-       alias: markdown.parser
-#       class: %project.bundle_namespace%\Twig\Markdowner
-#       arguments: ["@markdown.parser"]
+       class: %project.bundle_namespace%\Twig\Markdowner
+       arguments: ["@markdown.parser"]
 
     object_graph:
         class: %project.bundle_namespace%\Model\ObjectGraph

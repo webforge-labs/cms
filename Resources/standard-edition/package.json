@@ -22,7 +22,7 @@
     "gulp": "~3.9.0",
     "yargs": "^4.3.1"
   },
-  "browserlist": [
+  "browserslist": [
     "last 2 versions",
     "safari >= 4"
   ]

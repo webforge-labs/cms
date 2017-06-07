@@ -12,13 +12,13 @@ define(function() {
         {
           name: 'markdown',
           label: 'Fließtext',
-          component: 'block-markdown',
+          component: 'markdown',
           icon: 'align-left'
         },
         {
           name: 'intro',
           label: 'Introtext',
-          component: 'block-markdown',
+          component: 'markdown',
           icon: 'font'
         },
         /*
@@ -46,7 +46,7 @@ define(function() {
         {
           name: 'credits',
           label: 'Quellenangaben',
-          component: 'block-markdown',
+          component: 'markdown',
           icon: 'copyright'
         }
       ]

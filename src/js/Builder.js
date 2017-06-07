@@ -1,4 +1,4 @@
-module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
+module.exports = function(gulp, rootDir, rootRequire, isDevelopment, options) {
   // put all dependencies here to dependencies not to dev-depenendencies (because other projects will use the builder)
   var rename = require('gulp-rename');
   var sass = require('gulp-sass');
@@ -14,6 +14,8 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
   var that = this;
 
   var cmsDir = require('path').resolve(__dirname, '..', '..');
+
+  options = _.extend({}, { browserSync: false } , options);
 
   // we pass "our" require here on purpose (but i have forgotten why)
   this.jsBuilder = new WebforgeBuilder(gulp, { root: rootDir, dest: "www/assets", moduleSearchPaths: [cmsDir] }, require);
@@ -195,9 +197,9 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment) {
     gulp.task('build', this.mainTasks, function() {});
 
     gulp.task('watch', ['build'], function() {
-      browserSync.init({
-        proxy: "webforge.desktop.ps-webforge.net"
-      });
+      if (options.browserSync) {
+        browserSync.init(options.browserSync);
+      }
 
       gulp.watch('src/scss/**/*.scss', ['sass-only']);
       gulp.watch(cmsDir+'/src/scss/**/*.scss', ['sass-only']);
