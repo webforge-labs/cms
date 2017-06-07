@@ -20,9 +20,14 @@ chimp
 
 A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsoring a free Live account, that allows us to test on Iphones and other devices.
 
+## BC Breaks for 1.12.x
+
+- change `site.url` into `cms.site.url` in global twig variables
+- change `site.title` into `cms.site.title` in global twig variables
+
 ## BC Breaks for 1.11.x
 
-Rename Webforge\Common\String into Webforge\Common\StringUtil (because of PHP 7.x)
+- Rename Webforge\Common\String into Webforge\Common\StringUtil (because of PHP 7.x)
 
 ## BC Breaks for 1.7.x
 
