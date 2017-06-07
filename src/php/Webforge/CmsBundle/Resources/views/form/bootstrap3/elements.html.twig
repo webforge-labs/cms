@@ -94,12 +94,20 @@
 {% endmacro %}
 
 
-{% macro multiple_files_chooser(label, name) %}
+{% macro multiple_files_chooser(label, name, options) %}
   {% import _self as form %}
 
   <div class="form-group">
     {{ form.label(label, name) }}
-    <div style="position: relative" class="col-sm-10" data-bind='component: { name: "multiple-files-chooser", params: { name: "{{name}}", model: $data, generateUploadPath: $data.generateUploadPath } }'>
+    <div style="position: relative" class="col-sm-10" 
+      data-bind='component: { 
+        name: "multiple-files-chooser",
+        params: { 
+          name: "{{name}}",
+          model: $data,
+          generateUploadPath: $data.generateUploadPath,
+          accept: "{{options.accept|default("*/*")}}"
+        }}'>
     </div>
   </div>
 {% endmacro %}

@@ -8,6 +8,7 @@ define(['require', 'knockout', 'jquery', 'knockout-collection', 'knockout-dragdr
     that.files = new KnockoutCollection(filesObservableArray, {key: 'key', reference: true});
     that.processing = ko.observable(false);
     that.isLoading = ko.observable(false);
+    that.accept = ko.observable(params.accept);
 
     that.chooseFiles = function() {
       require(['cms/modules/main'], function(main) {
