@@ -1,0 +1,93 @@
+{% extends "AppBundle:test:prototype.html.twig" %}
+
+{% import 'WebforgeCmsBundle:form/bootstrap3:elements.html.twig' as form %}
+
+{% set cms = { title: "Content-Manager"} %}
+{% set data = '' %}
+{% set id = 'cm-7-form' %}
+
+{% block requirejs %}
+   <script type="text/javascript">
+     define('admin/config', {
+      Dropbox: {
+        appKey: '3s4jdiswvqljxx'
+      },
+
+      contentManager: {
+        blockTypes: [
+          {
+            name: 'fulltext',
+            label: 'Fließtext',
+            component: 'markdown',
+            icon: 'align-left'
+          },
+          {
+            name: 'intro',
+            label: 'Introtext',
+            component: 'markdown'
+          },
+          {
+            label: 'Frage',
+            name: 'interview',
+            icon: 'question-mark',
+            compounds: [
+              {
+                label: 'Fragesatz',
+                name: 'question',
+                component: 'textline'
+              },
+              {
+                label: 'Antwort',
+                name: 'answer',
+                component: 'markdown'
+              }
+            ]
+          }
+        ]
+      }
+     });
+
+     require(['knockout', 'knockout-mapping', 'jquery', 'admin/ko/BlocksComponentLoader', 'cms/ko-components/index'], function(ko, koMapping, $) {
+       var FormModel = function(data) {
+         var that = this;
+
+         koMapping.fromJS(data, {}, that);
+
+         this.trackBlocks = ko.computed(function() {
+           console.log(that);
+           return JSON.stringify(koMapping.toJS(that), null, 2);
+         });
+       };
+
+       var model = new FormModel({
+         entity: {
+           contents: {
+             blocks: []
+           }
+         }
+       });
+
+       ko.applyBindings(model);
+
+       setTimeout(function() {
+         $('#content-manager a:contains("Inhalt hinzufügen")').click();
+
+         setTimeout(function() {
+           $('#content-manager a:contains("Frage")').click();
+         }, 100);
+       }, 400);
+     });
+   </script>
+{% endblock %}
+
+{% block body %}
+
+  <form id="content-manager" data-bind="with: entity">
+    {{ form.content_manager('Inhalt', 'contents') }}
+    <div class="clearfix"></div>
+  </form>
+
+  <pre data-bind="text: trackBlocks()" style="margin-top: 1rem">
+  </pre>
+
+{% endblock %}

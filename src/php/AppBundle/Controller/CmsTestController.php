@@ -1,11 +1,12 @@
 <?php
 
-namespace Webforge\CmsBundle\Controller;
+namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Webforge\CmsBundle\Controller\CommonController;
 
-class TestController extends CommonController {
+class CmsTestController extends CommonController {
 
   /**
    * @Route("/cms", name="test_index")
@@ -98,11 +99,11 @@ class TestController extends CommonController {
   }
 
   /**
-   * @Route("/prototypes/layout-manager")
+   * @Route("/prototypes/content-manager")
    * @Method("GET")
    */
-  public function protoLayoutManagerAction() {
-    return $this->render('WebforgeCmsBundle:test/prototypes:layout-manager.html.twig', array());
+  public function protoContentManagerAction() {
+    return $this->render('AppBundle:test/prototypes:content-manager.html.twig', array());
   }
 
   /**

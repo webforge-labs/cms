@@ -2,5 +2,5 @@ cms:
   resource: "@WebforgeCmsBundle/Resources/config/routing/all.yml"
 
 testing:
-  resource: "@WebforgeCmsBundle/Controller/TestController.php"
+  resource: "@AppBundle/Controller/CmsTestController.php"
   type:     annotation

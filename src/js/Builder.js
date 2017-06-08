@@ -206,9 +206,7 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment, options) {
       gulp.watch('Resources/tpl/**/*.mustache', ['build']);
       gulp.watch('node_modules/webforge-js-components/src/js/**/*', ['build']);
       gulp.watch('node_modules/webforge-js-components/Resources/tpl/**/*', ['build']);
-      gulp.watch('src/js/lib/**/*.js', ['build']);
-      gulp.watch('src/js/modules/**/*.js', ['build']);
-      gulp.watch('src/js/config-*.js', ['build']);
+      gulp.watch('src/js/**/*.js', ['build']);
       gulp.watch('src/php/Webforge/CmsBundle/Resources/js-translations/*.json', ['build']);
 
       gulp.watch('Resources/img/**/*', ['build']);

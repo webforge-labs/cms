@@ -9,6 +9,4 @@ define(['knockout'], function(ko) {
     ko.components.register(componentName, { require: 'cms/ko-components/'+componentName });
   });
 
-  ko.components.register('block-markdown', { require: 'cms/ko-components/blocks/markdown' });
-
 });
