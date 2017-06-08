@@ -19,7 +19,8 @@
             name: 'fulltext',
             label: 'Fließtext',
             component: 'markdown',
-            icon: 'align-left'
+            icon: 'align-left',
+            params: { propertyName: 'markdown' }
           },
           {
             name: 'intro',
@@ -48,27 +49,44 @@
      });
 
      require(['knockout', 'knockout-mapping', 'jquery', 'admin/ko/BlocksComponentLoader', 'cms/ko-components/index'], function(ko, koMapping, $) {
+       var Entity = function(data) {
+         var that = this;
+         koMapping.fromJS(data, {}, this);
+
+         this.serialize = function() {
+           return koMapping.toJS(that);
+         };
+       };
+
        var FormModel = function(data) {
          var that = this;
 
-         koMapping.fromJS(data, {}, that);
+         this.entity = new Entity(data.entity);
+         this.blockContents = ko.observable();
 
-         this.trackBlocks = ko.computed(function() {
-           console.log(that);
-           return JSON.stringify(koMapping.toJS(that), null, 2);
-         });
+         this.trackBlocks = function() {
+           that.blockContents(JSON.stringify(that.entity.serialize(), null, 2));
+         };
        };
 
        var model = new FormModel({
          entity: {
            contents: {
-             blocks: []
+             blocks: [
+               {
+                 "type": "fulltext",
+                 "label": "Fließtext",
+                 "uuid": "9f2b6e97-1c66-4d51-a211-507d59f2a25f",
+                 "markdown": "backend model text"
+               }
+             ]
            }
          }
        });
 
        ko.applyBindings(model);
 
+       /*
        setTimeout(function() {
          $('#content-manager a:contains("Inhalt hinzufügen")').click();
 
@@ -76,6 +94,7 @@
            $('#content-manager a:contains("Frage")').click();
          }, 100);
        }, 400);
+       */
      });
    </script>
 {% endblock %}
@@ -87,7 +106,8 @@
     <div class="clearfix"></div>
   </form>
 
-  <pre data-bind="text: trackBlocks()" style="margin-top: 1rem">
+  <pre data-bind="text: blockContents" style="margin-top: 1rem">
   </pre>
+  <button type="button" class="btn btn-default" data-bind="click: trackBlocks">refresh</button>
 
 {% endblock %}

@@ -17,21 +17,24 @@ Feature: content-manager
   @cmadd
   Scenario: Adding Fließtext to the content-stream
     When I add a new block "Fließtext"
-    And I write "# headline" into the textblock 0
+    And I write "# headline" into the textblock 1
 
-    Then the content-stream contains a text block 0 with content "# headline"
+    Then the content-stream contains a text block 1 with content "# headline"
 
     When I add a new block "Fließtext"
-    And I write "content1" into the textblock 1
+    And I write "content1" into the textblock 2
 
-    Then the content-stream contains a text block 1 with content "content1"
+    Then the content-stream contains a text block 2 with content "content1"
 
+  @cm-read
+  Scenario: Having a block prefilled from database
+    Then the content-stream contains a text block 0 with content "backend model text"
 
   @cm-compounds
   Scenario: Adding a compound teaser to the content-stream
     When I add a new block "Frage"
 
-    And I write "question1" into the textarea from block 0
-    And I write "answer1" into the textfield from block 0
+    And I write "question1" into the textfield from block 1
+    And I write "answer1" into the textarea from block 1
 
-    Then the content-stream contains a block 0 with question "question1" and answer "answer1"
+    Then the content-stream contains a block 1 with question "question1" and answer "answer1"

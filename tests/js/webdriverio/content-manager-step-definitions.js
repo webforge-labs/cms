@@ -68,7 +68,7 @@ module.exports = function() {
   this.Then(/^the content\-stream contains a text block (\d+) with content "([^"]*)"$/, function (number, content) {
     var block = this.csBlock(number);
 
-    expect(block).to.have.property('type', 'markdown');
+    expect(block).to.have.property('type', 'fulltext');
     expect(block).to.have.property('markdown', content);
     expect(block).to.have.property('uuid');
   });
@@ -78,9 +78,18 @@ module.exports = function() {
       .css('.form-group textarea').exists().get().setValue(text);
   });
 
-  this.Then(/^the content\-stream contains a block (\d+) with question "([^"]*)" and answer "([^"]*)"$/, function (arg1, arg2, arg3) {
+  this.When(/^I write "([^"]*)" into the textfield from block (\d+)$/, function (text, number) {
+    this.cmPanel(number)
+      .css('.form-group input').exists().get().setValue(text);
+  });
+
+  this.Then(/^the content\-stream contains a block (\d+) with question "([^"]*)" and answer "([^"]*)"$/, function (number, questionContent, answerContent) {
     var block = this.csBlock(number);
 
-    expect(block).to.have.property('type', 'markdown');
+    this.screenshot();
+    
+    expect(block).to.have.property('type', 'interview');
+    expect(block).to.have.property('question', questionContent);
+    expect(block).to.have.property('answer', answerContent);
   });
 }
