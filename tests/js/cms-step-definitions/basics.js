@@ -23,15 +23,6 @@ module.exports = function() {
   });
 
   // i see something
-  this.Then(/^I( dont)? see the button "([^"]*)"$/, function (reverse, arg) {
-    var btn = this.context.css('.btn:contains("'+arg+'")');
-
-    if (reverse) {
-      btn.count(0)
-    } else {
-      btn.count(1);
-    }
-  });
 
   this.Then(/^I should see a headline "([^"]*)"$/, function (arg1) {
     this.getContext().css('h1:contains("'+arg1+'"), h2:contains("'+arg1+'"), h3:contains("'+arg1+'"), h4:contains("'+arg1+'"), h5:contains("'+arg1+'"), h6:contains("'+arg1+'")').waitForVisible(2000);
@@ -50,17 +41,13 @@ module.exports = function() {
   });
 
   this.Then(/^I( dont)? see the button "([^"]*)"$/, function (reverse, arg) {
-    var btn = this.context.css('.btn:contains("'+arg+'")');
+    var btn = this.getContext().css('.btn:contains("'+arg+'")');
 
     if (reverse) {
       btn.count(0)
     } else {
       btn.count(1);
     }
-  });
-
-  this.Then(/^I dont see the text "([^"]*)"$/, function (arg) {
-    this.context.css('*:contains("'+arg+'")').count(0);
   });
 
   // forms stuff

@@ -45,7 +45,7 @@
       }
      });
 
-     require(['knockout', 'knockout-mapping', 'jquery', 'admin/ko/BlocksComponentLoader', 'cms/ko-components/index'], function(ko, koMapping, $) {
+     require(['knockout', 'knockout-mapping', 'jquery', 'cms/ko-components/index'], function(ko, koMapping, $) {
        var Entity = function(data) {
          var that = this;
          koMapping.fromJS(data, {}, this);

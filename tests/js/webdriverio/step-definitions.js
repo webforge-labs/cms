@@ -9,7 +9,7 @@ module.exports = function() {
 
   this.After(function(result) {
 
-    if(result.isFailed()) {
+    if (result.isFailed()) {
       this.screenshot();
     }
   });

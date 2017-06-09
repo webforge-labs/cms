@@ -1,4 +1,8 @@
-define(['knockout'], function(ko) {
+define(function(require) {
+
+  var ko = require('knockout');
+
+  require('cms/ko/BlocksComponentLoader']); // registers itself
 
   var components = [
     'multiple-files-chooser',

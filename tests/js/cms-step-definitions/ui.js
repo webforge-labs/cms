@@ -53,16 +53,6 @@ module.exports = function() {
     this.context = this.findActiveTab();
   });
 
-  this.Then(/^I( can\'t)? see the text "([^"]*)"$/, function (reversed, text) {
-    var text = this.context.css(':contains("'+text+'")')
-
-    if (reversed) {
-      text.count(0)
-    } else {
-      text.count(1);
-    }
-  });
-
   this.When(/^I wait to see the text "([^"]*)"$/, function (text) {
     this.context.css(':contains("'+text+'")').waitForExist(2000);
   });
