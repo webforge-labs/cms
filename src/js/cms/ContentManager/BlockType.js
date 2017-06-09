@@ -34,6 +34,34 @@ define(['knockout'], function(ko) {
     that.getPropertyName = function() {
       return that.component.params.propertyName;
     };
+
+    that.createComponentDefinition = function(block) {
+
+      var initHelper = function(componentVM, spec) {
+        var propertyName = that.getPropertyName();
+
+        if (!ko.isObservable(block[propertyName])) {
+          block[propertyName] = ko.observable(block[propertyName]);
+        }
+
+        componentVM.block = block;
+        componentVM[spec.property] = block[propertyName];
+
+        componentVM.options = {};
+
+        ko.utils.objectForEach(spec.options || {}, function(prop, value) {
+          componentVM.options[prop] = that.component.params.hasOwnProperty(prop) ? that.component.params[prop] : value;
+        });
+      };
+
+      return {
+        name: that.component.name,
+        params: _.extend({}, that.component.params, {
+          block: block,
+          init: initHelper
+        })
+      };
+    };
   };
 
 });

@@ -1,5 +1,12 @@
+# these services are only used to run the cms-appbundle and they are not global
 services:
     now: 
         class: "Webforge\\Common\\DateTime\\DateTime"
         factory_class: "Webforge\\Common\\DateTime\\DateTime"
         factory_method: now
+
+    globals_twig_extension:
+        class: AppBundle\Twig\GlobalVariablesExtension
+        arguments: []
+        tags:
+            - { name: twig.extension }

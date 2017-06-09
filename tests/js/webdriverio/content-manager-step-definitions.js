@@ -86,8 +86,6 @@ module.exports = function() {
   this.Then(/^the content\-stream contains a block (\d+) with question "([^"]*)" and answer "([^"]*)"$/, function (number, questionContent, answerContent) {
     var block = this.csBlock(number);
 
-    this.screenshot();
-    
     expect(block).to.have.property('type', 'interview');
     expect(block).to.have.property('question', questionContent);
     expect(block).to.have.property('answer', answerContent);

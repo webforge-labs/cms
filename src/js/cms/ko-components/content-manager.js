@@ -7,6 +7,7 @@ define(function(require) {
   var BlockType = require('cms/ContentManager/BlockType');
   var config = require('admin/config');
 
+  require('cms/ko/BlocksComponentLoader');
   require('knockout-dragdrop');
   require('cms/ko-bindings/uk-sortable');
   require('cms/ko-bindings/markdown-editor');
@@ -18,6 +19,8 @@ define(function(require) {
       return v.toString(16);
     });
   };
+
+  var internalComponents = ['markdown', 'textline'];
 
   var contentManager = function(params) {
     var that = this;
@@ -36,8 +39,6 @@ define(function(require) {
       contents.blocks.remove(item);
       contents.blocks.splice(newIndex, 0, item);
     };
-
-    var internalComponents = ['markdown', 'textline'];
 
     this.createBlockType = function(type) {
       type.component = type.component || type.name;
@@ -84,10 +85,7 @@ define(function(require) {
     this.createComponentDefinition = function(block) {
       var blockType = that.blockTypes.get(block.type());
 
-      return {
-        name: blockType.component.name,
-        params: _.extend({}, blockType.component.params, { block: block })
-      };
+      return blockType.createComponentDefinition(block);
     };
   };
 

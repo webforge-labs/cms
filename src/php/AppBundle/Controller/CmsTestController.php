@@ -9,7 +9,7 @@ use Webforge\CmsBundle\Controller\CommonController;
 class CmsTestController extends CommonController {
 
   /**
-   * @Route("/cms", name="test_index")
+   * @Route("/cms/", name="test_index")
    * @Method("GET")
    */
   public function indexAction() {
@@ -21,6 +21,7 @@ class CmsTestController extends CommonController {
       ),
 
       'sidebar'=>array(
+        'activeGroup'=>1,
         'groups'=>array(
           'CMS'=>array(
             array(
@@ -64,7 +65,7 @@ class CmsTestController extends CommonController {
   public function dashboardAction() {
     $user = $this->getUser();
 
-    return $this->render('WebforgeCmsBundle:test:dashboard.html.twig', array(
+    return $this->render('AppBundle:test:dashboard.html.twig', array(
       'user'=>array(
         'firstName'=>$user->getFirstName(),
         'lastName'=>$user->getLastName(),

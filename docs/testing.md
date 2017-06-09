@@ -6,30 +6,6 @@ Note that the core from the CmsBundle should be located in src\php\Webforge\CmsB
 This repository is itself a Project, which is using the cms to make it acceptance-testable. E.g. everything in `app/` `etc/` and `src\php\AppBundle` should be related to creating a frame to test the cms and it's concepts.
 
 
-## Step definitions (**obsolete!** we're using webdriverio now)
-
-try to use as many role[xxx] selectors in the step definitions instead of normal selectors like classes or even html elements. Dont couple the step definitions to hard with the layout of the cms, so that refactorings would not require too much changing of all selectors in the step-definitions.
-
-## webforge TestSuite (cucumber howto)
-
-Instantiate your cucumber-world like this:
-
-```js
-module.exports = function() {
-  var Cms = require('webforge-cms');
-
-  var testSuite = new Cms.TestSuite({
-    root: [__dirname, '..', '..', '..', '..', '..']
-  });
-
-  this.World = function MyProjectWorld() {
-    // do custom stuff here
-  };
-
-  testSuite.cucumber.injectWorld(this.World);
-};
-```
-
 ## this.directory
 
 In you cucumberStep you can then use:

@@ -1,0 +1,13 @@
+[
+  {
+    "name": "fulltext",
+    "label": "Fließtext",
+    "component": "markdown",
+    "icon": "align-left"
+  },
+  {
+    "name": "intro",
+    "label": "Introtext",
+    "component": "markdown"
+  }
+]

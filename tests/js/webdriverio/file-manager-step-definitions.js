@@ -13,11 +13,9 @@ module.exports = function() {
 
   this.When(/^I create a folder "([^"]*)"$/, function (foldername) {
     this.onPrompt(foldername);
-    client.saveScreenshot('.screenshots/before.png');
 
     this.css('.btn:contains("Neuer Ordner")').isVisible().click();
 
-    client.saveScreenshot('.screenshots/oink.png');
     this.css('ul.root:contains("'+foldername+'")').waitForExist(100);
 
     /* this is only valid for creating a folder in navigator mode:
