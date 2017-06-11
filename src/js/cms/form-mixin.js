@@ -1,4 +1,4 @@
-define(['knockout', 'knockout-mapping', 'jquery', 'lodash', 'cms/TabModel', 'bootstrap-notify', 'bootstrap/alert', 'cms/ko-components/index', 'bluebird'], function(ko, koMapping, $, _, Tab, notify, bsAlert, componentsIndex, Promise) {
+define(['knockout', 'knockout-mapping', 'jquery', 'lodash', 'cms/TabModel', 'bootstrap-notify', 'bootstrap/alert', 'cms/ko-components/index', 'bluebird', 'cms/ko-bindings/with-visible'], function(ko, koMapping, $, _, Tab, notify, bsAlert, componentsIndex, Promise) {
 
   return function FormMixin(formModel, options) {
     var that = formModel;
