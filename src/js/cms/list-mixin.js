@@ -1,4 +1,4 @@
-define(['knockout', 'cms/modules/dispatcher', 'bootstrap-notify'], function(ko, dispatcher, notify) {
+define(['knockout', 'cms/modules/dispatcher', 'bootstrap-notify', 'cms/ko-bindings/with-visible'], function(ko, dispatcher, notify) {
 
   return function(listModel, listOptions) {
     var that = listModel;
