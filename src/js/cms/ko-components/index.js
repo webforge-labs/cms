@@ -2,7 +2,7 @@ define(function(require) {
 
   var ko = require('knockout');
 
-  require('cms/ko/BlocksComponentLoader']); // registers itself
+  require('cms/ko/BlocksComponentLoader'); // registers itself with ko
 
   var components = [
     'multiple-files-chooser',
