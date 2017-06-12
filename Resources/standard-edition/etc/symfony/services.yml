@@ -6,10 +6,6 @@ services:
         factory_class: "Webforge\\Common\\DateTime\\DateTime"
         factory_method: now
 
-    markdowner:
-       class: %project.bundle_namespace%\Twig\Markdowner
-       arguments: ["@markdown.parser"]
-
     object_graph:
         class: %project.bundle_namespace%\Model\ObjectGraph
         arguments: ["@jms_serializer", "@router", "@markdowner"]

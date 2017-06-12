@@ -8,7 +8,6 @@ class AppKernel extends Kernel {
     $bundles = parent::registerBundles();
 
     $bundles[] = new \%project.bundle_namespace%\%project.bundle_name%();
-    $bundles[] = new \Knp\Bundle\MarkdownBundle\KnpMarkdownBundle();
 
     if (in_array($this->getEnvironment(), array('dev', 'test'))) {
         //$bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
