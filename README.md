@@ -20,6 +20,12 @@ chimp
 
 A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsoring a free Live account, that allows us to test on Iphones and other devices.
 
+## BC Breaks for 1.13.x
+
+- Dont add \Knp\Bundle\MarkdownBundle\KnpMarkdownBundle() to the appkernel. It will be added automatically
+- create a `etc/cms/blocktypes.json` file (containing one empty array sufficient)
+
+
 ## BC Breaks for 1.12.x
 
 - change `site.url` into `cms.site.url` in global twig variables

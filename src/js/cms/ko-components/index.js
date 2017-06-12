@@ -1,4 +1,8 @@
-define(['knockout'], function(ko) {
+define(function(require) {
+
+  var ko = require('knockout');
+
+  require('cms/ko/BlocksComponentLoader'); // registers itself with ko
 
   var components = [
     'multiple-files-chooser',
@@ -8,7 +12,5 @@ define(['knockout'], function(ko) {
   ko.utils.arrayForEach(components, function(componentName) {
     ko.components.register(componentName, { require: 'cms/ko-components/'+componentName });
   });
-
-  ko.components.register('block-markdown', { require: 'cms/ko-components/blocks/markdown' });
 
 });

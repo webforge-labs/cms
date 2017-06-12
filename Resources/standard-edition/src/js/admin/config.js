@@ -21,12 +21,6 @@ define(function() {
           component: 'markdown',
           icon: 'font'
         },
-        /*
-        {
-          name: 'video',
-          label: 'Video'
-        },
-        */
         {
           name: 'polaroid-stripe',
           label: 'Polaroids (hochkant)',

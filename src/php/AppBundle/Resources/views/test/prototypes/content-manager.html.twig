@@ -1,0 +1,110 @@
+{% extends "AppBundle:test:prototype.html.twig" %}
+
+{% import 'WebforgeCmsBundle:form/bootstrap3:elements.html.twig' as form %}
+
+{% set cms = { title: "Content-Manager"} %}
+{% set data = '' %}
+{% set id = 'cm-7-form' %}
+
+{% block requirejs %}
+   <script type="text/javascript">
+     define('admin/config', {
+
+      contentManager: {
+        blockTypes: [
+          {
+            name: 'fulltext',
+            label: 'Fließtext',
+            component: 'markdown',
+            icon: 'align-left',
+            params: { propertyName: 'markdown' }
+          },
+          {
+            name: 'intro',
+            label: 'Introtext',
+            component: 'markdown'
+          },
+          {
+            label: 'Frage',
+            name: 'interview',
+            icon: 'question-mark',
+            compounds: [
+              {
+                label: 'Fragesatz',
+                name: 'question',
+                component: 'textline'
+              },
+              {
+                label: 'Antwort',
+                name: 'answer',
+                component: 'markdown'
+              }
+            ]
+          }
+        ]
+      }
+     });
+
+     require(['knockout', 'knockout-mapping', 'jquery', 'cms/ko-components/index'], function(ko, koMapping, $) {
+       var Entity = function(data) {
+         var that = this;
+         koMapping.fromJS(data, {}, this);
+
+         this.serialize = function() {
+           return koMapping.toJS(that);
+         };
+       };
+
+       var FormModel = function(data) {
+         var that = this;
+
+         this.entity = new Entity(data.entity);
+         this.blockContents = ko.observable();
+
+         this.trackBlocks = function() {
+           that.blockContents(JSON.stringify(that.entity.serialize(), null, 2));
+         };
+       };
+
+       var model = new FormModel({
+         entity: {
+           contents: {
+             blocks: [
+               {
+                 "type": "fulltext",
+                 "label": "Fließtext",
+                 "uuid": "9f2b6e97-1c66-4d51-a211-507d59f2a25f",
+                 "markdown": "backend model text"
+               }
+             ]
+           }
+         }
+       });
+
+       ko.applyBindings(model);
+
+       /*
+       setTimeout(function() {
+         $('#content-manager a:contains("Inhalt hinzufügen")').click();
+
+         setTimeout(function() {
+           $('#content-manager a:contains("Frage")').click();
+         }, 100);
+       }, 400);
+       */
+     });
+   </script>
+{% endblock %}
+
+{% block body %}
+
+  <form id="content-manager" data-bind="with: entity">
+    {{ form.content_manager('Inhalt', 'contents') }}
+    <div class="clearfix"></div>
+  </form>
+
+  <pre data-bind="text: blockContents" style="margin-top: 1rem">
+  </pre>
+  <button type="button" class="btn btn-default" data-bind="click: trackBlocks">refresh</button>
+
+{% endblock %}

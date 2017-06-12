@@ -1,14 +1,15 @@
 <?php
 
-namespace Webforge\CmsBundle\Controller;
+namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Webforge\CmsBundle\Controller\CommonController;
 
-class TestController extends CommonController {
+class CmsTestController extends CommonController {
 
   /**
-   * @Route("/cms", name="test_index")
+   * @Route("/cms/", name="test_index")
    * @Method("GET")
    */
   public function indexAction() {
@@ -20,6 +21,7 @@ class TestController extends CommonController {
       ),
 
       'sidebar'=>array(
+        'activeGroup'=>1,
         'groups'=>array(
           'CMS'=>array(
             array(
@@ -63,7 +65,7 @@ class TestController extends CommonController {
   public function dashboardAction() {
     $user = $this->getUser();
 
-    return $this->render('WebforgeCmsBundle:test:dashboard.html.twig', array(
+    return $this->render('AppBundle:test:dashboard.html.twig', array(
       'user'=>array(
         'firstName'=>$user->getFirstName(),
         'lastName'=>$user->getLastName(),
@@ -98,11 +100,11 @@ class TestController extends CommonController {
   }
 
   /**
-   * @Route("/prototypes/layout-manager")
+   * @Route("/prototypes/content-manager")
    * @Method("GET")
    */
-  public function protoLayoutManagerAction() {
-    return $this->render('WebforgeCmsBundle:test/prototypes:layout-manager.html.twig', array());
+  public function protoContentManagerAction() {
+    return $this->render('AppBundle:test/prototypes:content-manager.html.twig', array());
   }
 
   /**
@@ -110,7 +112,7 @@ class TestController extends CommonController {
    * @Method("GET")
    */
   public function protoFileManagerAction() {
-    return $this->render('WebforgeCmsBundle:test/prototypes:file-manager.html.twig', array(
+    return $this->render('AppBundle:test/prototypes:file-manager.html.twig', array(
       'cms'=>array(
         'title'=>'CMS Intern',
         'xsTitle'=>'CMS Intern'

@@ -2,7 +2,7 @@ module.exports = function() {
 
   this.World.prototype.clickTabLink = function(label) {
     // open the dropdown menu
-    this.css('.tabs-container .dropdown .dropdown-toggle').waitForExist().click();
+    this.css('.tabs-container .dropdown .dropdown-toggle').waitForVisible().click();
 
     var tabLink = this.css('.tabs-container ul.dropdown-menu li:contains("'+label+'") a').waitForExist(4000);
 
@@ -24,6 +24,10 @@ module.exports = function() {
     }
 
     browser.waitForVisible('#content-container', 1200);
+  });
+
+  this.Then(/^I see "([^"]*)" as loggedin user$/, function (name) {
+    this.getContext().css('[role="username"]:contains("'+name+'")').exists();
   });
 
   this.When(/^I goto the tab "([^"]*)" in section "([^"]*)" in the sidebar$/, function (label, section) {
@@ -49,22 +53,8 @@ module.exports = function() {
     this.context = this.findActiveTab();
   });
 
-  this.Then(/^I( can\'t)? see the text "([^"]*)"$/, function (reversed, text) {
-    var text = this.context.css(':contains("'+text+'")')
-
-    if (reversed) {
-      text.count(0)
-    } else {
-      text.count(1);
-    }
-  });
-
   this.When(/^I wait to see the text "([^"]*)"$/, function (text) {
     this.context.css(':contains("'+text+'")').waitForExist(2000);
-  });
-
-  this.When(/^I click on "([^"]*)" in context$/, function (linktext) {
-    this.context.css('a:contains("'+linktext+'"), button:contains("'+linktext+'")').click();
   });
 
   this.Then(/^the list table has (\d+) rows$/, function (number) {

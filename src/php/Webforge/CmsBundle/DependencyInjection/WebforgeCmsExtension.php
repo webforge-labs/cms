@@ -44,5 +44,26 @@ class WebforgeCmsExtension extends Extension implements PrependExtensionInterfac
     foreach ($taggedServices as $id => $tags) {
       $definition->addMethodCall('addProvider', array(new Reference($id)));
     }
+
+    $this->processBlockExtenders($container);
+  }
+
+  protected function processBlockExtenders(ContainerBuilder $container) {
+    $definition = $container->findDefinition('webforge.content.blocks');
+
+    $blockExtenders = array();
+    foreach ($container->findTaggedServiceIds('webforge_cms.block_extender') as $id => $attributes) {
+      $priority = isset($attributes[0]['priority']) ? $attributes[0]['priority'] : 0;
+      $blockExtenders[$priority][] = new Reference($id);
+    }
+
+    if (empty($blockExtenders)) {
+      return;
+    }
+
+    // sort by priority and flatten
+    krsort($blockExtenders);
+    $blockExtenders = call_user_func_array('array_merge', $blockExtenders);
+    $container->getDefinition('webforge.content.blocks')->replaceArgument(0, $blockExtenders);    
   }
 }

@@ -7,7 +7,7 @@
         <span class="label mover label-warning pull-right"><i class="fa fa-arrows"></i> verschieben</span>
 
       </div>
-      <div class="panel-body" data-bind="component: { name: $parent.componentNameForBlockType($data.type()), params: { val: $data } }">
+      <div class="panel-body" data-bind="component: $parent.createComponentDefinition($data)">
       </div>
     </div>
   </div>

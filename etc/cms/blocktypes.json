@@ -1,0 +1,34 @@
+[
+  {
+    "name": "fulltext",
+    "label": "Fließtext",
+    "component": "markdown",
+    "icon": "align-left",
+    "params": {
+      "propertyName": "markdown"
+    }
+  },
+  {
+    "name": "intro",
+    "label": "Introtext",
+    "component": "markdown"
+  },
+  {
+    "label": "Frage",
+    "name": "interview",
+    "icon": "question-mark",
+    "compounds": [
+      {
+        "label": "Fragesatz",
+        "name": "question",
+        "component": "textline"
+      },
+      {
+        "label": "Antwort",
+        "name": "answer",
+        "component": "markdown"
+      }
+    ]
+  }
+
+]

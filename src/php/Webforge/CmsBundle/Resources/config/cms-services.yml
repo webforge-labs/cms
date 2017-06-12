@@ -67,3 +67,17 @@ services:
     arguments: ['@webforge.media.manager']
     tags: 
       - { name: webforge_cms.alice_fixtures_provider }
+  
+  webforge.content.common_block_extender:
+    class: Webforge\CmsBundle\Content\CommonBlockExtender
+    arguments: ["@markdowner"]
+    tags:
+      - { name: webforge_cms.block_extender, priority: 50 } #(the highest the priority, the earlier a listener is executed)
+
+  webforge.content.blocks:
+    class: Webforge\CmsBundle\Content\Blocks
+    arguments: [ [], "%root_directory%/etc/cms/blocktypes.json", "@markdowner" ]  #first argument will be written with compiler pass
+
+  markdowner:
+    class: Webforge\CmsBundle\Content\Markdowner
+    arguments: ["@markdown.parser"]
