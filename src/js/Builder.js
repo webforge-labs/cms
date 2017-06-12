@@ -22,7 +22,7 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment, options) {
 
   this.autoprefixer = {};
   this.jsNamespaces = [];
-  this.mainTasks = ['etc', 'javascript', 'fonts', 'sass', 'images'];
+  this.mainTasks = ['javascript', 'fonts', 'sass', 'images'];
   this.requirejs = {
     mainConfigFile: cmsDir+'/src/js/config.js', // adds some paths here. But notice: baseUrl will be overriden anyway through this config
 
@@ -136,19 +136,15 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment, options) {
       .src(builder.resolveModule('bluebird')+'/../browser/'+(isDevelopment ? 'bluebird.js' : 'bluebird.min.js'))
       .pipe(rename, 'bluebird.js');
 
+    builder.add('js', 'etc-cms')
+      /* don't wide this too much, the symfony yml config should not be in assets ... */
+      .src('etc/cms/**/*.json')
+      .pipe(builder.dest, 'etc/cms');
+
     gulp.task('images', ['clean'], function() {
       return gulp.src(cmsDir+'/Resources/img/**/*')
         .pipe(gulp.dest(builder.config.dest+'/img'));
     });
-
-    var etcTask = function() {
-      /* don't wide this too much, the symfony yml config should not be in assets ... */
-      return gulp.src('etc/cms/**/*')
-        .pipe(gulp.dest(builder.config.dest+'/js/etc/cms'));
-    }
-
-    gulp.task('etc', ['clean'], etcTask);
-    gulp.task('etc-only', etcTask);
 
     var sassOptions = {
       includePaths: [
@@ -217,7 +213,7 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment, options) {
       gulp.watch('node_modules/webforge-js-components/Resources/tpl/**/*', ['build']);
       gulp.watch('src/js/**/*.js', ['build']);
       gulp.watch('src/php/Webforge/CmsBundle/Resources/js-translations/*.json', ['build']);
-      gulp.watch('etc/**/*', ['etc-only']);
+      gulp.watch('etc/**/*', ['build']);
 
       gulp.watch('Resources/img/**/*', ['build']);
 
