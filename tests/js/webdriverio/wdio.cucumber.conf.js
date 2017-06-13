@@ -59,7 +59,14 @@ exports.config = {
     }
 };
 
-if (hostname === 'psc-laptop') {
+if (process.env.SYMFONY_BASEURL) {
+  exports.config.baseUrl = process.env.SYMFONY_BASEURL;
+  exports.config.reporters = ['spec', 'junit'];
+  exports.config.cucumberOpts.failFast = false;
+  exports.config.services = ['phantomjs'];
+  exports.config.screenshotPath = './reports/screenshots';
+  exports.config.logLevel = 'verbose';
+} else if (hostname === 'psc-laptop') {
   exports.config.baseUrl = 'http://cms.laptop.ps-webforge.net';
 } else if (hostname === 'psc-desktop') {
   exports.config.baseUrl = 'http://cms.desktop.ps-webforge.net';
