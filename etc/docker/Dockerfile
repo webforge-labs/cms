@@ -13,7 +13,6 @@ COPY src/scss src/scss/
 COPY etc/cms etc/cms/
 COPY Resources/fonts Resources/fonts/
 COPY Resources/uikit Resources/uikit/
-COPY Resources/bootstrap Resources/bootstrap/
 COPY Resources/img Resources/img/
 
 RUN npm run build
