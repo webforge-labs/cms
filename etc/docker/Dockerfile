@@ -8,6 +8,7 @@ RUN npm install --unsafe-perm && npm cache clean
 
 # everything for build
 COPY Gulpfile.js ./
+COPY index.js ./
 COPY src/js src/js/
 COPY src/scss src/scss/
 COPY etc/cms etc/cms/
