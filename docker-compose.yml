@@ -50,6 +50,7 @@ services:
       - SYMFONY_BASEURL
       - SYMFONY__BUILD_VERSION=${BUILD_VERSION}
       - BUILD_VERSION
+      - IS_CI=1
 
 volumes:
   # we just need write support (www-data) for php-fpm on this dir. We might discard this volume with docker-compose down -v (to start with no symfony-cache)
