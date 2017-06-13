@@ -1,6 +1,6 @@
-# cms [![Build Status](https://travis-ci.org/webforge-labs/cms.svg?branch=master)](https://travis-ci.org/webforge-labs/cms)
+# cms
 
-this is a testable body of a cms installation.
+this repo contains the Webforge/CmsBundle and a symfony bundle (AppBundle) that allows self-tests 
 
 The "core" of the cms is in the Webforge\CmsBundle (located in `src\php\Webforge\CmsBundle`). The cms consists of this bundle and some components (see `src\php`).
 
@@ -12,9 +12,9 @@ The npm package webforge-cms and the composer package webforge/cms will be alway
 
 phpunit
 
-and
+and several javascript tests
 
-chimp
+npm test
 
 ## Sponsoring
 
