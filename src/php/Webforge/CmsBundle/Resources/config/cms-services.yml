@@ -72,7 +72,7 @@ services:
     class: Webforge\CmsBundle\Content\CommonBlockExtender
     arguments: ["@markdowner"]
     tags:
-      - { name: webforge_cms.block_extender, priority: 50 } #(the highest the priority, the earlier a listener is executed)
+      - { name: webforge_cms.content.block_extender, priority: 50 } #(the highest the priority, the earlier a listener is executed)
 
   webforge.content.blocks:
     class: Webforge\CmsBundle\Content\Blocks
