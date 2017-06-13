@@ -15,6 +15,7 @@ COPY etc/cms etc/cms/
 COPY Resources/fonts Resources/fonts/
 COPY Resources/uikit Resources/uikit/
 COPY Resources/img Resources/img/
+COPY src/php/Webforge/CmsBundle/Resources/js-translations src/php/Webforge/CmsBundle/Resources/js-translations/
 
 RUN npm run build
 
