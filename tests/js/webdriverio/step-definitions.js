@@ -7,13 +7,6 @@ module.exports = function() {
   require('./file-manager-step-definitions').apply(this);
   require('./content-manager-step-definitions').apply(this);
 
-  this.After(function(result) {
-
-    if (result.isFailed()) {
-      this.screenshot();
-    }
-  });
-
   this.Given(/^the alice fixtures were loaded:$/, function (string) {
     var that = this, fixtures = string.split(/\r?\n/g);
 

@@ -56,6 +56,29 @@ exports.config = {
           require('../../../index').stepDefinitionsFile('basics'),
           require('../../../index').stepDefinitionsFile('ui')
         ]
+    },
+
+    beforeFeature: function (feature) {
+      browser.windowHandleSize({width:1024,height:900});
+      browser.timeouts('page load', 60000);
+    },
+
+    afterFeature: function() {
+      var logs = browser.log('browser');
+
+      if (logs.state === 'success' && logs.value.length) {
+        console.log('from browser:');
+        console.log(logs.value);
+      }
+    },
+
+    afterStep: function (stepResult) {
+      if (stepResult.getStatus() == 'failed') {
+        var date = new Date();
+        var timestamp = date.toJSON().replace(/:/g, '-')
+        var filename = `ERROR_wbfrg_testing_${timestamp}.png`;
+        client.saveScreenshot(client.options.screenshotPath+'/'+filename);
+      }
     }
 };
 
