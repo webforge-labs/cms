@@ -1,5 +1,4 @@
 module.exports = function() {
-
   this.World.prototype.getContext = function() {
     if (!this.context) {
       this.context = this.css('body').exists();
@@ -13,13 +12,13 @@ module.exports = function() {
   });
 
   this.When(/^I click on "([^"]*)"$/, function (arg) {
-    this.css('a:contains("'+arg+'"), .btn:contains("'+arg+'")').exists().click();
+    this.getContext().css('a:contains("'+arg+'"), .btn:contains("'+arg+'")').exists().click();
   });
 
   this.When(/^I click on "([^"]*)" in dropdown "([^"]*)"$/, function (arg1, arg2) {
-    this.css('.dropdown-toggle:contains("'+arg2+'")').waitForVisible().click();
+    this.getContext().css('.dropdown-toggle:contains("'+arg2+'")').waitForVisible().click();
 
-    this.css('.dropdown-toggle:contains("'+arg2+'") + .dropdown-menu a:contains("'+arg1+'")').waitForVisible().click();
+    this.getContext().css('.dropdown-toggle:contains("'+arg2+'") + .dropdown-menu a:contains("'+arg1+'")').waitForVisible().click();
   });
 
   // i see something
@@ -51,21 +50,29 @@ module.exports = function() {
   });
 
   // forms stuff
+  this.Then(/^I see the edit form$/, function() {
+    this.context.css('.form-horizontal').waitForExist(8000);
+  });
+
+  this.When(/^I save the form$/, function() {
+    this.context.css('.btn:contains("Speichern")').click();
+  });
+
 
   this.When(/^I fill in "([^"]*)" for "([^"]*)"$/, function (value, inputLabel) {
     var that = this;
-    var selectors = ['input[placeholder="'+inputLabel+'"]'];
+    var selectors = ['.form-group:has(label:contains("'+inputLabel+'")) .form-control:first', 'input[placeholder="'+inputLabel+'"]'];
 
     var field;
-    selectors.forEach(function(selector) {
+    selectors.every(function(selector) {
       field = that.context.css(selector);
 
-      if (field.getCount() === 1) {
+      if (field.getCount() == 1) {
         return false; // break
       }
     });
 
-    expect(field.getCount(), 'field matching input selectors').to.be.equal(1);
+    expect(field.getCount(), 'field matching one of the input selectors').to.be.equal(1);
 
     field.setValue(value);
   });

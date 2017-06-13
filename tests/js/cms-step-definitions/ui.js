@@ -10,7 +10,7 @@ module.exports = function() {
   };
 
   this.World.prototype.findActiveTab = function() {
-    browser.waitForExist('[role=tab-content].active', 2400);
+    browser.waitForExist('[role=tab-content].active', 10000);
     return this.css('[role="tab-content"].active');
   };
 
@@ -20,10 +20,10 @@ module.exports = function() {
     if (browser.isExisting('h1*=Zugang zum CMS')) {
       browser.setValue('[name="_username"]', email);
       browser.setValue('[name="_password"]', 'secret');
-      browser.submitForm('form');
+      browser.click('button*=Anmelden');
     }
 
-    browser.waitForVisible('#content-container', 1200);
+    browser.waitForVisible('#content-container', 5000);
   });
 
   this.Then(/^I see "([^"]*)" as loggedin user$/, function (name) {
@@ -54,7 +54,7 @@ module.exports = function() {
   });
 
   this.When(/^I wait to see the text "([^"]*)"$/, function (text) {
-    this.context.css(':contains("'+text+'")').waitForExist(2000);
+    this.context.css(':contains("'+text+'")').waitForExist(5000);
   });
 
   this.Then(/^the list table has (\d+) rows$/, function (number) {
@@ -67,12 +67,12 @@ module.exports = function() {
   });
 
   this.When(/^I click on the link in the row from the list table with "([^"]*)"$/, function (title) {
-    this.context.css('table.table tr:contains("'+title+'")').waitForExist(3000)
+    this.context.css('table.table tr:contains("'+title+'")').waitForExist(6000)
       .css('td a:first').click();
   });
 
   this.Then(/^a message is shown "([^"]*)"$/, function (text) {
-    this.css('div[role=alert]:contains("'+text+'")').waitForVisible(3000);
+    this.css('div[role=alert]:contains("'+text+'")').waitForVisible(6000);
   });
 
   this.Then(/^a modal with "([^"]*)" is opened$/, function (text) {

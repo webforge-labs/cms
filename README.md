@@ -25,7 +25,7 @@ A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsori
 - Dont add \Knp\Bundle\MarkdownBundle\KnpMarkdownBundle() to the appkernel. It will be added automatically
 - create a `etc/cms/blocktypes.json` file (containing one empty array sufficient)
 - split the `admin/config.js` into `etc/cms/blocktypes.json` and include it with: requirejs-json
-
+- Refactor `When I click on "" in context` to `When I click on ""`
 
 ## BC Breaks for 1.12.x
 
