@@ -374,7 +374,7 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
 JSON
     );
 
-    $json->dropboxFiles[0]->link = str_replace('%hostUrl%', $this->getContainer()->getParameter('hostUrl'), $json->dropboxFiles[0]->link);
+    $json->dropboxFiles[0]->link = str_replace('%hostUrl%', getenv('SYMFONY_BASEURL'), $json->dropboxFiles[0]->link);
 
     return $json;
   }
