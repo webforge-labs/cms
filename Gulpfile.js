@@ -13,6 +13,9 @@ var builder = new Cms.Builder(gulp, __dirname, require, isDevelopment, {
   }
 });
 
+// we need to keep every module in singular, for the unit tests with mocha
+builder.requirejs.removeCombined = false;
+
 builder.addJsNamespace('admin', 'src/js/admin');
 
 builder.configure();
