@@ -57,7 +57,7 @@
     "superagent": "~1.4.0",
     "webforge-js-builder": "~1.2.0",
     "webforge-js-components": "^1.0.7",
-    "webforge-testing": "~1.2.4"
+    "webforge-testing": "~1.2.5"
   },
   "devDependencies": {
     "amplify": "0.0.11",
