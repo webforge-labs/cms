@@ -70,9 +70,11 @@ module.exports = function() {
       if (field.getCount() == 1) {
         return false; // break
       }
+
+      return true;
     });
 
-    expect(field.getCount(), 'field matching one of the input selectors').to.be.equal(1);
+    expect(field.getCount(), 'field matching one of the input selectors: '+selectors.join(', ')).to.be.equal(1);
 
     field.setValue(value);
   });
