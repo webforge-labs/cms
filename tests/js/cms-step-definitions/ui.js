@@ -10,7 +10,7 @@ module.exports = function() {
   };
 
   this.World.prototype.findActiveTab = function() {
-    browser.waitForExist('[role=tab-content].active', 10000);
+    browser.waitForExist('[role=tab-content].active', 15000);
     return this.css('[role="tab-content"].active');
   };
 
