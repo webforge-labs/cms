@@ -22,8 +22,7 @@ module.exports = function() {
       return koMapping.toJS(root.entity.contents);
     });
 
-    console.log(result);
-    expect(result).to.have.property('state').to.be.equal('success');
+    expect(result.value).to.be.a('object');
 
     return result.value;
   };
