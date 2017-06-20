@@ -2,7 +2,7 @@ login:
   headline: Zugang zum CMS
 
 layout:
-  title: MyTTT – Zugang
+  title: CMS Zugang
 
 username: Benutzername
 usernameoremail: Benutzername oder E-Mail-Adresse
