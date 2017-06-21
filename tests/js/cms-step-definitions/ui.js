@@ -17,7 +17,7 @@ module.exports = function() {
   this.Given(/^I am logged in as "([^"]*)"$/, function (email) {
     browser.url('/cms');
 
-    if (browser.isExisting('h1*=Zugang zum CMS')) {
+    if (browser.isExisting('[role="login-form"]')) {
       browser.setValue('[name="_username"]', email);
       browser.setValue('[name="_password"]', 'secret');
       browser.click('button*=Anmelden');
