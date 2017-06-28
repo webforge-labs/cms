@@ -9,3 +9,4 @@ composer.phar
 /www/images/cache
 /.screenshots
 /.env
+/package-lock.json

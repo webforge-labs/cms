@@ -40,8 +40,12 @@ define(['knockout'], function(ko) {
       var initHelper = function(componentVM, spec) {
         var propertyName = that.getPropertyName();
 
+        if (spec.hasOwnProperty('defaultValue') && !block.hasOwnProperty(propertyName)) {
+          block[propertyName] = spec.defaultValue;
+        }
+
         if (!ko.isObservable(block[propertyName])) {
-          block[propertyName] = ko.observable(block[propertyName]);
+          block[propertyName] = _.isArray(block[propertyName]) ? ko.observableArray(block[propertyName]) : ko.observable(block[propertyName]);
         }
 
         componentVM.block = block;
@@ -57,6 +61,8 @@ define(['knockout'], function(ko) {
       return {
         name: that.component.name,
         params: _.extend({}, that.component.params, {
+          contentManager: contentManager,
+          blockType: that,
           block: block,
           init: initHelper
         })

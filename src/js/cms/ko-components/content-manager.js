@@ -20,12 +20,14 @@ define(function(require) {
     });
   };
 
-  var internalComponents = ['markdown', 'textline'];
+  var internalComponents = require('cms/ko-components/internals-index');
 
   var contentManager = function(params) {
     var that = this;
 
-    var contents = params.model[params.name];
+    that.model = params.model;
+
+    var contents = that.model[params.name];
 
     var blocks = this.initBlocks(contents);
 
