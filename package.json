@@ -1,6 +1,6 @@
 {
   "name": "webforge-cms",
-  "version": "1.13.9",
+  "version": "1.13.10",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,9 @@
     "test-wdio": "wdio tests/js/webdriverio/wdio.cucumber.conf.js",
     "test": "npm-run-all --parallel test-tabs test-form test-entity-form test-fm test-wdio",
     "build": "gulp build",
-    "build-dev": "gulp build --dev"
+    "build-dev": "gulp build --dev",
+    "version": "git add package.json",
+    "postversion": "git push && git push --tags origin master"
   },
   "repository": {
     "type": "git",
