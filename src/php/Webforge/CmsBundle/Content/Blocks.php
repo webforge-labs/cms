@@ -74,7 +74,8 @@ class Blocks {
       'name'=>$prop,
       'component'=>$blockDefinition->component,
       'hasMarkdown'=>in_array($blockDefinition->component, array('markdown', 'textline')),
-      'hasText'=>in_array($blockDefinition->component, array('textline'))
+      'hasText'=>in_array($blockDefinition->component, array('textline')),
+      'hasFiles'=>in_array($blockDefinition->component, array('multiple-files-chooser')),
     ];
   }
 

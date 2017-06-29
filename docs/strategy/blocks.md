@@ -33,3 +33,8 @@ contentStreamProperty: {
 }
 ```
 
+## Multiple files chooser
+
+We write whatever we will get from the cms/ko-component/multiple-file-chooser to the block. But we are extending the property in the commonBlockExtender and will write a new - fresh - serialized file object to the blocks array.
+
+So be careful, when investigating things in the db, they might be serialized differently

@@ -16,7 +16,10 @@ class BlocksExtendingTest extends \Symfony\Bundle\FrameworkBundle\Test\KernelTes
 
     $this->container = self::$kernel->getContainer();
 
+    // depends on etc/cms/blocktypes.json
+    // depends on etc/symfony/parts/images.yml
     $this->blocks = $this->container->get('webforge.content.blocks');
+    $this->mediaManager = $this->container->get('webforge.media.manager');
   }
 
   public function testItExtendsSimpleBlocksThatHaveMarkdown() {
@@ -74,11 +77,94 @@ class BlocksExtendingTest extends \Symfony\Bundle\FrameworkBundle\Test\KernelTes
         ->end();
   }
 
+  public function testItExtendsImagesWithFreshThumbnailAndUrlInformation() {
+    $cs = $this->parseJSON('{
+      "blocks": [
+        {
+          "type": "section-leftimage",
+          "label": "Abschnitt mit Bild links",
+          "uuid": "7596a30a-2ecd-4bb9-a334-334f6783a31d",
+          "rightContent": "**Nichts**",
+          "color": "mint",
+          "screenshots": [
+              {
+                  "type": "file",
+                  "items": [],
+                  "name": "demo-home-monitor.png",
+                  "key": "fc6872e9-d7b8-499c-89c7-0101b91e3f25",
+                  "url": "\/cms\/media?download=1&file=fc6872e9-d7b8-499c-89c7-0101b91e3f25",
+                  "mimeType": "image\/png",
+                  "isExisting": true,
+                  "thumbnails": {
+                      "xs": {
+                          "isPortrait": false,
+                          "isLandscape": false,
+                          "orientation": "landscape",
+                          "url": "http:\/\/ich-will-ein-pony.desktop.ps-webforge.net\/images\/cache\/xs\/fc6872e9-d7b8-499c-89c7-0101b91e3f25\/demo-home-monitor.png",
+                          "name": "xs"
+                      },
+                      "sm": {
+                          "isPortrait": false,
+                          "isLandscape": true,
+                          "orientation": "landscape",
+                          "url": "http:\/\/ich-will-ein-pony.desktop.ps-webforge.net\/images\/cache\/sm\/fc6872e9-d7b8-499c-89c7-0101b91e3f25\/demo-home-monitor.png",
+                          "name": "sm"
+                      },
+                      "inpage1000": {
+                          "isPortrait": false,
+                          "isLandscape": true,
+                          "orientation": "landscape",
+                          "url": "http:\/\/ich-will-ein-pony.desktop.ps-webforge.net\/images\/cache\/inpage1000\/fc6872e9-d7b8-499c-89c7-0101b91e3f25\/demo-home-monitor.png",
+                          "name": "inpage1000"
+                      }
+                  }
+              }
+          ]
+        }
+      ]
+    }');
+
+    // we need to create the file physically
+    // 
+    try {
+      $this->mediaManager->beginTransaction();
+      $screenshot = $this->mediaManager->addFile('/_seiten/home', 'screenshot-demo.jpg', $this->getResourceImage('background.jpg')->getContents());
+      $mediaKey = $screenshot->getMediaFileKey();
+      $this->mediaManager->commitTransaction();
+    } catch (\ Webforge\CmsBundle\Media\FileAlreadyExistsException $e) {
+      $mediaKey = $e->mediaKey;
+    }
+
+    $cs->blocks[0]->screenshots[0]->key = $mediaKey;
+
+    $this->blocks->extendContentStream($cs, new \stdClass);
+
+    $this->assertThatObject($cs)
+      ->property('blocks')->isArray()
+        ->key(0)
+          ->property('screenshots')->isArray()
+            ->key(0)
+              ->property('thumbnails')->isArray() // i think this is because of the stupid serializer, but okay
+                ->key('sm')->end()
+                ->key('gallery')->end() // this was NOT in the saved image thumbnails, but it IS defined in etc/symfony/parts/images.yml
+                ->key('xs')
+                  ->property('url')
+                    ->is($this->logicalNot($this->stringContains('desktop.ps-webforge.net')))
+                    ->is($this->stringContains('screenshot-demo.jpg'))
+                  ->end()
+                ->end()
+              ->end();
+  }
+
   /**
    * @return mixed
    */
   public function parseJSON($string) {
     $decoder = new JsonDecoder();
     return $decoder->decode($string);
+  }
+
+  protected function getResourceImage($filename) {
+    return $GLOBALS['env']['root']->sub('Resources/img/')->getFile($filename);
   }
 }

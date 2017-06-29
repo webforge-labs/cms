@@ -29,6 +29,27 @@
         "component": "markdown"
       }
     ]
+  },
+  {
+    "name": "section-leftimage",
+    "label": "Abschnitt mit Bild links",
+    "icon": "align-left",
+    "compounds": [
+      {
+        "name": "rightContent",
+        "label": "Content der Rechten Spalte unter der Überschrift",
+        "component": "markdown"
+      },
+      {
+        "name": "screenshots",
+        "label": "Bild in der linken Spalte",
+        "component": "multiple-files-chooser"
+      },
+      {
+        "name": "color",
+        "label": "Farbe",
+        "component": "textline"
+      }
+    ]
   }
-
 ]

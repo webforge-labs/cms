@@ -70,7 +70,7 @@ services:
   
   webforge.content.common_block_extender:
     class: Webforge\CmsBundle\Content\CommonBlockExtender
-    arguments: ["@markdowner"]
+    arguments: ["@markdowner", "@webforge.media.manager"]
     tags:
       - { name: webforge_cms.content.block_extender, priority: 50 } #(the highest the priority, the earlier a listener is executed)
 
