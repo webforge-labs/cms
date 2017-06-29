@@ -14,7 +14,7 @@
     "build": "gulp build",
     "build-dev": "gulp build --dev",
     "version": "git add package.json",
-    "postversion": "git push && git push --tags origin master && npm publish"
+    "postversion": "git push --tags origin master && npm publish"
   },
   "repository": {
     "type": "git",
