@@ -4,7 +4,9 @@ FROM webforgelabs/php-nodejs as nodebuild
 WORKDIR /app
 
 COPY package.json ./
-RUN npm install --unsafe-perm && npm cache clean
+RUN npm install --unsafe-perm \
+  && npm install wdio-phantomjs-service phantomjs-prebuilt \
+  && npm cache clean
 
 # everything for build
 COPY Gulpfile.js ./
@@ -32,14 +34,13 @@ COPY etc/php/*.ini /usr/local/etc/php/conf.d/
 COPY composer.* ./
 RUN composer install -o --prefer-dist --no-interaction \
    && curl -L -o phpunit.phar https://phar.phpunit.de/phpunit-4.8.phar \
-   && mkdir -p files/cache
+   && mkdir -p files/cache \
+   && composer clear-cache
 
 
 # assets and node_modules build with node
 COPY --from=nodebuild /app/www/assets www/assets/
 COPY --from=nodebuild /app/node_modules node_modules/
-
-RUN npm install wdio-phantomjs-service phantomjs-prebuilt
 
 # all other code
 COPY . ./
@@ -49,5 +50,5 @@ COPY . ./
 #rm -r Resources/js; \
 RUN rm -r Resources/fonts; \
   mkdir -p /app/files/cache \
-  && chown -R www-data.www-data /var/www /app \
+  && chown -R www-data.www-data /app/app /app/files /app/www \
   && chmod +x bin/cli.sh
