@@ -90,4 +90,11 @@ module.exports = function() {
     expect(block).to.have.property('question', questionContent);
     expect(block).to.have.property('answer', answerContent);
   });
+
+  this.Then(/^the content\-stream contains a block (\d+) with textline "([^"]*)"$/, function (number, content) {
+    var block = this.csBlock(number);
+
+    expect(block).to.have.property('text', content);
+    expect(block).to.have.property('uuid');
+  });
 }

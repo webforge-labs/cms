@@ -13,6 +13,7 @@ Feature: content-manager
     | Fließtext |
     | Introtext |
     | Frage |
+    | Button |
 
   @cmadd
   Scenario: Adding Fließtext to the content-stream
@@ -38,3 +39,9 @@ Feature: content-manager
     And I write "answer1" into the textarea from block 1
 
     Then the content-stream contains a block 1 with question "question1" and answer "answer1"
+
+  @cmdefault
+  Scenario: Textline with default text value
+    When I add a new block "Button"
+
+    Then the content-stream contains a block 1 with textline "abschicken"

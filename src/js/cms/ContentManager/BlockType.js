@@ -40,8 +40,8 @@ define(['knockout'], function(ko) {
       var initHelper = function(componentVM, spec) {
         var propertyName = that.getPropertyName();
 
-        if (spec.hasOwnProperty('defaultValue') && !block.hasOwnProperty(propertyName)) {
-          block[propertyName] = spec.defaultValue;
+        if ((spec.hasOwnProperty('defaultValue') || options.hasOwnProperty('default')) && !block.hasOwnProperty(propertyName)) {
+          block[propertyName] = spec.hasOwnProperty('defaultValue') ? spec.defaultValue : options.default;
         }
 
         if (!ko.isObservable(block[propertyName])) {
