@@ -17,9 +17,11 @@
 <p>Es gibt keine Inhalte.</p>
 <!--/ko-->
 <div class="btn-group">
-  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-plus-circle" aria-hidden="true"></i> Inhalt hinzufügen <span class="caret"></span></button>
-  <ul class="dropdown-menu" data-bind="foreach: availableBlockTypes">
-    <li><a href="#" data-bind="click: add"><i data-bind="if: hasIcon, css: iconClass"></i> <!--ko text: label --><!--/ko--></a></li>
-    <!--<li role="separator" class="divider"></li>-->
-  </ul>
+  <div class="dropup">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-plus-circle" aria-hidden="true"></i> Inhalt hinzufügen <span class="caret"></span></button>
+    <ul class="dropdown-menu" data-bind="foreach: availableBlockTypes">
+      <li><a href="#" data-bind="click: add"><i data-bind="if: hasIcon, css: iconClass"></i> <!--ko text: label --><!--/ko--></a></li>
+      <!--<li role="separator" class="divider"></li>-->
+    </ul>
+  </div>
 </div>
