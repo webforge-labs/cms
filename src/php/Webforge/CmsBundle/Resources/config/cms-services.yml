@@ -29,7 +29,7 @@ services:
 
   webforge.serialization.imagine_thumbnails_file_handler:
     class: Webforge\CmsBundle\Serialization\ImagineThumbnailsFileHandler
-    arguments: ['@liip_imagine.cache.manager', '@liip_imagine.data.manager', '@liip_imagine.filter.manager', '@liip_imagine', '@liip_imagine.filter.configuration']
+    arguments: ['@liip_imagine.cache.manager', '@liip_imagine.data.manager', '@liip_imagine.filter.manager', '@liip_imagine', '@liip_imagine.filter.configuration', '@webforge.imagine.meta_web_path_resolver']
 
   webforge.imagine.meta_web_path_resolver:
     class: Webforge\CmsBundle\Imagine\MetaWebPathResolver

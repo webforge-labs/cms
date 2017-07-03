@@ -118,7 +118,7 @@ class Manager {
     try {
       $mimeType = $this->filesystem->mimeType($mediaKey);
     } catch (\Gaufrette\Exception\FileNotFound $e) {
-      throw new FileNotFoundException('file with: '.$mediaKey.' not found', 0, $e);
+      throw new FileNotFoundException('file with: "'.$mediaKey.'" not found in gaufrette storage', 0, $e);
     } catch (\LogicException $e) {
       $mimeType = NULL;
     }

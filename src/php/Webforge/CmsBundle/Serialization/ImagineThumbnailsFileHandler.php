@@ -21,7 +21,7 @@ class ImagineThumbnailsFileHandler implements MediaFileHandlerInterface {
   protected $dataManager;
   protected $imagine;
 
-  public function __construct(CacheManager $cacheManager, DataManager $dataManager, FilterManager $filterManager, ImagineInterface $imagine, FilterConfiguration $filterConfiguration) {
+  public function __construct(CacheManager $cacheManager, DataManager $dataManager, FilterManager $filterManager, ImagineInterface $imagine, FilterConfiguration $filterConfiguration, $metaResolver) {
     $this->cacheManager = $cacheManager;
     $this->filterManager = $filterManager;
     $this->dataManager = $dataManager;
@@ -30,6 +30,7 @@ class ImagineThumbnailsFileHandler implements MediaFileHandlerInterface {
       new \Doctrine\Common\Cache\ArrayCache(),
       new \Doctrine\Common\Cache\FilesystemCache($GLOBALS['env']['root']->sub('files/cache/imagine-meta')->wtsPath())
     ]);
+    $this->metaResolver = $metaResolver;
 
     $this->thumbnailFilters = array();
     foreach ($filterConfiguration->all() as $key=>$filter) {
@@ -49,7 +50,13 @@ class ImagineThumbnailsFileHandler implements MediaFileHandlerInterface {
         $meta = $this->cache->fetch(\Webforge\CmsBundle\Imagine\MetaWebPathResolver::cacheKey($path, $filter));
 
         if (!$meta) {
-          throw new NotLoadableException('No meta cache for file with gaufretteKey: '.$path);
+          $binary = $this->dataManager->find($filter, $mediaFile->getKey());
+          $this->metaResolver->store($binary, $path, $filter);
+  
+          $meta = $this->cache->fetch(\Webforge\CmsBundle\Imagine\MetaWebPathResolver::cacheKey($path, $filter));
+          if (!$meta) {
+            throw new NotLoadableException('No meta cache for file with gaufretteKey: '.$path);
+          }
         }
         $meta->url = $this->cacheManager->getBrowserPath($path, $filter);
         $meta->name = $filter;

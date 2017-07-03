@@ -59,6 +59,8 @@ class MetaWebPathResolver implements ResolverInterface {
       'isPortrait'=>$isPortrait = ($size->getHeight() > $size->getWidth()),
       'isLandscape'=>$size->getWidth() > $size->getHeight(),
       'orientation'=>$isPortrait ? 'portrait' : 'landscape', // square === landscape
+      'height'=>$size->getHeight(),
+      'width'=>$size->getWidth()
     ];
 
     // this path is without leading slash

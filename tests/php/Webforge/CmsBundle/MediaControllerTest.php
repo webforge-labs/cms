@@ -58,6 +58,8 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
                     ->property('orientation')->is('landscape')->end()
                     ->property('isPortrait')->is(false)->end()
                     ->property('isLandscape')->is(true)->end()
+                    ->property('width')->is($this->greaterThan(0))->end()
+                    ->property('height')->is($this->greaterThan(0))->end()
                     ->property('url')->contains('/images/cache/big')->contains('dsc03281.jpg')->end()
                   ->end()
                   ->property('sm')
