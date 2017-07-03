@@ -29,11 +29,15 @@ services:
 
   webforge.serialization.imagine_thumbnails_file_handler:
     class: Webforge\CmsBundle\Serialization\ImagineThumbnailsFileHandler
-    arguments: ['@liip_imagine.cache.manager', '@liip_imagine.data.manager', '@liip_imagine.filter.manager', '@liip_imagine', '@liip_imagine.filter.configuration', '@webforge.imagine.meta_web_path_resolver']
+    arguments: ['@liip_imagine.cache.manager', '@liip_imagine.data.manager', '@liip_imagine.filter.manager', '@liip_imagine', '@liip_imagine.filter.configuration', '@webforge.imagine.meta_web_path_resolver', '@webforge.imagine.meta_cache']
+
+  webforge.imagine.meta_cache:
+    class: Doctrine\Common\Cache\ChainCache
+    factory: ['Webforge\CmsBundle\Imagine\MetaWebPathResolver', 'createCache']
 
   webforge.imagine.meta_web_path_resolver:
     class: Webforge\CmsBundle\Imagine\MetaWebPathResolver
-    arguments: ['@liip_imagine.cache.resolver.default']
+    arguments: ['@liip_imagine.cache.resolver.default', '@webforge.imagine.meta_cache']
     calls:
       - [setImagine, ['@liip_imagine']]
     tags:

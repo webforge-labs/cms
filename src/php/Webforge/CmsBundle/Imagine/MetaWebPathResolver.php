@@ -12,12 +12,16 @@ class MetaWebPathResolver implements ResolverInterface {
   protected $imagine;
   protected $resolver;
 
-  public function __construct(WebPathResolver $resolver) {
-    $this->resolver = $resolver;
-    $this->cache = new \Doctrine\Common\Cache\ChainCache([
+  public static function createCache() {
+    return new \Doctrine\Common\Cache\ChainCache([
       new \Doctrine\Common\Cache\ArrayCache(),
       new \Doctrine\Common\Cache\FilesystemCache($GLOBALS['env']['root']->sub('files/cache/imagine-meta')->wtsPath())
     ]);
+  }
+
+  public function __construct(WebPathResolver $resolver, $cache) {
+    $this->resolver = $resolver;
+    $this->cache = $cache;
   }
 
   public function setImagine(\Imagine\Image\ImagineInterface $imagine) {
@@ -64,6 +68,8 @@ class MetaWebPathResolver implements ResolverInterface {
     $key = self::cacheKey($path, $filter);
 
     $this->cache->save($key, $meta);
+
+    return $meta;
   }
   
   /**

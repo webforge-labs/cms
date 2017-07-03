@@ -21,15 +21,12 @@ class ImagineThumbnailsFileHandler implements MediaFileHandlerInterface {
   protected $dataManager;
   protected $imagine;
 
-  public function __construct(CacheManager $cacheManager, DataManager $dataManager, FilterManager $filterManager, ImagineInterface $imagine, FilterConfiguration $filterConfiguration, $metaResolver) {
+  public function __construct(CacheManager $cacheManager, DataManager $dataManager, FilterManager $filterManager, ImagineInterface $imagine, FilterConfiguration $filterConfiguration, $metaResolver, \Doctrine\Common\Cache\Cache $cache) {
     $this->cacheManager = $cacheManager;
     $this->filterManager = $filterManager;
     $this->dataManager = $dataManager;
     $this->imagine = $imagine;
-    $this->cache = new \Doctrine\Common\Cache\ChainCache([
-      new \Doctrine\Common\Cache\ArrayCache(),
-      new \Doctrine\Common\Cache\FilesystemCache($GLOBALS['env']['root']->sub('files/cache/imagine-meta')->wtsPath())
-    ]);
+    $this->cache = $cache;
     $this->metaResolver = $metaResolver;
 
     $this->thumbnailFilters = array();
