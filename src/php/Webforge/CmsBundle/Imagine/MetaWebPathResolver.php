@@ -42,11 +42,8 @@ class MetaWebPathResolver implements ResolverInterface {
       }
     }
   }
-  
-  /**
-   * {@inheritdoc}
-   */
-  public function store(BinaryInterface $binary, $path, $filter) {
+
+  public function storeMeta(BinaryInterface $binary, $path, $filter) {
     if ($binary instanceof FileBinaryInterface) {
       $image = $this->imagine->open($binary->getPath());
     } else {
@@ -67,6 +64,13 @@ class MetaWebPathResolver implements ResolverInterface {
     $key = self::cacheKey($path, $filter);
 
     $this->cache->save($key, $meta);
+  }
+  
+  /**
+   * {@inheritdoc}
+   */
+  public function store(BinaryInterface $binary, $path, $filter) {
+    $this->storeMeta($binary, $path, $filter);
 
     return $this->resolver->store($binary, $path, $filter);
   }

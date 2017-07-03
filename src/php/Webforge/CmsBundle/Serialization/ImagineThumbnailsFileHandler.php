@@ -51,7 +51,7 @@ class ImagineThumbnailsFileHandler implements MediaFileHandlerInterface {
 
         if (!$meta) {
           $binary = $this->dataManager->find($filter, $mediaFile->getKey());
-          $this->metaResolver->store($binary, $path, $filter);
+          $this->metaResolver->storeMeta($binary, $path, $filter);
   
           $meta = $this->cache->fetch(\Webforge\CmsBundle\Imagine\MetaWebPathResolver::cacheKey($path, $filter));
           if (!$meta) {
