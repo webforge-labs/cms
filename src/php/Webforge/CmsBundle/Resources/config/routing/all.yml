@@ -2,6 +2,10 @@ cms_routes:
   resource: "@WebforgeCmsBundle/Resources/config/routing/cms.yml"
   prefix: /cms
 
+public_cms_routes:
+  resource: "@WebforgeCmsBundle/Resources/config/routing/public.yml"
+  prefix: /cms-public
+
 fos_user:
   resource: "@FOSUserBundle/Resources/config/routing/all.xml"
 

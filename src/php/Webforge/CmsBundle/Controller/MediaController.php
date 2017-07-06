@@ -6,12 +6,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Validator\Constraints as Assert;
 use Webforge\Symfony\FormError;
 
 class MediaController extends CommonController {
-
-  protected $thumbnailTypes = array('xs');
 
   /**
    * @Route("/media")

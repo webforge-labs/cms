@@ -7,6 +7,7 @@ use Gaufrette\Filesystem;
 use Webforge\Gaufrette\Index;
 use Ramsey\Uuid\Uuid;
 use Webforge\CmsBundle\Model\MediaFileEntityInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class Manager {
 
@@ -16,11 +17,14 @@ class Manager {
   private $filesystem;
   private $storage;
 
-  public function __construct(Filesystem $filesystem, Index $gaufretteIndex, PersistentStorage $storage, Array $serializeHandlers) {
+  private $router;
+
+  public function __construct(Filesystem $filesystem, Index $gaufretteIndex, PersistentStorage $storage, Array $serializeHandlers, $router) {
     $this->filesystem = $filesystem;
     $this->gaufretteIndex = $gaufretteIndex;
     $this->storage = $storage;
     $this->serializeHandlers = $serializeHandlers;
+    $this->router = $router;
   }
 
   /**
@@ -112,7 +116,7 @@ class Manager {
 
     // those properties will be defined for non existing files
     $file->key = $mediaKey;
-    $file->url = '/cms/media?download=1&file='.urlencode($mediaKey);
+    $file->url = $this->router->generate('public_media_original', array('key'=>$mediaKey, 'name'=>$entity->getMediaName()), UrlGeneratorInterface::ABSOLUTE_URL);
     $file->name = $entity->getMediaName();
 
     try {

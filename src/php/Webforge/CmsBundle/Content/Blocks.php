@@ -48,6 +48,10 @@ class Blocks {
   private function initBlockType($name) {
 
     foreach ($this->config as $blockDefinition) {
+      if (!isset($blockDefinition->component)) {
+        $blockDefinition->component = $blockDefinition->name;
+      }
+
       if ($blockDefinition->name == $name) {
         $properties = array();
 

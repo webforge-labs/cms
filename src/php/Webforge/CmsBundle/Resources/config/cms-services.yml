@@ -31,6 +31,12 @@ services:
     class: Webforge\CmsBundle\Serialization\ImagineThumbnailsFileHandler
     arguments: ['@liip_imagine.cache.manager', '@liip_imagine.data.manager', '@liip_imagine.filter.manager', '@liip_imagine', '@liip_imagine.filter.configuration', '@webforge.imagine.meta_web_path_resolver', '@webforge.imagine.meta_cache']
 
+  webforge.serialization.thumbor_thumbnails_file_handler:
+    class: Webforge\CmsBundle\Serialization\ThumborThumbnailsFileHandler
+    arguments:
+      - '%phumbor.transformations%'
+      - '@phumbor.url.transformer'
+
   webforge.imagine.meta_cache:
     class: Doctrine\Common\Cache\ChainCache
     factory: ['Webforge\CmsBundle\Imagine\MetaWebPathResolver', 'createCache']
@@ -64,7 +70,12 @@ services:
 
   webforge.media.manager:
     class: Webforge\CmsBundle\Media\Manager
-    arguments: ['@webforge.media.filesystem', '@webforge.gaufrette_index', '@webforge.media.persistent_storage', ['@webforge.serialization.imagine_thumbnails_file_handler']]
+    arguments: 
+      - '@webforge.media.filesystem'
+      - '@webforge.gaufrette_index'
+      - '@webforge.media.persistent_storage'
+      - ['@webforge.serialization.imagine_thumbnails_file_handler', '@webforge.serialization.thumbor_thumbnails_file_handler']
+      - '@router'
 
   webforge.media.alice_fixtures_provider:
     class: Webforge\CmsBundle\Media\AliceFixturesProvider
