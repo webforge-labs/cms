@@ -14,4 +14,7 @@ use JMS\Serializer\Annotation AS Serializer;
  * @Serializer\ExclusionPolicy("all")
  */
 class Binary extends CompiledBinary implements \Webforge\CmsBundle\Model\MediaFileEntityInterface {
+
+  use \Webforge\CmsBundle\Media\MediaFileEntityMetadata;
+  
 }

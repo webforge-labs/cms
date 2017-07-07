@@ -20,6 +20,15 @@ npm test
 
 A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsoring a free Live account, that allows us to test on Iphones and other devices.
 
+## BC Breaks for 1.40.x
+
+- MediaFileEntityInterface has two new methods: `setMediaMetadata` and `getMediaMetadata`
+- add this to your model.json for binaries `"mediaMeta": { "type": "Object", "nullable": true }`
+- use the trait: `Webforge\CmsBundle\Media\MediaFileEntityMetadata` to implement the methods
+- generation of thumbnails with imagine is deprecated
+- thumbnails will be created with thumbor and therefore have no `width` and `height` per default (pass metadata_only: true to the configuration of the transformation to enable getting metadata)
+
+
 ## BC Breaks for 1.13.x
 
 - Dont add \Knp\Bundle\MarkdownBundle\KnpMarkdownBundle() to the appkernel. It will be added automatically

@@ -125,7 +125,6 @@ class BlocksExtendingTest extends \Symfony\Bundle\FrameworkBundle\Test\KernelTes
     }');
 
     // we need to create the file physically
-    // 
     try {
       $this->mediaManager->beginTransaction();
       $screenshot = $this->mediaManager->addFile('/_seiten/home', 'screenshot-demo.jpg', $this->getResourceImage('background.jpg')->getContents());
@@ -144,7 +143,7 @@ class BlocksExtendingTest extends \Symfony\Bundle\FrameworkBundle\Test\KernelTes
         ->key(0)
           ->property('screenshots')->isArray()
             ->key(0)
-              ->property('thumbnails')->isArray() // i think this is because of the stupid serializer, but okay
+              ->property('thumbnails')->isArray() // i think this is an array because of the stupid serializer, but okay
                 ->key('sm')->end()
                 ->key('gallery')->end() // this was NOT in the saved image thumbnails, but it IS defined in etc/symfony/parts/images.yml
                 ->key('xs')

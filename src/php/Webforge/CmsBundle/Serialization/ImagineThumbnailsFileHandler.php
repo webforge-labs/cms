@@ -13,6 +13,7 @@ use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use RuntimeException;
+use Webforge\CmsBundle\Model\MediaFileEntityInterface;
 
 class ImagineThumbnailsFileHandler implements MediaFileHandlerInterface {
 
@@ -20,6 +21,7 @@ class ImagineThumbnailsFileHandler implements MediaFileHandlerInterface {
   protected $cacheManager;
   protected $dataManager;
   protected $imagine;
+  private $enabled;
 
   public function __construct(CacheManager $cacheManager, DataManager $dataManager, FilterManager $filterManager, ImagineInterface $imagine, FilterConfiguration $filterConfiguration, $metaResolver, \Doctrine\Common\Cache\Cache $cache) {
     $this->cacheManager = $cacheManager;
@@ -35,11 +37,18 @@ class ImagineThumbnailsFileHandler implements MediaFileHandlerInterface {
         $this->thumbnailFilters[] = $key;
       }
     }
+    $this->enabled = count($this->thumbnailFilters) > 0;
   }
 
-  public function serializeToFile(MediaFileInterface $mediaFile, \stdClass $file) {
-    if ($mediaFile->isImage()) {
-      $file->thumbnails = [];
+  public function serializeToFile(MediaFileInterface $mediaFile, MediaFileEntityInterface $entity, \stdClass $file) {
+    if ($this->enabled && $mediaFile->isImage()) {
+
+      if (!isset($file->thumbnails)) {
+        $file->thumbnails = [];
+      } else {
+        $file->thumbnails = (array) $file->thumbnails;
+      }
+
       foreach ($this->thumbnailFilters as $filter) {
         $path = $mediaFile->getKey().'/'.$mediaFile->getName();
 

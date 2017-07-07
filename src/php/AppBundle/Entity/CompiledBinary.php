@@ -42,6 +42,15 @@ abstract class CompiledBinary {
    */
   protected $mediaName;
   
+  /**
+   * mediaMeta
+   * @var object
+   * @ORM\Column(type="object", nullable=true)
+   * @Serializer\Expose
+   * @Serializer\Type("")
+   */
+  protected $mediaMeta;
+  
   public function __construct() {
 
   }
@@ -88,6 +97,21 @@ abstract class CompiledBinary {
    */
   public function setMediaName($mediaName) {
     $this->mediaName = $mediaName;
+    return $this;
+  }
+  
+  /**
+   * @return object
+   */
+  public function getMediaMeta() {
+    return $this->mediaMeta;
+  }
+  
+  /**
+   * @param object $mediaMeta
+   */
+  public function setMediaMeta(\stdClass $mediaMeta = NULL) {
+    $this->mediaMeta = $mediaMeta;
     return $this;
   }
 }

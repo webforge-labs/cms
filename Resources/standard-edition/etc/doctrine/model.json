@@ -58,7 +58,8 @@
         "id": { "type": "DefaultId" },
 
         "mediaFileKey": { "type": "String" },
-        "mediaName": { "type": "String" }
+        "mediaName": { "type": "String" },
+        "mediaMeta": { "type": "Object", "nullable": true }
       }
     },
 

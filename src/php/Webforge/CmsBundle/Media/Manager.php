@@ -132,7 +132,7 @@ class Manager {
     $file->isExisting = TRUE;
 
     foreach ($this->serializeHandlers as $handler) {
-      $handler->serializeToFile($mediaFile, $file);
+      $handler->serializeToFile($mediaFile, $entity, $file);
     }
   }
 
@@ -146,7 +146,11 @@ class Manager {
 
     $tree = $this->storage->loadTree();
 
-    return $tree->asScalar($options);
+    $scalar = $tree->asScalar($options);
+
+    $this->afterSerialization();
+
+    return $scalar;
   }
 
   public function beginTransaction() {
@@ -158,6 +162,11 @@ class Manager {
       $this->treeModified = FALSE;
     }
 
+    $this->storage->flush();
+  }
+
+  public function afterSerialization() {
+    // flush cached metadata to entities
     $this->storage->flush();
   }
 

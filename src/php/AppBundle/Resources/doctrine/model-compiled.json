@@ -50,6 +50,11 @@
           "name":"mediaName",
           "isEntityReference":false,
           "type":"String"
+        },
+        "mediaMeta":{
+          "name":"mediaMeta",
+          "isEntityReference":false,
+          "type":"Object"
         }
       }
     },

@@ -19,6 +19,7 @@ services:
     arguments: ['@webforge.media.manager']
     tags: 
       - { name: jms_serializer.handler, direction: 'serialization', format: 'json', type: 'WebforgeMediaFileEntity', method: 'serialize' }
+      - { name: jms_serializer.event_listener, event: serializer.post_serialize, method: 'onPostSerialize' }
 
   webforge.serialization.special_types_listener:
     class:      Webforge\CmsBundle\Serialization\SpecialTypesListener
