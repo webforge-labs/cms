@@ -31,14 +31,14 @@ class CommonBlockExtender implements BlockExtender {
 
         if ($property->hasFiles) {
           // create a fresh serialized version of the file only by media key
-          $newValue = array();
+          $refreshedFiles = array();
           foreach ($value as $fileSpec) {
             // we will overwrite a lot from $fileSpec here, regenerating thumbnail-informations, etc
             $this->mediaManager->serializeFile($fileSpec->key, $fileSpec);
-            $newValue[] = $fileSpec;
+            $refreshedFiles[] = $fileSpec;
           }
           // replace with fresh serialized
-          $block->{$property->name} = $newValue;
+          $block->{$property->name} = $refreshedFiles;
         }
       }
     }

@@ -100,21 +100,21 @@ class BlocksExtendingTest extends \Symfony\Bundle\FrameworkBundle\Test\KernelTes
                           "isPortrait": false,
                           "isLandscape": false,
                           "orientation": "landscape",
-                          "url": "http:\/\/ich-will-ein-pony.desktop.ps-webforge.net\/images\/cache\/xs\/fc6872e9-d7b8-499c-89c7-0101b91e3f25\/demo-home-monitor.png",
+                          "url": "http:\/\/live.com\/images\/cache\/xs\/fc6872e9-d7b8-499c-89c7-0101b91e3f25\/demo-home-monitor.png",
                           "name": "xs"
                       },
                       "sm": {
                           "isPortrait": false,
                           "isLandscape": true,
                           "orientation": "landscape",
-                          "url": "http:\/\/ich-will-ein-pony.desktop.ps-webforge.net\/images\/cache\/sm\/fc6872e9-d7b8-499c-89c7-0101b91e3f25\/demo-home-monitor.png",
+                          "url": "http:\/\/live.com\/images\/cache\/sm\/fc6872e9-d7b8-499c-89c7-0101b91e3f25\/demo-home-monitor.png",
                           "name": "sm"
                       },
                       "inpage1000": {
                           "isPortrait": false,
                           "isLandscape": true,
                           "orientation": "landscape",
-                          "url": "http:\/\/ich-will-ein-pony.desktop.ps-webforge.net\/images\/cache\/inpage1000\/fc6872e9-d7b8-499c-89c7-0101b91e3f25\/demo-home-monitor.png",
+                          "url": "http:\/\/live.com\/images\/cache\/inpage1000\/fc6872e9-d7b8-499c-89c7-0101b91e3f25\/demo-home-monitor.png",
                           "name": "inpage1000"
                       }
                   }
@@ -148,7 +148,7 @@ class BlocksExtendingTest extends \Symfony\Bundle\FrameworkBundle\Test\KernelTes
                 ->key('gallery')->end() // this was NOT in the saved image thumbnails, but it IS defined in etc/symfony/parts/images.yml
                 ->key('xs')
                   ->property('url')
-                    ->is($this->logicalNot($this->stringContains('desktop.ps-webforge.net')))
+                    ->is($this->logicalNot($this->stringContains('live.com')))
                     ->is($this->stringContains('screenshot-demo.jpg'))
                   ->end()
                 ->end()

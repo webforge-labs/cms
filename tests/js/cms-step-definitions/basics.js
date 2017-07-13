@@ -59,7 +59,7 @@ module.exports = function() {
   });
 
 
-  this.When(/^I fill in "([^"]*)" for "([^"]*)"$/, function (value, inputLabel) {
+  this.When(/^I fill in "([^"]*)" (?:for|as) "([^"]*)"$/, function (value, inputLabel) {
     var that = this;
     var selectors = ['.form-group:has(label:contains("'+inputLabel+'")) .form-control:first', 'input[placeholder="'+inputLabel+'"]'];
 
