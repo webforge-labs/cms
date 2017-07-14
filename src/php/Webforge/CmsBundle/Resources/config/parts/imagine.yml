@@ -3,7 +3,7 @@ liip_imagine:
   resolvers:
     default: 
       web_path:
-        web_root: %root_directory%/www
+        web_root: '%root_directory%/www'
         cache_prefix: /images/cache
 
   cache: webforge_meta_web_path
