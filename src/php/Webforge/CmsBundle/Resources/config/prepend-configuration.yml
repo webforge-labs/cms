@@ -8,3 +8,6 @@ imports:
     - { resource: ./parts/twig.yml }
     - { resource: ./parts/swiftmailer.yml }
     - { resource: ./parts/gaufrette.yml }
+
+parameters:
+  mailer_spoolpath: "%kernel.root_dir%/files/mailspool"

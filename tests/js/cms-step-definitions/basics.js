@@ -28,7 +28,7 @@ module.exports = function() {
   });
 
   this.Then(/^I should see an alert with "([^"]*)"$/, function (content) {
-    this.getContext().css('.alert:contains("'+content+'")').waitForVisible();
+    this.getContext().css('.alert:contains("'+content+'")').waitForVisible(8000);
   });
 
   this.Then(/^I dont see the text "([^"]*)"$/, function (arg) {
