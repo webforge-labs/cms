@@ -1,6 +1,6 @@
 {
   "name": "webforge-cms",
-  "version": "1.13.17",
+  "version": "1.14.0",
   "description": "",
   "main": "index.js",
   "scripts": {
