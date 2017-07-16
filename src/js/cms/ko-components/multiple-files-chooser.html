@@ -1,5 +1,5 @@
 <div data-bind="ukUpload: { multiple: true, url: '/cms/media/upload', path: uploadPath, completed: addUploadedFiles }">
-  <div class="row multiple-files-chooser uk-sortable" data-bind="ukSortable: { foreach: addedFiles, change: reorder, handleClass: 'thumbnail' }">
+  <div class="row multiple-files-chooser uk-sortable" data-bind="ukSortable: { foreach: addedFiles, change: reorder, handle: '.thumbnail' }">
     <div class="col-xs-5 col-sm-4 col-md-3">
       <button class="btn btn-sm btn-danger top-right-button" data-bind="click: $parent.removeFromAddedFiles"><i class="fa fa-chain-broken"></i></button>
       <div class="thumbnail">

@@ -3,13 +3,19 @@
 
 }
 
-
-.content-manager, .uk-sortable-dragged {
+/* when moved it will be detached from .content-manager! */
+.move-container {
   .label.mover {
     font-size: 100%;
 
     &:hover {
       cursor: move;
     }
+  }
+}
+
+.uk-sortable-item {
+  .label.mover {
+    background-color: red;
   }
 }

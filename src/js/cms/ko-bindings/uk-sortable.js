@@ -28,7 +28,7 @@ define(['require', 'knockout', 'jquery', 'uikit-src/uikit-core'], function(requi
         var sortable = UIkit.sortable(element, {
           animation: 120,
           threshold: 10,
-          handleClass: options.handleClass
+          handle: options.handle
         });
 
         if (options.change) {
