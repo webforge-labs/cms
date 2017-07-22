@@ -9,6 +9,7 @@ module.exports = function() {
 
   this.When(/^I visit "([^"]*)"$/, function (relativeUrl) {
     client.url(relativeUrl);
+    this.context = undefined;
   });
 
   this.When(/^I click on "([^"]*)"$/, function (arg) {
