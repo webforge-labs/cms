@@ -1,7 +1,7 @@
 define(['require', 'knockout', 'jquery', 'uikit-src/uikit-core'], function(require, ko, $, UIkit) {
 
   var UploadComponent = function(UIkit, element, options) {
-    var bar, warnings, files;
+    var bar, warnings, files, progressBefore = 0;
 
     $context = $(element);
 
@@ -27,10 +27,19 @@ define(['require', 'knockout', 'jquery', 'uikit-src/uikit-core'], function(requi
         });
         bar.removeAttribute('hidden');
         bar.value = 0;
+        progressBefore = 0;
       },
 
+      /* 
+        it sends (while sending one chunk) for each event of the process such an event
+        (put on throttle in chrome and look at it)
+        it tells you how many bytes it has .loaded from the .total of the bytes of the chunk
+      */
       progress: function (e) {
-        bar.value += e.loaded;
+        var delta = e.loaded - progressBefore;
+        bar.value += delta;
+
+        progressBefore = e.loaded;
       },
 
       complete: function(xhr) {
@@ -43,9 +52,12 @@ define(['require', 'knockout', 'jquery', 'uikit-src/uikit-core'], function(requi
         ko.utils.arrayForEach(body.files, function(file) {
           files.push(file);
         });
+
+        progressBefore = 0;
       },
 
       completeAll: function(onlyLastXhr) {
+        //bar.value = bar.max;
         if (warnings.length) {
           $.notify({
             message: 
