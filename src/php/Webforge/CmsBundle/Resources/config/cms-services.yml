@@ -37,6 +37,7 @@ services:
     arguments:
       - '%phumbor.transformations%'
       - '@phumbor.url.transformer'
+      - '@webforge.media.filesystem'
 
   webforge.imagine.meta_cache:
     class: Doctrine\Common\Cache\ChainCache
