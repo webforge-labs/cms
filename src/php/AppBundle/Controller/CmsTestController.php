@@ -112,12 +112,6 @@ class CmsTestController extends CommonController {
    * @Method("GET")
    */
   public function protoFileManagerAction() {
-    return $this->render('AppBundle:test/prototypes:file-manager.html.twig', array(
-      'cms'=>array(
-        'title'=>'CMS Intern',
-        'xsTitle'=>'CMS Intern'
-      )
-
-    ));
+    return $this->render('AppBundle:test/prototypes:file-manager.html.twig', array());
   }
 }
