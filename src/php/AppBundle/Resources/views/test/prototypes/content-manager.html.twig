@@ -106,7 +106,7 @@
 
 {% block body %}
 
-  <form id="content-manager" data-bind="with: entity">
+  <form id="content-manager" data-bind="with: entity, css: { loaded: true }">
     {{ form.content_manager('Inhalt', 'contents') }}
     <div class="clearfix"></div>
   </form>

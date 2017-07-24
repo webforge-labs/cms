@@ -40,7 +40,7 @@ module.exports = function() {
   this.When(/^I open the content\-manager$/, function () {
     browser.url("/prototypes/content-manager");
 
-    this.context = this.css('#content-manager').waitForVisible();
+    this.context = this.css('#content-manager.loaded').waitForVisible(4000);
   });  
 
   this.Then(/^I see the blocks to add:$/, function (table) {
