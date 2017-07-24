@@ -26,6 +26,7 @@
     </div>
 
     <script type="text/javascript">
+      requirejs.config({ urlArgs: "version={{cms.version}}" });
       require(['cms/main'], function(main) {
         main({{data|raw}});
       });

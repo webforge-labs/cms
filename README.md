@@ -27,6 +27,7 @@ A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsori
 - use the trait: `Webforge\CmsBundle\Media\MediaFileEntityMetadata` to implement the methods
 - generation of thumbnails with imagine is deprecated
 - thumbnails will be created with thumbor and therefore have no `width` and `height` per default (pass metadata_only: true to the configuration of the transformation to enable getting metadata)
+- add `cms.version` to your global twig variables
 
 
 ## BC Breaks for 1.13.x

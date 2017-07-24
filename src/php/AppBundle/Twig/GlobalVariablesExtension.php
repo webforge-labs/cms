@@ -14,6 +14,8 @@ class GlobalVariablesExtension extends Twig_Extension implements Twig_Extension_
       'cms'=>[
         'title'=>'Webforge Test-CMS',
         'xsTitle'=>'Test CMS',
+        'version'=>'dev',
+
         'site'=>[
           'title'=>'zur Webseite',
           'url'=>'/'
