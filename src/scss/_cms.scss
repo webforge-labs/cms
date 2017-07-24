@@ -12,6 +12,7 @@ $cms-alt-color: #f2f2f2;
 @import 'cms/file-manager';
 @import 'cms/content-manager';
 @import 'cms/preview';
+@import 'cms/form-elements';
 @import 'vendor/bootstrap-markdown';
 
 $spacer:                     1em;
@@ -24,6 +25,10 @@ $spacer-y:                   $spacer;
 
 // copied from https://github.com/eternicode/bootstrap-datepicker/blob/master/dist/css/datepicker3.css
 @import 'vendor/datepicker3';
+
+body {
+  padding-bottom: 50px;
+}
 
 .navbar .spinner {
   float: left;

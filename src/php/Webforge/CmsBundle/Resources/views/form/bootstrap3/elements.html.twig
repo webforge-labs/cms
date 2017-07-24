@@ -57,14 +57,23 @@
   </div>
 {% endmacro %}
 
-{% macro submit(label, binding) %}
+{% macro submit(label, binding, type) %}
   {% import _self as form %}
 
-  <div class="form-group">
-    <div class="col-sm-10 col-sm-offset-2">
-      <button data-bind="click: {{binding|raw}}, disable: isProcessing" type="button" class="btn btn-primary"><i data-bind="visible: isProcessing" class="fa fa-spinner fa-spin"></i> {{label}}</button>
-    </div>
-  </div> 
+  {% if type|default('fixed-bottom') %}
+    <nav class="navbar navbar-default navbar-fixed-bottom">
+      <div class="container">
+        <button data-bind="click: {{binding|raw}}, disable: isProcessing" type="button" class="btn btn-primary navbar-btn"><i data-bind="visible: isProcessing" class="fa fa-spinner fa-spin"></i> {{label}}</button>
+      </div>
+    </nav>
+  {% else %}
+    <div class="form-group">
+      <div class="col-sm-10 col-sm-offset-2">
+        <button data-bind="click: {{binding|raw}}, disable: isProcessing" type="button" class="btn btn-primary"><i data-bind="visible: isProcessing" class="fa fa-spinner fa-spin"></i> {{label}}</button>
+      </div>
+    </div> 
+  {% endif %}
+
 {% endmacro %}
 
 {% macro datetime(label, name) %}
