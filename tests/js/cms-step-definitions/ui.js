@@ -10,8 +10,7 @@ module.exports = function() {
   };
 
   this.World.prototype.findActiveTab = function() {
-    browser.waitForExist('[role=tab-content].active', 25000);
-    return this.css('[role="tab-content"].active');
+    return this.css('[role="tab-content"].active').waitForVisible(25000);
   };
 
   this.Given(/^I am logged in as "([^"]*)"$/, function (email) {
@@ -30,7 +29,7 @@ module.exports = function() {
     this.getContext().css('[role="username"]:contains("'+name+'")').exists();
   });
 
-  this.When(/^I goto the tab "([^"]*)" in section "([^"]*)" in the sidebar$/, function (label, section) {
+  this.When(/^I goto the tab "([^"]*)" in section "([^"]*)" in the sidebar$/, { timeout: 28000 }, function (label, section) {
     var sidebar = this.css('[role="sidebar"]').exists();
     var sidebarLink = sidebar.css('.panel:has(.panel-title:contains("'+section+'"))').exists()
       .css('[role=tabpanel]').exists()
@@ -48,7 +47,7 @@ module.exports = function() {
     this.context = this.findActiveTab();
   });
   
-  this.When(/^I activate the tab with "([^"]*)"$/, function(title) {  
+  this.When(/^I activate the tab with "([^"]*)"$/, { timeout: 28000 }, function(title) {  
     this.clickTabLink(title);
     this.context = this.findActiveTab();
   });
@@ -72,7 +71,7 @@ module.exports = function() {
   });
 
   this.Then(/^a message is shown "([^"]*)"$/, function (text) {
-    this.css('div[role=alert]:contains("'+text+'")').waitForVisible(6000);
+    this.css('div[role=alert]:contains("'+text+'")').waitForVisible(8000);
   });
 
   this.Then(/^a modal with "([^"]*)" is opened$/, function (text) {
