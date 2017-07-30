@@ -34,6 +34,9 @@ define(['require', 'knockout', 'jquery', 'uikit-src/uikit-core'], function(requi
         if (options.change) {
           $sortable.on('change.uk.sortable', function(e, srtbl, $dragged, type) {
             if (!$dragged) return;
+
+            // is this some nested sortable or our sortable?
+            if (!srtbl.$el.is($sortable)) return;
   
             var draggedItem = ko.dataFor($dragged.get(0));
             var newIndex = $sortable.children().index($dragged);
