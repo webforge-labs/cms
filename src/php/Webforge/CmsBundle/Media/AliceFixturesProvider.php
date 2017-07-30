@@ -24,4 +24,8 @@ class AliceFixturesProvider {
     $this->manager->commitTransaction(); // this will flush doctrine, but i dont know if this breaks things
     return $file;
   }
+
+  public function getWebforgeMediaFile($path) {
+    return $this->manager->findFileByPath($path);
+  }
 }

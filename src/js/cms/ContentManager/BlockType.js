@@ -22,14 +22,18 @@ define(['knockout'], function(ko) {
     that.hasIcon = true;
     that.iconClass = 'fa fa-fw fa-'+options.icon;
 
-    that.add = function() {
+    that.add = function(options) {
       var blockData = {
         type: ko.observable(name),
         label: ko.observable(label) // can be customized from user for this specific block
       };
 
-      contentManager.addBlock(blockData);
+      contentManager.addBlock(blockData, options);
     };
+
+    that.addAfter = function(block) {
+      return that.add({ position: 'after-block', block: block});
+    }
 
     that.getPropertyName = function() {
       return that.component.params.propertyName;

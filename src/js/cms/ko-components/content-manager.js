@@ -75,9 +75,23 @@ define(function(require) {
       return that.blockTypes.toArray();
     });
 
-    that.addBlock = function(block) {
-      block.uuid = generateUUID();
-      blocks.add(block);
+    that.addBlock = function(block, options) {
+      if (!options) {
+        options = { position: 'end' };
+      }
+
+      that.createBlockProperties(block);
+
+      if (options.position === 'after-block') {
+        /* TODO: refactor this into knockout-collection */
+        var blocksArr = blocks.toArray();
+        var position = blocks.items.indexOf(options.block);
+        blocks.items.splice(Math.max(0, position+1), 0, block);
+        options.block.collapsed(true);
+      } else {
+        blocks.add(block);
+      }
+      block.collapsed(false);
     }
 
     that.removeBlock = function(block) {
@@ -93,17 +107,21 @@ define(function(require) {
 
   contentManager.prototype.initBlocks = function(contents) {
     if (ko.isObservable(contents.blocks)) {
-      ko.utils.arrayForEach(contents.blocks, this.addBlockUUID);
+      ko.utils.arrayForEach(ko.unwrap(contents.blocks), this.createBlockProperties);
     } else {
-      contents.blocks = ko.observableArray(ko.utils.arrayMap(contents.blocks, this.addBlockUUID));
+      contents.blocks = ko.observableArray(ko.utils.arrayMap(contents.blocks, this.createBlockProperties));
     }
 
     return new KnockoutCollection(contents.blocks, { key: 'uuid', reference: true});
   };
 
-  contentManager.prototype.createBlockUUID = function(block) {
+  contentManager.prototype.createBlockProperties = function(block) {
     if (!block.uuid) {
       block.uuid = ko.observable();
+    }
+
+    if (!block.collapsed) {
+      block.collapsed = ko.observable(true);
     }
 
     if (!ko.unwrap(block.uuid)) {

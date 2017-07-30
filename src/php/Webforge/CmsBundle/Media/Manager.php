@@ -68,6 +68,25 @@ class Manager {
     $this->treeModified = $tree;
   }
 
+  /**
+   * Returns the entity from the path
+   * 
+   * @param  string $path
+   * @return MediaFileEntityInterface
+   */
+  public function findFileByPath($path) {
+    $tree = $this->storage->loadTree();
+    $node = $tree->findNode($path);
+
+    if (!$node instanceof FileNode) {
+      throw new \LogicException('File wasnt found by path: '.$path);
+    }
+
+    $entity = $this->storage->loadFile($node->getMediaKey());
+
+    return $entity;
+  }
+
   public function findFiles(Array $keys) {
     return $this->storage->loadFiles($keys);
   }

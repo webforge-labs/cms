@@ -2,12 +2,22 @@
   <div class="move-container">
     <div class="panel panel-default">
       <div class="panel-heading clearfix">
-        <h3 class="panel-title pull-left" data-bind="text: label"></h3>
-        <button type="button" data-bind="click: $parent.removeBlock" class="btn btn-xs btn-danger pull-right" title="entfernen"><i class="fa fa-trash-o"></i></button>
+        <h3 class="panel-title pull-left"><a href="#" data-bind="click: function() { collapsed(!collapsed()); }"><i data-bind="css: { 'fa-caret-right': collapsed(), 'fa-caret-down': !collapsed()}" class="fa"></i> <span data-bind="text: label"></span></a></h3>
+
+        <div class="btn-group pull-right">
+          <div class="dropdown">
+            <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+            <ul class="dropdown-menu" data-bind="foreach: $parent.availableBlockTypes">
+              <li><a href="#" data-bind="click: function() { addAfter($parent); }"><i data-bind="if: hasIcon, css: iconClass"></i> <!--ko text: label --><!--/ko--></a></li>
+              <!--<li role="separator" class="divider"></li>-->
+            </ul>
+          </div>
+        </div>
         <span class="label mover label-warning pull-right"><i class="fa fa-arrows"></i> verschieben</span>
+        <button type="button" data-bind="click: $parent.removeBlock" class="btn btn-xs btn-danger pull-right" title="entfernen"><i class="fa fa-trash-o"></i></button>
 
       </div>
-      <div class="panel-body" data-bind="component: $parent.createComponentDefinition($data)">
+      <div class="panel-body" data-bind="visible: !collapsed(), component: $parent.createComponentDefinition($data)">
       </div>
     </div>
   </div>
