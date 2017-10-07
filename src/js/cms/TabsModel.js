@@ -60,8 +60,16 @@ define(['knockout', 'knockout-mapping', 'knockout-collection', 'cms/modules/disp
         activeTab.deactivate();
       }
 
+      var newProps = { label: tab.label(), url: tab.url() };
+
       // get the tab that is already attached, to avoid duplicate objects
       tab = tabs.get(tab.id());
+
+      ko.utils.objectForEach(newProps, function(key, value) {
+        if (value && tab[key]() != value) {
+          tab[key](value);
+        }
+      });
 
       tab.activate();
       that.activeTab(tab);

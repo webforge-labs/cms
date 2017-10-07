@@ -71,7 +71,7 @@ module.exports = function() {
   });
 
   this.Then(/^a message is shown "([^"]*)"$/, function (text) {
-    this.css('div[role=alert]:contains("'+text+'")').waitForVisible(8000);
+    this.css('div[role=alert]:contains("'+text+'")').waitForVisible(10000);
   });
 
   this.Then(/^a modal with "([^"]*)" is opened$/, function (text) {

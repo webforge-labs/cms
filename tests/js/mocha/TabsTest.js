@@ -159,5 +159,22 @@ describe('Tabs', function() {
     }, 30);
   });
 
+  it('should refresh the tab infos, if tab was added before and then reopened', function() {
+    var wrongPostTab = new Tab({
+      id: this.postTab.id(),
+      url: this.postTab.url(),
+      icon: 'envelope',
+      label: 'Some older label'
+    });
+    this.tabs.add(wrongPostTab);
+
+    this.expectOkPostTabRequest();
+    this.tabs.open(this.postTab);
+
+    var activeTab = this.tabs.activeTab();
+    expect(activeTab).to.be.ok;
+    expect(activeTab.label()).to.be.not.equal('Some older label');
+    expect(activeTab.label()).to.be.equal('Post #7');
+  });
 
 });
