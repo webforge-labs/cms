@@ -6,7 +6,7 @@ use Symfony\Component\Process\Process;
 use AppBundle\Entity\Binary;
 use AppBundle\Entity\Image;
   
-class MediaFileMetadataTest extends \Webforge\Testing\WebTestCase {
+class ManagerTest extends \Webforge\Testing\WebTestCase {
 
   use \Webforge\Testing\TestTrait;
 
