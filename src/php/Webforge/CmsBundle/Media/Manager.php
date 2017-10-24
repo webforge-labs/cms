@@ -19,12 +19,16 @@ class Manager {
 
   private $router;
 
-  public function __construct(Filesystem $filesystem, Index $gaufretteIndex, PersistentStorage $storage, Array $serializeHandlers, $router) {
+  private $streamWrapperProtocol, $streamWrapperDomain;
+
+  public function __construct(Filesystem $filesystem, Index $gaufretteIndex, PersistentStorage $storage, Array $serializeHandlers, $router, $streamWrapperProtocol, $streamWrapperDomain) {
     $this->filesystem = $filesystem;
     $this->gaufretteIndex = $gaufretteIndex;
     $this->storage = $storage;
     $this->serializeHandlers = $serializeHandlers;
     $this->router = $router;
+    $this->streamWrapperProtocol = $streamWrapperProtocol;
+    $this->streamWrapperDomain = $streamWrapperDomain;
   }
 
   /**
@@ -87,6 +91,19 @@ class Manager {
     return $entity;
   }
 
+  /**
+   * Returns a StreamWrapper-URL for the given entity
+   * 
+   * @param  MediaFileEntityInterface $entity
+   * @return string
+   */
+  public function getStreamUrl(MediaFileEntityInterface $entity) {
+    return sprintf('%s://%s/%s', $this->streamWrapperProtocol, $this->streamWrapperDomain, $entity->getMediaFileKey());
+  }
+
+  /**
+   * @return Webforge\CmsBundle\Model\MediaFileEntityInterface[]
+   */
   public function findFiles(Array $keys) {
     return $this->storage->loadFiles($keys);
   }

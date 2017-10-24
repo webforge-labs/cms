@@ -12,6 +12,6 @@ liip_imagine:
   loaders:
     cms_media_gaufrette:
       stream:
-       wrapper: gaufrette://cms_media/
+        wrapper: gaufrette://cms_media/
 
   data_loader: cms_media_gaufrette

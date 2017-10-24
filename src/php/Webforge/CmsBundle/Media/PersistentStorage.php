@@ -72,6 +72,9 @@ class PersistentStorage {
     return $this->fileRepository->findOneBy(array('mediaFileKey'=>$key));
   }
 
+  /**
+   * @return Webforge\CmsBundle\Model\MediaFileEntityInterface[]
+   */
   public function loadFiles(Array $keys) {
     return $this->fileRepository->findBy(array('mediaFileKey'=>$keys));
   }

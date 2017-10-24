@@ -1,3 +1,6 @@
+parameters:
+  webforge_media_filesystem_domain: 'cms_media'
+
 services:
   # please not that the datetime handler is loaded from the dependency injection extension, because we cannot load from
   #imports:
@@ -64,7 +67,7 @@ services:
   webforge.media.filesystem:
     class: Gaufrette\Filesystem
     factory: 'knp_gaufrette.filesystem_map:get'
-    arguments: ['cms_media']
+    arguments: ['%webforge_media_filesystem_domain%']
 
   webforge.gaufrette_index:
     class: Webforge\Gaufrette\Index
@@ -78,6 +81,8 @@ services:
       - '@webforge.media.persistent_storage'
       - ['@webforge.serialization.imagine_thumbnails_file_handler', '@webforge.serialization.thumbor_thumbnails_file_handler']
       - '@router'
+      - '%knp_gaufrette.stream_wrapper.protocol%'
+      - '%webforge_media_filesystem_domain%'
 
   webforge.media.alice_fixtures_provider:
     class: Webforge\CmsBundle\Media\AliceFixturesProvider
