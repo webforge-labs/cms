@@ -33,7 +33,7 @@ COPY etc/php/*.ini /usr/local/etc/php/conf.d/
 
 COPY composer.* ./
 RUN composer install -o --prefer-dist --no-interaction \
-   && curl -L -o phpunit.phar https://phar.phpunit.de/phpunit-4.8.phar \
+   && curl -L -o phpunit.phar https://phar.phpunit.de/phpunit-5.7.9.phar \
    && mkdir -p files/cache \
    && composer clear-cache
 
