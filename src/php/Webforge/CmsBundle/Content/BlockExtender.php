@@ -32,5 +32,5 @@ interface BlockExtender {
    * @param stdclass $context pass whatever you like to the blockExtenders
    * @return bool if the extender has extended the block it returns true
    */
-  public function extend(Array $blocks, \stdClass $context);
+  public function extend(Array &$blocks, \stdClass $context);
 }

@@ -12,7 +12,7 @@ class CommonBlockExtender implements BlockExtender {
     $this->mediaManager = $mediaManager;
   }
 
-  public function extend(Array $blocks, \stdClass $context) {
+  public function extend(Array &$blocks, \stdClass $context) {
 
     $first = TRUE;
     foreach ($blocks as $block) {

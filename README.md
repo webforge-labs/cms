@@ -20,7 +20,12 @@ npm test
 
 A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsoring a free Live account, that allows us to test on Iphones and other devices.
 
-## BC Breaks for 1.40.x
+## BC Breaks for 1.15.x
+
+- use PHPUnit 5.x.x
+- BlockExtender Interface has been changed to pass value of blocks-array by reference
+
+## BC Breaks for 1.14.x
 
 - MediaFileEntityInterface has two new methods: `setMediaMetadata` and `getMediaMetadata`
 - add this to your model.json for binaries `"mediaMeta": { "type": "Object", "nullable": true }`
