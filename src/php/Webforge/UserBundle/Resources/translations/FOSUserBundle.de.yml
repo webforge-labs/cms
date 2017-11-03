@@ -1,0 +1,31 @@
+login:
+  headline: "Zugang zum CMS"
+
+resetting:
+  request:
+    headline: "Neues Passwort anfordern"
+
+  check_email:
+    headline: Neues Passwort angefordert
+    message: |
+      Wir haben dir gerade eine E-Mail geschickt. Sie enthält einen Link, um dein Passwort zurückzusetzen.
+      Hinweis: Ein neues Passwort kann nur alle %tokenLifetime% Stunden beantragt werden.
+
+      Eventuell wurde diese E-Mail als Spam markiert, wenn sie nicht angekommen ist.
+
+  email:
+    message: |
+      Hallo %username%!
+
+      du erhälst diese E-Mail, weil du ein neues Passwort angefordert hast.
+      Bitte besuche die folgende Seite, um dein Passwort zurückzusetzen: 
+      %confirmationUrl%
+
+      Wenn du kein neues Passwort angefordert hast, ignoriere diese Nachricht einfach.
+
+  flash:
+    success: 'Dein Passwort wurde erfolgreich zurückgesetzt.'
+
+  reset:
+    headline: Neues Passwort festlegen
+

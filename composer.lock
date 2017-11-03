@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "329319a3afcbd7c7e2d3e205e11fe239",
+    "content-hash": "35bd48f1c16aa04894c360e74dc165e9",
     "packages": [
         {
             "name": "99designs/phumbor",
@@ -3060,16 +3060,16 @@
         },
         {
             "name": "webforge/symfony",
-            "version": "1.6.0",
+            "version": "1.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webforge-labs/webforge-symfony.git",
-                "reference": "1f19931be1d041078c4fb458e632017266ebd6cc"
+                "reference": "eb0f051e33af99cda849ff7e3489cc332cd58ea5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webforge-labs/webforge-symfony/zipball/1f19931be1d041078c4fb458e632017266ebd6cc",
-                "reference": "1f19931be1d041078c4fb458e632017266ebd6cc",
+                "url": "https://api.github.com/repos/webforge-labs/webforge-symfony/zipball/eb0f051e33af99cda849ff7e3489cc332cd58ea5",
+                "reference": "eb0f051e33af99cda849ff7e3489cc332cd58ea5",
                 "shasum": ""
             },
             "require": {
@@ -3081,7 +3081,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.5.x-dev"
+                    "dev-master": "1.7.x-dev"
                 }
             },
             "autoload": {
@@ -3102,7 +3102,7 @@
                     "email": "p.scheit@ps-webforge.com"
                 }
             ],
-            "time": "2017-07-14T10:19:16+00:00"
+            "time": "2017-11-03T12:19:59+00:00"
         },
         {
             "name": "webforge/utils",

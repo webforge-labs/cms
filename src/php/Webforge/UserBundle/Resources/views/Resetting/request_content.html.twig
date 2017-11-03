@@ -1,0 +1,14 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% include 'WebforgeUserBundle:Resetting:request_header.html.twig' %}
+
+<form action="{{ path('fos_user_resetting_send_email') }}" method="post" class="fos_user_resetting_request">
+
+    <div class="form-group">
+        <label for="username">{{ 'resetting.request.username'|trans }}</label>
+        <input class="form-control" type="text" id="username" name="username" value="" required="required" />
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary btn-block">{{ 'resetting.request.submit'|trans }}</button>
+    </div>
+</form>

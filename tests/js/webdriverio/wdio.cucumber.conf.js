@@ -23,7 +23,7 @@ exports.config = {
      */
     capabilities: [
         {
-            browserName: 'phantomjs'
+            browserName: 'chrome'
         }
     ],
     /*
@@ -54,13 +54,15 @@ exports.config = {
         require: [
           './tests/js/webdriverio/step-definitions.js',
           require('../../../index').stepDefinitionsFile('basics'),
-          require('../../../index').stepDefinitionsFile('ui')
+          require('../../../index').stepDefinitionsFile('ui'),
+          require('../../../index').stepDefinitionsFile('mail')
         ]
     },
 
     beforeFeature: function (feature) {
       browser.windowHandleSize({width:1024,height:900});
       browser.timeouts('page load', 60000);
+      browser.timeouts('script', 2010);
     },
 
     afterFeature: function() {
@@ -73,11 +75,25 @@ exports.config = {
     },
 
     afterStep: function (stepResult) {
+      var step = stepResult.getStep();
+
+      var stati = {
+        'passed': '√',
+        'failed': 'x',
+        'skipped': 'S',
+        'undefined': 'undef',
+        'ambiguous': 'A'
+      };
+
+      console.log(stati[stepResult.getStatus()]+' '+step.getName());
+
       if (stepResult.getStatus() == 'failed') {
         var date = new Date();
         var timestamp = date.toJSON().replace(/:/g, '-')
         var filename = `ERROR_wbfrg_testing_${timestamp}.png`;
         client.saveScreenshot(client.options.screenshotPath+'/'+filename);
+      } else if (stepResult.getStatus() == 'ambiguous') {
+        throw new Error('Step definition '+stepResult.getStep().getName()+' is ambigious');
       }
     }
 };

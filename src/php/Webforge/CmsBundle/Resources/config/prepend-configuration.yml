@@ -10,4 +10,4 @@ imports:
     - { resource: ./parts/gaufrette.yml }
 
 parameters:
-  mailer_spoolpath: "%kernel.root_dir%/files/mailspool"
+  mailer_spoolpath: "%root_directory%/files/mailspool"

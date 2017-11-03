@@ -13,12 +13,14 @@ module.exports = function() {
     return this.css('[role="tab-content"].active').waitForVisible(25000);
   };
 
-  this.Given(/^I am logged in as "([^"]*)"$/, function (email) {
+  this.Given(/^I am logged in as "([^"]*)"(?: with password "([^"]*)")$/, function (email, password) {
     browser.url('/cms');
+
+    if (!password) password = 'secret';
 
     if (browser.isExisting('[role="login-form"]')) {
       browser.setValue('[name="_username"]', email);
-      browser.setValue('[name="_password"]', 'secret');
+      browser.setValue('[name="_password"]', password);
       browser.click('button*=Anmelden');
     }
 

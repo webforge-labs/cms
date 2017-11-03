@@ -17,4 +17,7 @@ web_profiler:
     intercept_redirects: false
 
 swiftmailer:
-    delivery_address: p.scheit@ps-webforge.com
+    delivery_address: 'p.scheit@ps-webforge.com'
+    spool:
+        type: file
+        path: "%mailer_spoolpath%"

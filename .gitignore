@@ -10,3 +10,4 @@ composer.phar
 /.screenshots
 /.env
 /package-lock.json
+/files/mailspool
