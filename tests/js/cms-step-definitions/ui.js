@@ -13,7 +13,7 @@ module.exports = function() {
     return this.css('[role="tab-content"].active').waitForVisible(25000);
   };
 
-  this.Given(/^I am logged in as "([^"]*)"(?: with password "([^"]*)")$/, function (email, password) {
+  this.Given(/^I am logged in as "([^"]*)"(?: with password "([^"]*)")?$/, function (email, password) {
     browser.url('/cms');
 
     if (!password) password = 'secret';
