@@ -1,5 +1,6 @@
 login:
   headline: "Zugang zum CMS"
+  usernameoremail: Benutzername oder E-Mail-Adresse
 
 resetting:
   request:

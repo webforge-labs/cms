@@ -13,7 +13,7 @@ Feature: login
     When I visit "/cms"
     Then I should see a headline "Zugang zum CMS"
 
-    When I fill in "petra.platzhalter@ps-webforge.net" for "Benutzername oder E-Mail"
+    When I fill in "petra.platzhalter@ps-webforge.net" for "Benutzername oder E-Mail-Adresse"
     And I fill in "secret" for "Passwort"
     And I click on "Anmelden"
 
@@ -27,7 +27,7 @@ Feature: login
     When I visit "/cms"
     Then I should see a headline "Zugang zum CMS"
 
-    When I fill in "petra.platzhalter@ps-webforge.net" for "Benutzername oder E-Mail"
+    When I fill in "petra.platzhalter@ps-webforge.net" for "Benutzername oder E-Mail-Adresse"
     And I fill in "wrongpassword" for "Passwort"
     And I click on "Anmelden"
 
