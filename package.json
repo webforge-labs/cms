@@ -57,6 +57,7 @@
     "shimney-lodash": "~4.9.0",
     "shimney-requirejs-json": "~1.0.3",
     "shimney-superagent": "~1.4.0-build.2",
+    "sortablejs": "^1.6.1",
     "superagent": "~1.4.0",
     "webforge-js-builder": "~1.2.1",
     "webforge-js-components": "^1.0.7",

@@ -141,6 +141,11 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment, options) {
       .src('etc/cms/**/*.json')
       .pipe(builder.dest, 'etc/cms');
 
+    // rubaxa sortable
+    builder.add('js', 'sortablejs')
+      .src(builder.resolveModule('sortablejs')+'/'+(isDevelopment ? 'Sortable.js' : 'Sortable.min.js'))
+      .pipe(rename, 'sortable.js');
+
     gulp.task('images', ['clean'], function() {
       return gulp.src(cmsDir+'/Resources/img/**/*')
         .pipe(gulp.dest(builder.config.dest+'/img'));

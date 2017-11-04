@@ -3,7 +3,7 @@ define(['require', 'knockout', 'jquery', 'uikit-src/uikit-core'], function(requi
   var getTemplateOptions = function(options) {
     var result = {};
 
-    result.foreach = options.foreach;
+     result.foreach = options.foreach;
 
      ko.utils.arrayForEach(["afterAdd", "afterRender", "as", "beforeRemove", "includeDestroyed", "templateEngine", "templateOptions", "nodes"], function (option) {
        if (options.hasOwnProperty(option)) {

@@ -9,7 +9,7 @@ define(function(require) {
 
   require('cms/ko/BlocksComponentLoader');
   require('knockout-dragdrop');
-  require('cms/ko-bindings/uk-sortable');
+  require('cms/ko-bindings/rubaxa-sortable');
   require('cms/ko-bindings/markdown-editor');
   require('bootstrap/dropdown');
 
