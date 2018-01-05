@@ -26,7 +26,7 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment, options) {
   this.requirejs = {
     mainConfigFile: cmsDir+'/src/js/config.js', // adds some paths here. But notice: baseUrl will be overriden anyway through this config
 
-    paths: [],
+    paths: {},
 
     modules: [
       {

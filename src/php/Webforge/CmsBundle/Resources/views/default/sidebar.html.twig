@@ -9,7 +9,7 @@
         </a>
       </h4>
     </div>
-    <div id="drop-contents-group-{{loop.index}}" class="panel-collapse collapse {% if loop.index == sidebar.activeGroup %}in{%endif%}" role="tabpanel" aria-labelledby="drop-contents-group-{{loop.index}}-heading">
+    <div id="drop-contents-group-{{loop.index}}" class="panel-collapse collapse {% if sidebar.allOpen is defined and sidebar.allOpen or loop.index == sidebar.activeGroup %}in{%endif%}" role="tabpanel" aria-labelledby="drop-contents-group-{{loop.index}}-heading">
       <ul class="list-group">
       {% for link in group %}
         <li class="list-group-item"><a href="#" data-bind='cmsTab: {{link.tab|json_encode}}'>{{link.label}}</a></li>
