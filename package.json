@@ -12,9 +12,7 @@
     "test-wdio": "wdio tests/js/webdriverio/wdio.cucumber.conf.js",
     "test": "npm-run-all --parallel test-tabs test-form test-entity-form test-fm test-wdio",
     "build": "gulp build",
-    "build-dev": "gulp build --dev",
-    "version": "git add package.json",
-    "postversion": "git push --tags origin master && npm publish"
+    "build-dev": "gulp build --dev"
   },
   "repository": {
     "type": "git",
