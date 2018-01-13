@@ -47,7 +47,7 @@
     "knockout-collection": "~2.0.0",
     "knockout-dragdrop": "~2.4.4",
     "knockout-mapping": "~2.5.0",
-    "moment": "~2.10.6",
+    "moment": "~2.20.1",
     "requirejs": "~2.2.0",
     "requirejs-text": "^2.0.12",
     "shimney-amplify": "~1.1.2-build.4",

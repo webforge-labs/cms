@@ -29,3 +29,6 @@ _default:
     post-release-actions:
         vcs-publish:                       # Publish the release to the VCS
             ask-confirmation: true
+        command:
+          cmd: 'npm publish'
+          live-output: true

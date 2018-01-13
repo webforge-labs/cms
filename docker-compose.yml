@@ -41,7 +41,7 @@ services:
       - ./reports:/app/reports
 
     extra_hosts:
-      - "mysqldb:172.17.0.1"
+      - "mysqldb:172.22.0.1"
 
     # these are passed through from .env file (or other passed in variables)
     environment:
