@@ -28,7 +28,7 @@ class JmsSerializerMediaFileEntityHandler {
     $file->id = $binary->getId();
 
     try {
-      $this->manager->serializeFile($binary->getMediaFileKey(), $file);
+      $this->manager->serializeEntity($binary, $file);
 
       $file->isExisting = TRUE;
 
