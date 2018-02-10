@@ -46,7 +46,7 @@ define(['require', 'knockout', 'jquery', 'knockout-collection', 'knockout-dragdr
 
     that.reorder = function(item, newIndex) {
       var oldIndex = filesObservableArray.indexOf(item);
-      console.log('moved from ', oldIndex, 'to ', newIndex);
+      //console.log('moved from ', oldIndex, 'to ', newIndex);
       
       filesObservableArray.remove(item);
       filesObservableArray.splice(newIndex, 0, item);

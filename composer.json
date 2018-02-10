@@ -22,15 +22,14 @@
         
         "doctrine/orm": ">=2.2.3,<2.5",
         "webforge/utils": "~1.1.0",
-        "symfony/symfony": "2.7.*",
-        "doctrine/doctrine-bundle": "^1.6@dev",
+        "symfony/symfony": "3.0.*",
+        "doctrine/doctrine-bundle": "^1.8.1",
         "symfony/swiftmailer-bundle": "^2.3@dev",
         "symfony/monolog-bundle": "^2.8@dev",
         "sensio/framework-extra-bundle": "^3.0@dev",
         "jms/serializer-bundle": "^1.1@dev",
         "webmozart/json": "^1.1@dev",
         "jbroadway/urlify": "^1.0@dev",
-        "symfony/var-dumper": "2.7.*@stable",
         "friendsofsymfony/user-bundle": "2.0.*",
         "webforge/doctrine": "~1.2.6",
         "webforge/collections": "1.0.*@stable",
@@ -38,7 +37,7 @@
         "liip/functional-test-bundle": "1.3.*@dev",
         "knplabs/knp-gaufrette-bundle": "^0.3.0",
         "knplabs/knp-markdown-bundle": "^1.4",
-        "liip/imagine-bundle": "~1.6.0",
+
         "nelmio/alice": "^2.2",
         "ramsey/uuid": "^3.5",
         "nicmart/tree": "^0.2.7",
@@ -64,7 +63,7 @@
         "symfony-app-dir": "app",
         "symfony-web-dir": "www",
         "branch-alias": {
-            "dev-master": "1.15.x-dev"
+            "dev-master": "2.0.x-dev"
         }
     }
 }
