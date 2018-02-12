@@ -23,7 +23,7 @@ class Kernel extends SymfonyKernel
      * ```
      *
      * this keeps the bootstrap from installed edition very small and gives us power to refactor the bootstrapping process (been there with psc-cms)
-     * 
+     *
      * @param  string $rootDir the dir where the project is installed
      * @param  Composer\Autoload\ClassLoader $loader
      * @return mixed
@@ -36,11 +36,11 @@ class Kernel extends SymfonyKernel
 
         require $GLOBALS['env']['root']->getFile('app/AppKernel.php');
 
-        if (getenv('SYMFONY_ENV') == FALSE) {
+        if (getenv('SYMFONY_ENV') == false) {
             $dotenv = new Dotenv($GLOBALS['env']['root']->wtsPath());
             $dotenv->overload();
             $dotenv->required('SYMFONY_ENV')->notEmpty()->allowedValues(['production', 'staging', 'dev', 'test']);
-            $dotenv->required('SYMFONY_DEBUG')->isInteger()->allowedValues([0,1]);
+            $dotenv->required('SYMFONY_DEBUG')->isInteger()->allowedValues([0, 1]);
         }
 
         return $loader;
@@ -49,7 +49,7 @@ class Kernel extends SymfonyKernel
     public function registerBundles()
     {
         $bundles = array();
-        
+
         $bundles[] = new \Symfony\Bundle\FrameworkBundle\FrameworkBundle();
         $bundles[] = new \Symfony\Bundle\SecurityBundle\SecurityBundle();
         $bundles[] = new \Symfony\Bundle\TwigBundle\TwigBundle();
@@ -66,7 +66,7 @@ class Kernel extends SymfonyKernel
         $bundles[] = new \Webforge\CmsBundle\WebforgeCmsBundle();
 
 
-        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
+        if (in_array($this->getEnvironment(), array('dev', 'test', 'testing'))) {
             $bundles[] = new \Symfony\Bundle\DebugBundle\DebugBundle();
             $bundles[] = new \Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
 
@@ -78,7 +78,7 @@ class Kernel extends SymfonyKernel
 
         return $bundles;
     }
-    
+
     public function getCacheDir()
     {
         return $this->rootDir.'/../files/cache/symfony-'.$this->environment;
@@ -93,7 +93,7 @@ class Kernel extends SymfonyKernel
     {
         // this does not work as prepend extension config, because we need to load configuration from files for a lot of extensions (the symfony api is not very enhanced there)
         try {
-          $loader->load('@WebforgeCmsBundle/Resources/config/prepend-configuration.yml');
+            $loader->load('@WebforgeCmsBundle/Resources/config/prepend-configuration.yml');
         } catch (\InvalidArgumentException $e) {
         }
         $loader->load($this->getProjectDir().'/'.$this->configDirectory.'/config_'.$this->getEnvironment().'.yml');
