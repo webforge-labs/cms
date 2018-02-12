@@ -2,7 +2,7 @@ knp_gaufrette:
   adapters:
     local_files:
       local:
-        directory:  %root_directory%/files/media
+        directory:  "%kernel.project_dir%/files/media"
         create:     true
   
   filesystems:

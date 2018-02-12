@@ -2,8 +2,7 @@
 services:
     now: 
         class: "Webforge\\Common\\DateTime\\DateTime"
-        factory_class: "Webforge\\Common\\DateTime\\DateTime"
-        factory_method: now
+        factory: ["Webforge\\Common\\DateTime\\DateTime", "now"]
 
     globals_twig_extension:
         class: AppBundle\Twig\GlobalVariablesExtension

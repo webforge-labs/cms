@@ -7,8 +7,9 @@
             "Webforge\\CmsBundle": "src/php/",
             "Webforge\\UserBundle": "src/php/",
             "Webforge\\Gaufrette": "src/php/",
-
-            "Webforge\\Symfony": "D:\\www\\webforge-symfony\\src\\php\\"
+            "Webforge\\Doctrine": "src/php/",
+            "Webforge\\Symfony": "src/php/",
+            "Webforge\\Testing": "src/php/"
         }
     },
     "autoload-dev": {
@@ -18,37 +19,35 @@
     },
     "prefer-stable": true,
     "require": {
-        "php": ">=5.4.0",
-        
-        "doctrine/orm": ">=2.2.3,<2.5",
-        "webforge/utils": "~1.1.0",
-        "symfony/symfony": "3.0.*",
-        "doctrine/doctrine-bundle": "^1.8.1",
-        "symfony/swiftmailer-bundle": "^2.3@dev",
-        "symfony/monolog-bundle": "^2.8@dev",
-        "sensio/framework-extra-bundle": "^3.0@dev",
-        "jms/serializer-bundle": "^1.1@dev",
-        "webmozart/json": "^1.1@dev",
-        "jbroadway/urlify": "^1.0@dev",
-        "friendsofsymfony/user-bundle": "2.0.*",
-        "webforge/doctrine": "~1.2.6",
-        "webforge/collections": "1.0.*@stable",
-        "webforge/symfony": "~1.7.1",
-        "liip/functional-test-bundle": "1.3.*@dev",
-        "knplabs/knp-gaufrette-bundle": "^0.3.0",
-        "knplabs/knp-markdown-bundle": "^1.4",
+        "php": ">=7.1.0",
 
-        "nelmio/alice": "^2.2",
+        "symfony/symfony": "4.0.*",
+        
+        "doctrine/doctrine-bundle": "^1.8.1",
+        "knplabs/knp-gaufrette-bundle": "~0.5",
+        "knplabs/knp-markdown-bundle": "^1.7",
+        "friendsofsymfony/user-bundle": "2.1.*@dev",
+        "symfony/swiftmailer-bundle": "^3.1",
+        "symfony/monolog-bundle": "^3.1",
+        "sensio/framework-extra-bundle": "^5.1.5",
+        "jms/serializer-bundle": "^2.3.1",
+        "liip/functional-test-bundle": "^2.0@alpha",
+        "jbouzekri/phumbor-bundle": "^1.2",
+
+        "webforge/utils": "~1.1.0@stable",
+
+        "webmozart/json": "^1.1",
+        "jbroadway/urlify": "^1.0",
         "ramsey/uuid": "^3.5",
         "nicmart/tree": "^0.2.7",
-        "jbouzekri/phumbor-bundle": "^1.2"
+        "doctrine/orm": "^2.6",
+        "vlucas/phpdotenv": "^2.2"
     },
     "require-dev": {
         "webforge/testdata-repository": "0.2.2-alpha",
-        "webforge/testing": "^1.2.2"
-    },
-    "suggest": {
-      "nelmio/alice": "to use alice-fixtures in your tests (use dev dependency version 2.x)"
+        "symfony/phpunit-bridge": "^4.0",
+        "theofidry/alice-data-fixtures": "^1.0",
+        "doctrine/data-fixtures": "^1.3"
     },
     "license": "MIT",
     "authors": [

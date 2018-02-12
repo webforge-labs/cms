@@ -17,10 +17,9 @@ security:
             pattern: ^/
             form_login:
                 provider: fos_userbundle
-                csrf_provider: security.csrf.token_manager
                 default_target_path: /cms
             remember_me:
-                key: '%secret%'
+                secret: "%secret%"
                 lifetime: 31536000
                 path: ~
                 domain: ~

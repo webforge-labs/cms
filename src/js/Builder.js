@@ -2,7 +2,6 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment, options) {
   // put all dependencies here to dependencies not to dev-depenendencies (because other projects will use the builder)
   var rename = require('gulp-rename');
   var sass = require('gulp-sass');
-  var browserSync = require('browser-sync').create();
   var wait = require('gulp-wait');
   var sourcemaps = require('gulp-sourcemaps');
   var autoprefixer = require('gulp-autoprefixer');
@@ -14,8 +13,6 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment, options) {
   var that = this;
 
   var cmsDir = require('path').resolve(__dirname, '..', '..');
-
-  options = _.extend({}, { browserSync: false } , options);
 
   // we pass "our" require here on purpose (but i have forgotten why)
   this.jsBuilder = new WebforgeBuilder(gulp, { root: rootDir, dest: "www/assets", moduleSearchPaths: [cmsDir] }, require);
@@ -194,7 +191,6 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment, options) {
         .pipe(autoprefixer(that.autoprefixerOptions))
         .pipe(gulpif(isDevelopment, sourcemaps.write('./')))
         .pipe(gulp.dest(builder.config.dest+'/css'))
-        .pipe(browserSync.stream({once: true}));
 
       } catch (exc) {
         console.log(exc);
@@ -207,10 +203,6 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment, options) {
     gulp.task('build', this.mainTasks, function() {});
 
     gulp.task('watch', ['build'], function() {
-      if (options.browserSync) {
-        browserSync.init(options.browserSync);
-      }
-
       gulp.watch('src/scss/**/*.scss', ['sass-only']);
       gulp.watch(cmsDir+'/src/scss/**/*.scss', ['sass-only']);
       gulp.watch('Resources/tpl/**/*.mustache', ['build']);
@@ -221,8 +213,6 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment, options) {
       gulp.watch('etc/**/*', ['build']);
 
       gulp.watch('Resources/img/**/*', ['build']);
-
-      gulp.watch('src/php/**/*.twig*').on('change', browserSync.reload);
     });
   };
 

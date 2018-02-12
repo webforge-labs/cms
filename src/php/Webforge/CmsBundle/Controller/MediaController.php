@@ -4,6 +4,8 @@ namespace Webforge\CmsBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -154,18 +156,18 @@ class MediaController extends CommonController {
       'path'=>NULL
     ];
 
-    $form = $this->get('form.factory')->createNamedBuilder(null, 'form', $json, array('csrf_protection'=>false))
-      ->add('name', 'text', array(
+    $form = $this->get('form.factory')->createNamedBuilder(null, FormType::class, $json, array('csrf_protection'=>false))
+      ->add('name', TextType::class, array(
         'constraints'=>array(new Assert\NotBlank())
       ))
-      ->add('path', 'text', array(
+      ->add('path', TextType::class, array(
         'constraints'=>array(new Assert\NotBlank())
       ))
       ->getForm();
 
-    $form->bind($request);
+    $form->handleRequest($request);
 
-    if ($form->isValid()) {
+    if ($form->isSubmitted() && $form->isValid()) {
       $manager = $this->get('webforge.media.manager');
 
       $manager->beginTransaction();

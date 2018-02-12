@@ -1,6 +1,11 @@
 imports:
     - { resource: config.yml }
 
+parameters:
+    # we cannot link directly (in the network) to thumbor, because the browser on host uses this hostname to connect to the image server (not the docker container itself, but sometimes)
+    thumbor_server: 'http://docker-host:8000'
+    thumbor_secret: gJ5n38f7o0TilkkmMTEB
+
 services:
 #    now: 
 #        class: "Webforge\\Common\\DateTime\\DateTime"
@@ -8,7 +13,7 @@ services:
 
 framework:
     router:
-        resource: "%root_directory%/etc/symfony/routing_dev.yml"
+        resource: "%kernel.project_dir%/etc/symfony/routing_dev.yml"
         strict_requirements: true
     profiler: { only_exceptions: false }
 

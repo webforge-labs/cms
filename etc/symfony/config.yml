@@ -8,4 +8,14 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     entities_namespace: 'AppBundle\Entity'
+    secret: 9w349sdfDFLKJ2349dsf90i
     locale: de
+    router.request_context.host: "%env(DOMAIN)%"
+    version: "%env(BUILD_VERSION)%"
+    mail_from: 'info@ps-webforge.com'
+    mail_from_name: 'Webforge'
+
+jb_phumbor:
+    server:
+        url: "%thumbor_server%"
+        secret: "%thumbor_secret%"
