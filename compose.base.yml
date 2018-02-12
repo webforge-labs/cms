@@ -15,8 +15,6 @@ services:
       - "${NGINX_PORT}:80"
 
     volumes:
-      - appassets:/app/www
-      - ../shared/thumbnails/cache:/app/www/images/cache
       - ./etc/docker/nginx-site.conf:/etc/nginx/conf.d/01-site.conf
       - ./etc/docker/nginx.conf:/etc/nginx/nginx.conf:ro
 
@@ -30,32 +28,21 @@ services:
       dockerfile: ./etc/docker/Dockerfile
 
     volumes:
-      - appassets:/app/www
       - appcache:/app/files/cache
-      - ../shared/media:/app/files/media
-      - ../shared/thumbnails/cache:/app/www/images/cache
-      - ../shared/thumbnails/imagine-meta:/app/files/cache/imagine-meta
       - ./etc/docker/fpm-pool.conf:/usr/local/etc/php-fpm.d/z-www.conf
-      - ./parameters.yml:/app/etc/symfony/parameters.yml
-      # stores test artifacts:
-      - ./reports:/app/reports
 
     extra_hosts:
-      - "mysqldb:172.23.0.1"
+      - "docker-host:${DOCKER_HOSTIP}"
 
     # these are passed through from .env file (or other passed in variables)
     environment:
       - SYMFONY_ENV
       - SYMFONY_DEBUG
       - SYMFONY_BASEURL
-      - SYMFONY__BUILD_VERSION=${BUILD_VERSION}
-      - BUILD_VERSION
-      - IS_CI=1
+      - SYMFONY__ROUTER__REQUEST_CONTEXT__HOST
+      - SYMFONY__BUILD_VERSION
 
 volumes:
   # we just need write support (www-data) for php-fpm on this dir. We might discard this volume with docker-compose down -v (to start with no symfony-cache)
   # note that imagine-meta will be host-binded above this cache dir
   appcache:
-
-  # we need to mount the assets as a named volume, so that the build for the php dockerfile will write assets to this volume - because we need to access them in nginx
-  appassets:

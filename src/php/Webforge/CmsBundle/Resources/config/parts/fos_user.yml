@@ -12,5 +12,5 @@ fos_user:
 #          template: ':mails:resetting.txt.mustache'
 
   from_email:
-    address: '%mail_from%'
-    sender_name: '%mail_from_name%'
+    address: "%mail_from%"
+    sender_name: "%mail_from_name%"

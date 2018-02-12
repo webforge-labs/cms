@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  web:
+    volumes:
+      - ./www:/app/www
+
+  php:
+    volumes:
+      - ./:/app
+      - ./.bash_history:/root/.bash_history
+
+    extra_hosts:
+      - "cms.local:${DOCKER_HOSTIP}"
+
+  mysqldb:
+    #note: mysql 5.7 has longer usernames (32 instead of 16)!
+    image: mysql:5.5
+
+    ports:
+      - 3320:3306
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+    #  - ./Resources/db/docker-init:/docker-entrypoint-initdb.d/
+
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw
+      MYSQL_DATABASE: cms
+      MYSQL_USER: cms
+      MYSQL_PASSWORD: cmspw
+
+
+
+volumes:
+  mysql_data:

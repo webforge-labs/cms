@@ -10,12 +10,11 @@ class GulpBuilderTest extends \PHPUnit_Framework_TestCase {
 
   public function setUp() {
     if (!self::$built) {
-
       if (getenv('IS_CI') == 1) {
         return $this->markTestSkipped('this does not make sense in ci');
       }
 
-      $process = new Process('gulp build --dev');
+      $process = new Process('npm run build-dev');
       $process->setWorkingDirectory($GLOBALS['env']['root']->wtsPath());
 
       $process->mustRun();

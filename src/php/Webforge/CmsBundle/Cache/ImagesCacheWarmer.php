@@ -4,7 +4,7 @@ namespace Webforge\CmsBundle\Cache;
 
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
-class ImagineCacheWarmer implements CacheWarmerInterface {
+class ImagesCacheWarmer implements CacheWarmerInterface {
 
   protected $manager;
 

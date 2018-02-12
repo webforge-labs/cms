@@ -1,27 +1,37 @@
-liip_imagine:
+jb_phumbor:
+    transformations:
+      # resize: crop, fit_in: no crop
+        xs:
+            resize:
+                width: 120
+                height: 120
 
-  filter_sets:
-    # outbound: crop, inset: no crop
-    xs:
-      quality: 75
-      filters:
-        auto_rotate: ~
-        thumbnail: { size: [120, 90], mode: inset }
+            smart_crop: true
+            filters:
+                - { name: "quality", arguments: [75] }
 
-    sm:
-      quality: 75
-      filters:
-        auto_rotate: ~
-        thumbnail: { size: [620, 400], mode: outbound }
+        sm:
+            fit_in:
+                width: 620
+                height: 620
 
-    gallery:
-      quality: 100
-      filters:
-        auto_rotate: ~
-        thumbnail: { size: [1200, 800], mode: inset }
+            metadata_only: true   # retrieve metadata for this thumbnail-size
 
-    big:
-      quality: 100
-      filters:
-        auto_rotate: ~
-        thumbnail: { size: [4000, 4000], mode: inset }
+            filters:
+                - { name: "quality", arguments: [75] }
+
+        gallery:
+            fit_in:
+                width: 768
+                height: 768
+
+            filters:
+                - { name: "quality", arguments: [90] }
+
+        big:
+            fit_in:
+                width: 1200
+                height: 1000
+
+            filters:
+                - { name: "quality", arguments: [90] }

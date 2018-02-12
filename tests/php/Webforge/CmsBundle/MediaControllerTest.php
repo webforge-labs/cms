@@ -19,7 +19,7 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
       $client
     );
 
-    $this->emptyFileSystemAndCache();
+    $this->emptyFileSystemAndCache($client);
 
     return $client;
   }
@@ -54,13 +54,13 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
                 ->property('url')->isNotEmpty()->end()
                 ->property('isExisting')->is(TRUE)->end()
                 ->property('thumbnails')->isObject()
-                  ->property('big')
+                  ->property('sm')
                     ->property('orientation')->is('landscape')->end()
                     ->property('isPortrait')->is(false)->end()
                     ->property('isLandscape')->is(true)->end()
                     ->property('width')->is($this->greaterThan(0))->end()
                     ->property('height')->is($this->greaterThan(0))->end()
-                    ->property('url')->contains('/images/cache/big')->contains('dsc03281.jpg')->end()
+                    ->property('url')->contains('fit')->contains('dsc03281.jpg')->end()
                   ->end()
                   ->property('sm')
                     ->property('orientation')->is('landscape')->end()
@@ -385,8 +385,8 @@ JSON
     return $GLOBALS['env']['root']->sub('Resources/img/')->getFile($filename);
   }
 
-  protected function emptyFileSystemAndCache() {
-    $filesystem = $this->getContainer()->get('knp_gaufrette.filesystem_map')->get('cms_media');
+  protected function emptyFileSystemAndCache($client) {
+    $filesystem = $client->getContainer()->get('knp_gaufrette.filesystem_map')->get('cms_media');
 
     $dirs = array();
     foreach ($filesystem->keys() as $key) {

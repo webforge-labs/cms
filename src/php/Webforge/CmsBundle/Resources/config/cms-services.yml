@@ -6,16 +6,14 @@ services:
   #imports:
   #  - { resource: '../../vendor/webforge/symfony/Resources/config/services.yml' }
 
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    public: true
+
   dc:
     class: Webforge\Doctrine\Entities
     arguments: ["@doctrine.orm.entity_manager", "%entities_namespace%"]
-
-  webforge.liip_imagine.binary.loader.stream.cms_media:
-    class: "%liip_imagine.binary.loader.stream.class%"
-    arguments:
-      - 'gaufrette://cms_media/'
-    tags:
-      - { name: 'liip_imagine.binary.loader', loader: 'stream.cms_media' }
 
   webforge.serialization.jms_serializer_media_file_entity_handler:
     class:      Webforge\CmsBundle\Serialization\JmsSerializerMediaFileEntityHandler
@@ -31,10 +29,6 @@ services:
     tags: 
       - { name: jms_serializer.event_listener, event: serializer.pre_serialize }
 
-  webforge.serialization.imagine_thumbnails_file_handler:
-    class: Webforge\CmsBundle\Serialization\ImagineThumbnailsFileHandler
-    arguments: ['@liip_imagine.cache.manager', '@liip_imagine.data.manager', '@liip_imagine.filter.manager', '@liip_imagine', '@liip_imagine.filter.configuration', '@webforge.imagine.meta_web_path_resolver', '@webforge.imagine.meta_cache']
-
   webforge.serialization.thumbor_thumbnails_file_handler:
     class: Webforge\CmsBundle\Serialization\ThumborThumbnailsFileHandler
     arguments:
@@ -42,20 +36,9 @@ services:
       - '@phumbor.url.transformer'
       - '@webforge.media.filesystem'
 
-  webforge.imagine.meta_cache:
-    class: Doctrine\Common\Cache\ChainCache
-    factory: ['Webforge\CmsBundle\Imagine\MetaWebPathResolver', 'createCache']
 
-  webforge.imagine.meta_web_path_resolver:
-    class: Webforge\CmsBundle\Imagine\MetaWebPathResolver
-    arguments: ['@liip_imagine.cache.resolver.default', '@webforge.imagine.meta_cache']
-    calls:
-      - [setImagine, ['@liip_imagine']]
-    tags:
-      - { name: 'liip_imagine.cache.resolver', resolver: 'webforge_meta_web_path' }
-  
-  webforge.cache.imagine_cache_warmer:
-    class: Webforge\CmsBundle\Cache\ImagineCacheWarmer
+  webforge.cache.images_cache_warmer:
+    class: Webforge\CmsBundle\Cache\ImagesCacheWarmer
     arguments: ['@webforge.media.manager']
     tags:
       - { name: kernel.cache_warmer, priority: 1 }
@@ -79,7 +62,7 @@ services:
       - '@webforge.media.filesystem'
       - '@webforge.gaufrette_index'
       - '@webforge.media.persistent_storage'
-      - ['@webforge.serialization.imagine_thumbnails_file_handler', '@webforge.serialization.thumbor_thumbnails_file_handler']
+      - ['@webforge.serialization.thumbor_thumbnails_file_handler']
       - '@router'
       - '%knp_gaufrette.stream_wrapper.protocol%'
       - '%webforge_media_filesystem_domain%'
@@ -98,8 +81,39 @@ services:
 
   webforge.content.blocks:
     class: Webforge\CmsBundle\Content\Blocks
-    arguments: [ [], "%root_directory%/etc/cms/blocktypes.json", "@markdowner" ]  #first argument will be written with compiler pass
+    arguments: [ [], "%kernel.project_dir%/etc/cms/blocktypes.json", "@markdowner" ]  #first argument will be written with compiler pass
 
   markdowner:
     class: Webforge\CmsBundle\Content\Markdowner
     arguments: ["@markdown.parser"]
+
+  webforge_symfony_datetimehandler:
+    class:      Webforge\Symfony\DateTimeHandler
+    arguments: []
+    tags:
+      - { name: jms_serializer.subscribing_handler }
+
+  webforge_symfony_form_iso_8601_date_time_type:
+    class: Webforge\Symfony\Form\Iso8601DateTimeType
+    tags:
+      - { name: form.type, alias: webforge_iso8601_date_time }
+
+  webforge_symfony_load_fixtures_command:
+    class: Webforge\Symfony\Commands\LoadFixturesCommand
+    tags:
+      -  { name: console.command }
+
+  webforge_symfony_dql_query_command:
+    class: Webforge\Symfony\Commands\DqlQueryCommand
+    arguments: ["@doctrine"]
+    tags:
+      -  { name: console.command }
+
+  webforge_mail_spool_command:
+    class: Webforge\CmsBundle\Command\MailSpoolCommand
+    tags:
+      -  { name: console.command }
+
+  webforge_symfony_alice_manager:
+    class: Webforge\Doctrine\Fixtures\AliceManager
+    arguments: ['@fidry_alice_data_fixtures.loader.doctrine']

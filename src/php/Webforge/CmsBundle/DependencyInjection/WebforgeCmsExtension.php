@@ -27,22 +27,20 @@ class WebforgeCmsExtension extends Extension implements PrependExtensionInterfac
       $container,
       new FileLocator(__DIR__.'/../Resources/config')
     );
-    $loader->load('parts/imagine.yml');
 
     // make user dynamic
     $container->prependExtensionConfig('fos_user', array('user_class'=>$container->getParameter('entities_namespace').'\\User'));
   }
 
   public function process(ContainerBuilder $container) {
-    if (!$container->has('webforge_symfony_alice_loader')) {
-      return;
-    }
+    if ($container->has('webforge_symfony_alice_loader')) {
 
-    $definition = $container->findDefinition('webforge_symfony_alice_loader');
-    $taggedServices = $container->findTaggedServiceIds('webforge_cms.alice_fixtures_provider');
+        $definition = $container->findDefinition('webforge_symfony_alice_loader');
+        $taggedServices = $container->findTaggedServiceIds('webforge_cms.alice_fixtures_provider');
 
-    foreach ($taggedServices as $id => $tags) {
-      $definition->addMethodCall('addProvider', array(new Reference($id)));
+        foreach ($taggedServices as $id => $tags) {
+            $definition->addMethodCall('addProvider', array(new Reference($id)));
+        }
     }
 
     $this->processBlockExtenders($container);
