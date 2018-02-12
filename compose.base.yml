@@ -39,9 +39,8 @@ services:
       - SYMFONY_ENV
       - SYMFONY_DEBUG
       - SYMFONY_BASEURL
-      - DOMAIN
-      - SYMFONY__BUILD_VERSION=${BUILD_VERSION}
-      - BUILD_VERSION
+      - SYMFONY__ROUTER__REQUEST_CONTEXT__HOST
+      - SYMFONY__BUILD_VERSION
 
 volumes:
   # we just need write support (www-data) for php-fpm on this dir. We might discard this volume with docker-compose down -v (to start with no symfony-cache)

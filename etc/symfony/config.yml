@@ -10,8 +10,8 @@ parameters:
     entities_namespace: 'AppBundle\Entity'
     secret: 9w349sdfDFLKJ2349dsf90i
     locale: de
-    router.request_context.host: "%env(DOMAIN)%"
-    version: "%env(BUILD_VERSION)%"
+    router.request_context.host: "%env(SYMFONY__ROUTER__REQUEST_CONTEXT__HOST)%"
+    version: "%env(SYMFONY__BUILD_VERSION)%"
     mail_from: 'info@ps-webforge.com'
     mail_from_name: 'Webforge'
 
