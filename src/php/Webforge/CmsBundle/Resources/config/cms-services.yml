@@ -109,6 +109,11 @@ services:
     tags:
       -  { name: console.command }
 
+  webforge_mail_spool_command:
+    class: Webforge\CmsBundle\Command\MailSpoolCommand
+    tags:
+      -  { name: console.command }
+
   webforge_symfony_alice_manager:
     class: Webforge\Doctrine\Fixtures\AliceManager
     arguments: ['@fidry_alice_data_fixtures.loader.doctrine']
