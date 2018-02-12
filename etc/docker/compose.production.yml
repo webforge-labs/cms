@@ -14,7 +14,7 @@ services:
   php:
     volumes:
       - appassets:/app/www
-      - ./parameters.yml:/app/etc/symfony/parameters.yml
+      - ./etc/symfony/parameters.yml:/app/etc/symfony/parameters.yml
       # stores test artifacts:
       - ./reports:/app/reports
       - shared-media:/app/files/media
