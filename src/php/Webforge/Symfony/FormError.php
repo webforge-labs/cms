@@ -30,6 +30,14 @@ class FormError {
       );
     }
 
+    if (!$form->isSubmitted()) {
+        $info['errors'][] = array(
+          'message'=>'Form is empty', // will be translated
+          'field'=>'',
+          'params'=>[]
+        );
+    }
+
     return $info;
   }
 
