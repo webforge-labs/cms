@@ -1,5 +1,6 @@
 {
   "namespace": "%project.bundle_namespace%\\Entity",
+  "collectionType": "doctrine",
 
   "entities": [
     {
