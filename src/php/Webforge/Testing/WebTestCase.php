@@ -150,7 +150,7 @@ class WebTestCase extends SymfonyWebTestCase
                 substr($client->getResponse(), 0, 800)
             );
 
-            file_put_contents(getcwd().'/last-exception.html', $client->getResponse());
+            //file_put_contents(getcwd().'/last-exception.html', $client->getResponse());
         }
 
         self::assertEquals($expectedStatusCode, $response->getStatusCode(), $helpfulErrorMessage);
