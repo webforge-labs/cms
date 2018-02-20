@@ -72,7 +72,8 @@ services:
     arguments: ['@webforge.media.manager']
     tags: 
       - { name: webforge_cms.alice_fixtures_provider }
-  
+      - { name: nelmio_alice.faker.provider }
+
   webforge.content.common_block_extender:
     class: Webforge\CmsBundle\Content\CommonBlockExtender
     arguments: ["@markdowner", "@webforge.media.manager"]
@@ -92,6 +93,7 @@ services:
     arguments: []
     tags:
       - { name: jms_serializer.subscribing_handler }
+      - { name: nelmio_alice.faker.provider }
 
   webforge_symfony_form_iso_8601_date_time_type:
     class: Webforge\Symfony\Form\Iso8601DateTimeType
