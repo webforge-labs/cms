@@ -19,6 +19,11 @@ class WebforgeCmsExtension extends Extension implements PrependExtensionInterfac
     );
 
     $loader->load('cms-services.yml');
+
+    $env = $container->getParameter("kernel.environment");
+    if (in_array($env, array('dev', 'test', 'testing'))) {
+        $loader->load('cms-dev-services.yml');
+    }
   }
   
   public function prepend(ContainerBuilder $container) {

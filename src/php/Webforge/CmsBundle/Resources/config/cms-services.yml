@@ -2,10 +2,6 @@ parameters:
   webforge_media_filesystem_domain: 'cms_media'
 
 services:
-  # please not that the datetime handler is loaded from the dependency injection extension, because we cannot load from
-  #imports:
-  #  - { resource: '../../vendor/webforge/symfony/Resources/config/services.yml' }
-
   _defaults:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
@@ -67,13 +63,6 @@ services:
       - '%knp_gaufrette.stream_wrapper.protocol%'
       - '%webforge_media_filesystem_domain%'
 
-  webforge.media.alice_fixtures_provider:
-    class: Webforge\CmsBundle\Media\AliceFixturesProvider
-    arguments: ['@webforge.media.manager']
-    tags: 
-      - { name: webforge_cms.alice_fixtures_provider }
-      - { name: nelmio_alice.faker.provider }
-
   webforge.content.common_block_extender:
     class: Webforge\CmsBundle\Content\CommonBlockExtender
     arguments: ["@markdowner", "@webforge.media.manager"]
@@ -100,11 +89,6 @@ services:
     tags:
       - { name: form.type, alias: webforge_iso8601_date_time }
 
-  webforge_symfony_load_fixtures_command:
-    class: Webforge\Symfony\Commands\LoadFixturesCommand
-    tags:
-      -  { name: console.command }
-
   webforge_symfony_dql_query_command:
     class: Webforge\Symfony\Commands\DqlQueryCommand
     arguments: ["@doctrine"]
@@ -115,7 +99,3 @@ services:
     class: Webforge\CmsBundle\Command\MailSpoolCommand
     tags:
       -  { name: console.command }
-
-  webforge_symfony_alice_manager:
-    class: Webforge\Doctrine\Fixtures\AliceManager
-    arguments: ['@fidry_alice_data_fixtures.loader.doctrine']

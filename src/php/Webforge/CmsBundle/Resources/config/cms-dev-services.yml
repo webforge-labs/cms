@@ -1,0 +1,21 @@
+services:
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    public: true
+
+  webforge_symfony_alice_manager:
+    class: Webforge\Doctrine\Fixtures\AliceManager
+    arguments: ['@fidry_alice_data_fixtures.loader.doctrine']
+
+  webforge.media.alice_fixtures_provider:
+    class: Webforge\CmsBundle\Media\AliceFixturesProvider
+    arguments: ['@webforge.media.manager']
+    tags:
+      - { name: webforge_cms.alice_fixtures_provider }
+      - { name: nelmio_alice.faker.provider }
+
+  webforge_symfony_load_fixtures_command:
+    class: Webforge\Symfony\Commands\LoadFixturesCommand
+    tags:
+      -  { name: console.command }
