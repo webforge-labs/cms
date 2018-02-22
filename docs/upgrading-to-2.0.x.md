@@ -11,3 +11,4 @@ Version 2.0 uses Symfony 4. You have to upgrade every BC break from Symfony. The
 - bundle extension was removed in symfony 4.0
 - replace "%root_directory%" with "%kernel.project_dir%"
 - env variables with "SYMFONY__" wont work anymore use (in config.yml): `tenant_name: "%env(SYMFONY__TENANT_NAME)%"` for workarounds or use dev variables directly
+- use your own `security.yml` file

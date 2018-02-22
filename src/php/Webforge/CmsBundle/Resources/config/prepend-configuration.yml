@@ -1,6 +1,5 @@
 imports:
     - { resource: ./parts/framework.yml }
-    - { resource: ./parts/security.yml }
     - { resource: ./parts/doctrine.yml }
     - { resource: ./parts/fos_user.yml }
     - { resource: ./parts/serializer.yml }
