@@ -55,3 +55,16 @@ bin/cli.sh
 bin/cli.sh 
 bin/cli.sh 
 exit
+npm run build
+wdio tests/js/webdriverio/wdio.cucumber.conf.js
+node_modules/.bin/wdio tests/js/webdriverio/wdio.cucumber.conf.js
+npm run build-dev
+ls -la
+less Gulpfile.js 
+less mc.bat 
+exit
+node_modules/.bin/wdio tests/js/webdriverio/wdio.cucumber.conf.js
+exit
+exit
+less /etc/nginx/conf.d/01-site.conf 
+exit

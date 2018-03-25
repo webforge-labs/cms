@@ -13,7 +13,7 @@ define(['knockout'], function(ko) {
     if (!params.block.computedLabel()) { // use the first markdown in compounds
       params.block.computedLabel(function () {
         var markdown = that.value();
-        if (markdown != "") {
+        if (typeof(markdown) === "string" && markdown != "") {
           return (markdown.substr(0, 50).replace(/^\#+(.*)$/mg, '$1: ')) + '…';
         }
 

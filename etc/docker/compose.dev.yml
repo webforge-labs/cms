@@ -4,6 +4,9 @@ services:
   web:
     volumes:
       - ./www:/app/www
+      - ./etc/docker/nginx-site.dev.conf:/etc/nginx/conf.d/01-site.conf
+      # live loading from jsa
+      - ./src:/app/src
 
   php:
     volumes:

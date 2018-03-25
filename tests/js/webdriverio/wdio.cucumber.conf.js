@@ -98,16 +98,18 @@ exports.config = {
     }
 };
 
-if (process.env.SYMFONY_BASEURL) {
+if (process.env.SYMFONY_ENV === 'dev') {
+  exports.config.baseUrl = process.env.SYMFONY_BASEURL;
+  exports.config.reporters = ['spec'];
+  exports.config.cucumberOpts.failFast = true;
+  exports.config.services = ['phantomjs'];
+  exports.config.screenshotPath = './.screenshots';
+} else if (process.env.SYMFONY_BASEURL) {
   exports.config.baseUrl = process.env.SYMFONY_BASEURL;
   exports.config.reporters = ['spec', 'junit'];
   exports.config.cucumberOpts.failFast = false;
   exports.config.services = ['phantomjs'];
   exports.config.screenshotPath = './reports/screenshots';
-} else if (hostname === 'psc-laptop') {
-  exports.config.baseUrl = 'http://cms.laptop.ps-webforge.net';
-} else if (hostname === 'psc-desktop') {
-  exports.config.baseUrl = 'http://cms.desktop.ps-webforge.net';
 } else if (hostname === 'travis-ci') {
   exports.config.baseUrl = 'http://localhost:8080';
   exports.config.reporters = ['spec', 'junit'];

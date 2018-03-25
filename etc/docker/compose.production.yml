@@ -10,6 +10,7 @@ services:
 
     volumes:
       - appassets:/app/www
+      - ./etc/docker/nginx-site.conf:/etc/nginx/conf.d/01-site.conf
 
   php:
     volumes:
