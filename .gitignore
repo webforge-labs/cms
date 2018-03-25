@@ -11,3 +11,4 @@ composer.phar
 /.env
 /package-lock.json
 /files/mailspool
+/.bash_history
