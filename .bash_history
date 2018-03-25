@@ -43,3 +43,11 @@ npm install
 gulp build --dev
 node_modules/.bin/gulp build --dev
 exit
+bin/cli.sh --env=staging list
+bin/cli.sh list --env=staging
+bin/cli.sh list
+bin/cli.sh list --env=staging
+bin/cli.sh debug:container --env=staging | grep 'alice'
+bin/cli.sh debug:container --env=staging | grep 'alice'
+bin/cli.sh list --env=staging
+bin/cli.sh list --env=test
