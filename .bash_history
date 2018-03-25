@@ -51,3 +51,7 @@ bin/cli.sh debug:container --env=staging | grep 'alice'
 bin/cli.sh debug:container --env=staging | grep 'alice'
 bin/cli.sh list --env=staging
 bin/cli.sh list --env=test
+bin/cli.sh 
+bin/cli.sh 
+bin/cli.sh 
+exit
