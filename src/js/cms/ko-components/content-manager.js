@@ -127,6 +127,18 @@ define(function(require) {
     if (!ko.unwrap(block.uuid)) {
       block.uuid(generateUUID());
     }
+    // allow to inject a computedLabel from the component
+    var originalLabel = block.label;
+    block.computedLabel = ko.observable();
+    block.label = ko.computed(function() {
+      var computed = this.computedLabel();
+
+      if (computed) {
+        return computed();
+      } else {
+        return ko.unwrap(originalLabel);
+      }
+    }, block);
 
     return block;
   };
