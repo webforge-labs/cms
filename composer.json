@@ -18,8 +18,6 @@
     },
     "prefer-stable": true,
     "require": {
-        "php": ">=5.4.0",
-        
         "doctrine/orm": ">=2.2.3,<2.5",
         "webforge/utils": "~1.1.0",
         "symfony/symfony": "2.7.*",
