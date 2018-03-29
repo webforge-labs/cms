@@ -6,7 +6,6 @@ src/php/Webforge/*
 src/php/Webforge/CmsBundle/*
 src/php/Webforge/CmsBundle/Resources/*
 !src/php/Webforge/CmsBundle/Resources/js-translations/*.json
-tests/
 etc/symfony/
 etc/docker/
 etc/apache2/
