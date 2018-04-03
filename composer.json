@@ -1,6 +1,7 @@
 {
     "name": "webforge/cms",
     "description": "A cms written in knockoutjs and twitter-bootstrap on top of symfony",
+    "homepage": "https://www.ich-will-ein-pony.de/de/impressum",
 
     "autoload": {
         "psr-0": {
