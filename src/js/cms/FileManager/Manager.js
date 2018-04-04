@@ -393,7 +393,12 @@ define(function(require) {
       }
       that.selection.removeAll();
       that.chosenFiles.removeAll();
-      that.setCurrentItem(that.root);
+
+      if (options.currentPath && that.index.containsKey(options.currentPath)) {
+        that.setCurrentItem(that.index.get(options.currentPath));
+      } else {
+        that.setCurrentItem(that.root);
+      }
     }
 
     this.toNavigator = function() {

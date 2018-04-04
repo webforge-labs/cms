@@ -19,7 +19,8 @@
             });
           },
           spinner: that.isLoading,
-          choosingMode: true
+          choosingMode: true,
+          currentPath: that.uploadPathWithTrailingSlash()
         });
       });
     };
@@ -36,6 +37,16 @@
 
     that.uploadPath = ko.computed(function() {
       return params.generateUploadPath.call(null);
+    });
+
+    that.uploadPathWithTrailingSlash = ko.pureComputed(function() {
+      var path = that.uploadPath();
+
+      if (typeof(path) === "string") {
+        path = path.lastIndexOf('/') != path.length-1 ? path+'/' : path;
+      }
+
+      return path;
     });
 
     that.addUploadedFiles = function(files) {

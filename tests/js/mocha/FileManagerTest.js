@@ -241,6 +241,18 @@ describe('FileManager', function() {
     expect(item2.selected(), 'item.selected after reset').to.be.false;
   });
 
+  it('opens the folder from options currentPath when resetted', function() {
+    var fm = this.fm;
+
+    this.changeFolder('2016-03-27');
+
+    fm.reset({
+      currentPath: '/neuer-ordner/'
+    });
+
+    expect(fm.currentItem().path()).to.be.equal('/neuer-ordner/');
+  });
+
   it('marks all items if selectAll is used', function() {
     var fm = this.fm;
 
