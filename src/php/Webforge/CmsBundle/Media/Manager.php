@@ -31,13 +31,14 @@ class Manager {
     $this->streamWrapperDomain = $streamWrapperDomain;
   }
 
-  /**
-   * Stores a file in db and gaufrette filesystem
-   * @param string $path     a path with forwardslashes starting from root (think of it as directory)
-   * @param string $name     the filename of the file in format given by the user (think of it as filename in the directory in $path)
-   * @param string $contents the binary contents of the file
-   * @return The Entity handling binaries
-   */
+    /**
+     * Stores a file in db and gaufrette filesystem
+     * @param string $path a path with forwardslashes starting from root (think of it as directory)
+     * @param string $name the filename of the file in format given by the user (think of it as filename in the directory in $path)
+     * @param string $contents the binary contents of the file
+     * @return The Entity handling binaries
+     * @throws FileAlreadyExistsException
+     */
   public function addFile($path, $name, $contents) {
     $path = trim($path, '/').'/'; // store without leadingslash but with trailingslash
     $name = $this->normalizeFilename($name);
@@ -137,17 +138,17 @@ class Manager {
     $this->treeModified = $tree;
   }
 
-  public function serializeFile($mediaKey, \stdClass $file) {
+  public function serializeFile($mediaKey, \stdClass $file, Array $options = array()) {
     $entity = $this->storage->loadFile($mediaKey);
 
     if (!$entity) {
       throw new \RuntimeException(sprintf('Entity not found with mediaKey: "%s"', $mediaKey));
     }
 
-    return $this->serializeEntity($entity, $file);
+    return $this->serializeEntity($entity, $file, $options);
   }
 
-  public function serializeEntity(MediaFileEntityInterface $entity, \stdClass $file) {
+  public function serializeEntity(MediaFileEntityInterface $entity, \stdClass $file, Array $options = array()) {
     $mediaKey = $entity->getMediaFileKey();
 
     // those properties will be defined for non existing files
@@ -168,21 +169,22 @@ class Manager {
     $file->isExisting = TRUE;
 
     foreach ($this->serializeHandlers as $handler) {
-      $handler->serializeToFile($mediaFile, $entity, $file);
+      $handler->serializeToFile($mediaFile, $entity, $file, $options);
     }
   }
 
-  public function asTree() {
+  public function asTree(Array $options = array()) {
     $that = $this;
-    $options = [
-      'withFile'=>function(FileNode $node, \stdClass $export) use ($that) {
-        return $that->serializeFile($node->getMediaKey(), $export);
+
+    $treeOptions = [
+      'withFile'=>function(FileNode $node, \stdClass $export) use ($that, $options) {
+        return $that->serializeFile($node->getMediaKey(), $export, $options);
       }
     ];
 
     $tree = $this->storage->loadTree();
 
-    $scalar = $tree->asScalar($options);
+    $scalar = $tree->asScalar($treeOptions);
 
     $this->afterSerialization();
 

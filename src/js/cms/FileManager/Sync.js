@@ -32,6 +32,25 @@ define(['jquery', 'knockout', 'lodash', 'amplify', 'bluebird', 'cms/modules/disp
  
       return d.promise();
     };
+
+    this.retrieveAll = function(processing, afterwards) {
+      processing(true);
+
+      return dispatcher.sendPromised('GET', '/cms/media?thumbnails[]=xs', undefined, 'json')
+        .then(function(response) {
+          processing(false);
+          return afterwards(response);
+        })
+        .catch(function(fault) {
+          processing(false);
+
+          if (fault.response) {
+            amplify.publish('cms.ajax.error', fault.response);
+          } else {
+            throw fault;
+          }
+        });
+    }
  
     this.uploadFromDropbox = function(ci, files, processing, progress, afterwards) {
       var path = ci.path();
@@ -42,7 +61,7 @@ define(['jquery', 'knockout', 'lodash', 'amplify', 'bluebird', 'cms/modules/disp
       var warnings = [];
  
       Promise.map(_.chunk(files, that.concurrentFiles()), function(chunkOfFiles) {
-        var sendPromise = dispatcher.sendPromised('POST', '/cms/media/dropbox', { dropboxFiles: chunkOfFiles, path: path }, 'json');
+        var sendPromise = dispatcher.sendPromised('POST', '/cms/media/dropbox?thumbnails[]=xs', { dropboxFiles: chunkOfFiles, path: path }, 'json');
  
         sendPromise.reflect().then(function(inspection) {
          if (inspection.isFulfilled()) {
@@ -59,7 +78,7 @@ define(['jquery', 'knockout', 'lodash', 'amplify', 'bluebird', 'cms/modules/disp
         return sendPromise;
  
       }, {concurrency: that.concurrentConnections()}).then(function() {
-        return dispatcher.sendPromised('GET', '/cms/media', undefined, 'json');
+        return dispatcher.sendPromised('GET', '/cms/media?thumbnails[]=xs', undefined, 'json');
       })
       .then(function(response) {
         processing(false);
@@ -77,10 +96,8 @@ define(['jquery', 'knockout', 'lodash', 'amplify', 'bluebird', 'cms/modules/disp
     };
 
     this.moveFiles = function(sourcePaths, targetPath, afterwards) {
-      dispatcher.sendPromised('POST', '/cms/media/move', { sources: sourcePaths, target: targetPath }, 'json')
-        .then(function() {
-          return dispatcher.sendPromised('GET', '/cms/media', undefined, 'json');
-        }).then(function(response) {
+      dispatcher.sendPromised('POST', '/cms/media/move?thumbnails[]=xs', { sources: sourcePaths, target: targetPath }, 'json')
+        .then(function(response) {
           return afterwards(response);
         })
        .catch(function(err) {
@@ -93,7 +110,7 @@ define(['jquery', 'knockout', 'lodash', 'amplify', 'bluebird', 'cms/modules/disp
     };
 
     this.rename = function(path, newName) {
-      return dispatcher.sendPromised('POST', '/cms/media/rename', { path: path, name: newName }, 'json')
+       return dispatcher.sendPromised('POST', '/cms/media/rename?thumbnails[]=xs', { path: path, name: newName }, 'json')
         .then(function(response) {
           return {
             response: response,

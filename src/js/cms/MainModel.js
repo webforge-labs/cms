@@ -71,7 +71,7 @@ define(['knockout', 'knockout-mapping', './TabsModel', './TabModel', 'cms/FileMa
 
       that.spinning(true);
       if (options.spinner) options.spinner(true);
-      dispatcher.sendPromised('GET', '/cms/media')
+      dispatcher.sendPromised('GET', '/cms/media?thumbnails[]=xs')
         .then(function(response) {
           if (!that.fileManager()) {
             var fileManager = new FileManager.Manager(response.body);

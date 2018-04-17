@@ -1,7 +1,7 @@
 define(['require', 'knockout', 'jquery', 'uikit-src/uikit-core'], function(require, ko, $, UIkit) {
 
   var UploadComponent = function(UIkit, element, options) {
-    var bar, warnings, files, progressBefore = 0;
+    var bar, warnings, files, errors, progressBefore = 0;
 
     $context = $(element);
 
@@ -17,6 +17,7 @@ define(['require', 'knockout', 'jquery', 'uikit-src/uikit-core'], function(requi
       beforeAll: function(Upload, uploadFiles) { 
         bar = $(element).find('.uk-progress')[0];
         warnings = [];
+        errors = [];
         files = [];
 
         Upload.params['path'] = ko.isObservable(options.path) ? ko.unwrap(options.path) : options.path.call(Upload);
@@ -45,19 +46,35 @@ define(['require', 'knockout', 'jquery', 'uikit-src/uikit-core'], function(requi
       complete: function(xhr) {
         var body = xhr.responseJSON;
 
-        ko.utils.arrayForEach(body.warnings, function(warning) {
-          warnings.push(warning);
-        });
+        if (xhr.status == 200 || xhr.status == 201) {
+          ko.utils.arrayForEach(body.warnings, function (warning) {
+            warnings.push(warning)
+          })
 
-        ko.utils.arrayForEach(body.files, function(file) {
-          files.push(file);
-        });
+          ko.utils.arrayForEach(body.files, function (file) {
+            files.push(file)
+          })
+        } else {
+          errors.push(xhr);
+        }
 
         progressBefore = 0;
       },
 
       completeAll: function(onlyLastXhr) {
         //bar.value = bar.max;
+        if (errors.length) {
+          ko.utils.arrayForEach(errors, function(xhr) {
+            $.notify({
+              message:
+              'Fehler beim Dateien hochladen. ' +xhr.status+' '+xhr.statusText
+            }, {
+              delay: 0,
+              type: 'danger'
+            })
+          });
+        }
+
         if (warnings.length) {
           $.notify({
             message: 
@@ -67,7 +84,9 @@ define(['require', 'knockout', 'jquery', 'uikit-src/uikit-core'], function(requi
           },{
             type: 'warning'
           });
-        } else {
+        }
+
+        if (!errors.length && !warnings.length) {
           $.notify({
             message: 
               files.length == 1 ? 
@@ -78,6 +97,7 @@ define(['require', 'knockout', 'jquery', 'uikit-src/uikit-core'], function(requi
           });
         }
 
+        // call this (no matter what, because some files might be uploaded anyway
         if (options.completed) {
           options.completed.call(undefined, files, onlyLastXhr);
         }

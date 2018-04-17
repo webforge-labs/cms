@@ -62,8 +62,8 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
                     ->property('height')->is($this->greaterThan(0))->end()
                     ->property('url')->contains('fit')->contains('dsc03281.jpg')->end()
                   ->end()
-                  ->property('sm')
-                    ->property('orientation')->is('landscape')->end()
+                  ->property('xs')
+                    ->property('name')->is('xs')->end()
                   ->end()
                 ->end()
                 ->property('key')->isNotEmpty()->get()
@@ -262,24 +262,27 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
 
     $client->request(
       'POST',
-      '/cms/media/upload',
+      '/cms/media/upload?thumbnails[]=xs',
       array('path' => 'uploaded/2017/02/'),
       array('files' => [$photo])
     );
 
-    $response = $this->assertJsonResponse(201, $client);
+    $response = $this->assertJsonResponse(201, $client)
+      ->property('warnings')->isArray()->length(0)->end()
+      ->property('files')->isArray()->length(1)
+        ->key(0)
+            ->property('thumbnails')
+                ->property('xs')->end()
+            ->end()
+            ->property('url')->end()
+      ->end();
+
+    $this->sendJsonRequest($client, 'GET', '/cms/media');
+    $response = $this->assertJsonResponse(200, $client);
 
     $this->assertMediaFiles($response, [
       'uploaded/2017/02/background.jpg'
     ]);
-
-    $response
-      ->property('files')->isArray()->length(1)
-        ->key(0)
-          ->property('name')->isNotEmpty()->end()
-          ->property('key')->isNotEmpty()->end()
-          ->property('isExisting')->is(TRUE)->end()
-        ->end();
   }
 
   public function testUploadingAlreadyExistingFilesConventional() {
@@ -302,16 +305,38 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase {
       array('files' => [$photo])
     );
 
-    $response = $this->assertJsonResponse(201, $client);
+    $this->assertJsonResponse(201, $client)
+        ->property('warnings')->isArray()->length(1)->end()
+        ->property('files')->isArray()->length(1)
+            ->key(0)
+                ->property('name', 'dsc03281.jpg');
 
-    $response
-      ->property('warnings')->isArray()->length(1)->end()
-      ->property('files')->isArray()->length(1)
-        ->key(0)
-          ->property('name')->is('dsc03281.jpg')->end()
-          ->property('key')->isNotEmpty()->end()
-          ->property('isExisting')->is(TRUE)->end()
-        ->end();
+    $this->sendJsonRequest($client, 'GET', '/cms/media');
+    $response = $this->assertJsonResponse(200, $client);
+
+    $this->assertMediaFiles($response, [
+      '2016-03-27/dsc03281.jpg'
+    ]);
+  }
+
+  public function testGetWithThumbnailsFilter()
+  {
+      $client = $this->setUpEmpty();
+      $json = $this->getDropboxFiles();
+      $this->sendJsonRequest($client, 'POST', '/cms/media/dropbox', $json);
+
+      $this->sendJsonRequest($client, 'GET', '/cms/media?thumbnails[]=xs');
+
+      $response = $this->assertJsonResponse(200, $client);
+
+      $thumbnails = $response->property('root')
+        ->property('items')->key(0)
+          ->property('items')->key(0)
+              ->property('thumbnails')
+                  ->property('xs')->isObject()->end()
+                  ->get();
+
+      $this->assertEquals(['xs'], array_keys((array) $thumbnails), 'only xs thumbnails should be generated');
   }
 
   private function assertMediaFiles($response, array $flatFiles) {

@@ -1,4 +1,4 @@
-<div class="file-manager" data-bind="ukUpload: { multiple: true, url: '/cms/media/upload', path: getCurrentUploadPath, completed: addUploadedFiles }">
+<div class="file-manager" data-bind="ukUpload: { multiple: true, url: '/cms/media/upload?thumbnails[]=xs', path: getCurrentUploadPath, completed: addUploadedFiles }">
   <!-- ko if: view() == "navigator" -->
     {% include 'WebforgeCmsBundle:components:file-manager/navigator.html.twig' %}
   <!-- /ko -->

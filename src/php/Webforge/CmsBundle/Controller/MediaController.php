@@ -2,14 +2,17 @@
 
 namespace Webforge\CmsBundle\Controller;
 
+use Doctrine\Common\Util\Debug;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Validator\Constraints as Assert;
+use Webforge\CmsBundle\Media\FileAlreadyExistsException;
+use Webforge\CmsBundle\Media\Manager;
 use Webforge\Symfony\FormError;
 
 class MediaController extends CommonController {
@@ -18,8 +21,12 @@ class MediaController extends CommonController {
    * @Route("/media")
    * @Method("GET")
    */
-  public function indexAction() {
-    return new JsonResponse($this->getIndex());
+  public function indexAction(Request $request) {
+    return new JsonResponse(
+        $this->getIndex([
+            'filters'=>$request->query->all()
+        ])
+    );
   }
 
   /**
@@ -32,10 +39,10 @@ class MediaController extends CommonController {
     ));
   }
 
-  protected function getIndex() {
+  protected function getIndex(Array $options = array()) {
     $manager = $this->get('webforge.media.manager');
 
-    return $manager->asTree();
+    return $manager->asTree($options);
   }
 
   /**
@@ -45,6 +52,7 @@ class MediaController extends CommonController {
   public function uploadMediaFromDropboxAction(Request $request) {
     $user = $this->getUser();
     $json = $this->retrieveJsonBody($request);
+    /** @var Manager $manager */
     $manager = $this->get('webforge.media.manager');
 
     $manager->beginTransaction();
@@ -53,14 +61,14 @@ class MediaController extends CommonController {
       try {
         $manager->addFile($json->path, $dbFile->name, file_get_contents($dbFile->link));
 
-      } catch (\Webforge\CmsBundle\Media\FileAlreadyExistsException $e) {
+      } catch (FileAlreadyExistsException $e) {
         $warnings[] = sprintf('Die Datei %s existiert bereits und wird nicht von mir überschrieben. Du musst sie erst löschen, um sie zu ersetzen', $e->getPath());
       }
     }
 
     $manager->commitTransaction();
 
-    $data = $this->getIndex();
+    $data = $this->getIndex(['filters'=>$request->query->all()]);
     $data->warnings = $warnings;
 
     return new JsonResponse($data, 201);
@@ -72,12 +80,21 @@ class MediaController extends CommonController {
    */
   public function uploadMediaFromAjaxAction(Request $request) {
     $user = $this->getUser();
+    /** @var Manager $manager */
     $manager = $this->get('webforge.media.manager');
+
+    $options = ['filters'=>$request->query->all()];
 
     $manager->beginTransaction();
     $warnings = array();
     $files = array();
-    foreach ($request->files->get('files') as $uploadedFile) {
+    $uploadedFiles = $request->files->get('files');
+
+    if (!$uploadedFiles) {
+        throw new UploadException('The max file size seems to be hit');
+    }
+
+    foreach ($uploadedFiles as $uploadedFile) {
       $export = new \stdClass;
 
       try {
@@ -86,18 +103,19 @@ class MediaController extends CommonController {
           $uploadedFile->getClientOriginalName(), 
           file_get_contents($uploadedFile->getPathName())
         );
-  
-        $manager->serializeEntity($entity, $export);
-      } catch (\Webforge\CmsBundle\Media\FileAlreadyExistsException $e) {
+
+        $manager->serializeEntity($entity, $export, $options);
+
+      } catch (FileAlreadyExistsException $e) {
         $warnings[] = sprintf('Die Datei %s existiert bereits und wird nicht von mir überschrieben. Du musst sie erst löschen, um sie zu ersetzen', $e->getPath());
-        $manager->serializeFile($e->mediaKey, $export);
+        $manager->serializeFile($e->mediaKey, $export, $options);
       }
 
       $files[] = $export;
     }
     $manager->commitTransaction();
 
-    $data = $this->getIndex();
+    $data = new \stdClass;
     $data->warnings = $warnings;
     $data->files = $files;
 
@@ -122,7 +140,7 @@ class MediaController extends CommonController {
 
     $manager->commitTransaction();
 
-    return $this->indexAction();
+    return $this->indexAction($request);
   }
 
   /**
@@ -140,7 +158,7 @@ class MediaController extends CommonController {
     }
     $manager->commitTransaction();
 
-    return $this->indexAction();
+    return $this->indexAction($request);
   }
 
   /**
@@ -174,7 +192,7 @@ class MediaController extends CommonController {
       $manager->renameByPath($json->path, $json->name);
       $manager->commitTransaction();
 
-      return $this->indexAction();
+      return $this->indexAction($request);
     }
 
     $formError = new FormError();

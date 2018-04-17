@@ -352,7 +352,7 @@ define(function(require) {
          that.sync.uploadFromDropbox(ci, files, that.processing, that.filesProgress, function(response, warnings) {
            that.refreshData(response.body);
 
-           if (warnings.length) {
+           if (warnings && warnings.length) {
              that.error({message: _.join(warnings, "<br>\n")});
            }
          });
@@ -370,13 +370,12 @@ define(function(require) {
       return that.path();
     };
 
-    this.addUploadedFiles = function(files, lastXhr) {
-      that.refreshData(lastXhr.responseJSON);
-      /*
-      ko.utils.arrayForEach(files, function(file) {
-        that.currentItem().addFile(file);
-      });
-      */
+    this.addUploadedFiles = function(files) {
+      if (files.length > 0) {
+        that.sync.retrieveAll(that.processing, function (response) {
+          that.refreshData(response.body);
+        });
+      }
     };
 
     this.confirmChosenFiles = function () {

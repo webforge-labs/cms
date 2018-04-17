@@ -20,7 +20,7 @@ class ThumborThumbnailsFileHandler implements MediaFileHandlerInterface {
     $this->filesystem = $filesystem;
   }
 
-  public function serializeToFile(FileInterface $mediaFile, MediaFileEntityInterface $entity, stdClass $file) {
+  public function serializeToFile(FileInterface $mediaFile, MediaFileEntityInterface $entity, stdClass $file, Array $options) {
     if ($this->enabled && $mediaFile->isImage()) {
 
       if (!isset($file->thumbnails)) {
@@ -30,6 +30,12 @@ class ThumborThumbnailsFileHandler implements MediaFileHandlerInterface {
       }
 
       foreach ($this->transformations as $name => $transformation) {
+        if ($options && $options['filters'] && isset($options['filters']['thumbnails']) && is_array($options['filters']['thumbnails'])) {
+            if (!in_array($name, $options['filters']['thumbnails'])) {
+                continue;
+            }
+        }
+
         $meta = new stdClass;
         $builder = $this->transformer->transform($file->url, $name);
 

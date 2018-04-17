@@ -7,5 +7,5 @@ use Webforge\CmsBundle\Model\MediaFileEntityInterface;
 
 Interface MediaFileHandlerInterface {
 
-  public function serializeToFile(MediaFileInterface $mediaFile, MediaFileEntityInterface $entity, \stdClass $file);
+  public function serializeToFile(MediaFileInterface $mediaFile, MediaFileEntityInterface $entity, \stdClass $file, Array $options);
 }

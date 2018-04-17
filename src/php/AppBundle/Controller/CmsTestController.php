@@ -31,7 +31,15 @@ class CmsTestController extends CommonController {
                 'id'=>'users-list',
                 'url'=>'/cms/users/list'
               )
-            )
+            ),
+            array(
+              'label'=>'Bilder verwalten',
+              'tab'=>array(
+                'label'=>'Datei-Manager',
+                'id'=>'file-manager',
+                'url'=>'/cms/media/file-manager'
+              )
+            ),
           ),
           'Webseite'=>array(
             array(
