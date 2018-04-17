@@ -58,18 +58,20 @@ class MediaController extends CommonController {
 
     $manager->beginTransaction();
     $warnings = array();
+    $entities = [];
     foreach ($json->dropboxFiles as $dbFile) {
       try {
-        $entity = $manager->addFile($json->path, $dbFile->name, file_get_contents($dbFile->link));
-
-        $this->warmupSerializationInBackground($entity);
-
+        $entities[] = $manager->addFile($json->path, $dbFile->name, file_get_contents($dbFile->link));
       } catch (FileAlreadyExistsException $e) {
         $warnings[] = sprintf('Die Datei %s existiert bereits und wird nicht von mir überschrieben. Du musst sie erst löschen, um sie zu ersetzen', $e->getPath());
       }
     }
 
     $manager->commitTransaction();
+
+    foreach ($entities as $entity) {
+      $this->warmupSerializationInBackground($entity);
+    }
 
     $data = $this->getIndex(['filters'=>$request->query->all()]);
     $data->warnings = $warnings;
@@ -89,8 +91,9 @@ class MediaController extends CommonController {
     $options = ['filters'=>$request->query->all()];
 
     $manager->beginTransaction();
-    $warnings = array();
-    $files = array();
+    $warnings = [];
+    $files = [];
+    $entities = [];
     $uploadedFiles = $request->files->get('files');
 
     if (!$uploadedFiles) {
@@ -101,16 +104,13 @@ class MediaController extends CommonController {
       $export = new \stdClass;
 
       try {
-        $entity = $manager->addFile(
+        $entities[] = $entity = $manager->addFile(
           $request->request->get('path'),
           $uploadedFile->getClientOriginalName(), 
           file_get_contents($uploadedFile->getPathName())
         );
 
         $manager->serializeEntity($entity, $export, $options);
-
-        $this->warmupSerializationInBackground($entity);
-
       } catch (FileAlreadyExistsException $e) {
         $warnings[] = sprintf('Die Datei %s existiert bereits und wird nicht von mir überschrieben. Du musst sie erst löschen, um sie zu ersetzen', $e->getPath());
         $manager->serializeFile($e->mediaKey, $export, $options);
@@ -119,6 +119,10 @@ class MediaController extends CommonController {
       $files[] = $export;
     }
     $manager->commitTransaction();
+
+    foreach ($entities as $entity) {
+      $this->warmupSerializationInBackground($entity);
+    }
 
     $data = new \stdClass;
     $data->warnings = $warnings;
