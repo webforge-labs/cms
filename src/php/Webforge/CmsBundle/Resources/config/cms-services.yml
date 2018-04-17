@@ -99,3 +99,8 @@ services:
     class: Webforge\CmsBundle\Command\MailSpoolCommand
     tags:
       -  { name: console.command }
+
+  webforge_warmup_media_file_command:
+    class: \Webforge\CmsBundle\Command\WarmupMediaFileMetaCommand
+    tags:
+      -  { name: console.command }

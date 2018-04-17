@@ -1,6 +1,11 @@
 # these services are only used to run the cms-appbundle and they are not global
 services:
-    now: 
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: true
+
+    now:
         class: "Webforge\\Common\\DateTime\\DateTime"
         factory: ["Webforge\\Common\\DateTime\\DateTime", "now"]
 
@@ -9,3 +14,12 @@ services:
         arguments: []
         tags:
             - { name: twig.extension }
+
+    job_dispatcher:
+        class: Webforge\CmsBundle\JobDispatcher
+        arguments:
+          - '/app/bin/cli.sh'
+          - '%kernel.environment%'
+          - '@logger'
+          - { SOMETHING_IN_ENV_FOR_CLI: 'some value' }
+

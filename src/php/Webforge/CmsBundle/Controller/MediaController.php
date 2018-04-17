@@ -2,7 +2,7 @@
 
 namespace Webforge\CmsBundle\Controller;
 
-use Doctrine\Common\Util\Debug;
+use Psr\Container\NotFoundExceptionInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 use Webforge\CmsBundle\Media\FileAlreadyExistsException;
 use Webforge\CmsBundle\Media\Manager;
+use Webforge\CmsBundle\Model\MediaFileEntityInterface;
 use Webforge\Symfony\FormError;
 
 class MediaController extends CommonController {
@@ -59,7 +60,9 @@ class MediaController extends CommonController {
     $warnings = array();
     foreach ($json->dropboxFiles as $dbFile) {
       try {
-        $manager->addFile($json->path, $dbFile->name, file_get_contents($dbFile->link));
+        $entity = $manager->addFile($json->path, $dbFile->name, file_get_contents($dbFile->link));
+
+        $this->warmupSerializationInBackground($entity);
 
       } catch (FileAlreadyExistsException $e) {
         $warnings[] = sprintf('Die Datei %s existiert bereits und wird nicht von mir überschrieben. Du musst sie erst löschen, um sie zu ersetzen', $e->getPath());
@@ -105,6 +108,8 @@ class MediaController extends CommonController {
         );
 
         $manager->serializeEntity($entity, $export, $options);
+
+        $this->warmupSerializationInBackground($entity);
 
       } catch (FileAlreadyExistsException $e) {
         $warnings[] = sprintf('Die Datei %s existiert bereits und wird nicht von mir überschrieben. Du musst sie erst löschen, um sie zu ersetzen', $e->getPath());
@@ -202,4 +207,16 @@ class MediaController extends CommonController {
       400
     );
   }
+
+    protected function warmupSerializationInBackground(MediaFileEntityInterface $entity)
+    {
+        try {
+            $dispatcher = $this->get('job_dispatcher');
+
+            $dispatcher->dispatchCliCommand('cms:warmup-media-file', [$entity->getMediaFileKey()]);
+
+        } catch (NotFoundExceptionInterface $e) {
+            print 'Not possible to warmup media file in background because no service "job_dispatcher" is registered';
+        }
+    }
 }

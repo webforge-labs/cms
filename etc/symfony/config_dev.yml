@@ -6,11 +6,6 @@ parameters:
     thumbor_server: 'http://docker-host:8000'
     thumbor_secret: gJ5n38f7o0TilkkmMTEB
 
-services:
-#    now: 
-#        class: "Webforge\\Common\\DateTime\\DateTime"
-#        arguments: ['08.10.2015 10:11']
-
 framework:
     router:
         resource: "%kernel.project_dir%/etc/symfony/routing_dev.yml"
