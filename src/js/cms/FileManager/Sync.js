@@ -33,17 +33,13 @@ define(['jquery', 'knockout', 'lodash', 'amplify', 'bluebird', 'cms/modules/disp
       return d.promise();
     };
 
-    this.retrieveAll = function(processing, afterwards) {
-      processing(true);
+    this.retrieveAll = function(afterwards) {
 
       return dispatcher.sendPromised('GET', '/cms/media?thumbnails[]=xs', undefined, 'json')
         .then(function(response) {
-          processing(false);
           return afterwards(response);
         })
         .catch(function(fault) {
-          processing(false);
-
           if (fault.response) {
             amplify.publish('cms.ajax.error', fault.response);
           } else {

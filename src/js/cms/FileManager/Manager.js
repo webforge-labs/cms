@@ -372,7 +372,7 @@ define(function(require) {
 
     this.addUploadedFiles = function(files) {
       if (files.length > 0) {
-        that.sync.retrieveAll(that.processing, function (response) {
+        that.sync.retrieveAll(function (response) {
           that.refreshData(response.body);
         });
       }
