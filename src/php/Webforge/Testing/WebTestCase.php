@@ -147,7 +147,7 @@ class WebTestCase extends SymfonyWebTestCase
             $helpfulErrorMessage = sprintf(
                 "\n** Tested Request: %s\n\n** Tested Response:\n%s",
                 $client->getRequest(),
-                substr($client->getResponse(), 0, 800)
+                (string) $client->getResponse()
             );
 
             //file_put_contents(getcwd().'/last-exception.html', $client->getResponse());
