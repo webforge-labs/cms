@@ -56,7 +56,7 @@ class MediaFileSerializationTest extends \Webforge\Testing\WebTestCase {
 
     $manager = $client->getContainer()->get('webforge.media.manager');
     $manager->beginTransaction();
-    $binary = $manager->addFile('die-minis/', 'mini.png', $GLOBALS['env']['root']->sub('Resources/img/')->getFile('mini-single.png')->getContents());
+    $binary = $manager->addFile('die-minis/', 'mini.png', $GLOBALS['env']['root']->sub('tests/files/')->getFile('mini-single.png')->getContents());
     $manager->commitTransaction();
 
     $image = new Image();

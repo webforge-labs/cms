@@ -28,7 +28,7 @@ class TreeFileVisitor implements \Tree\Visitor\Visitor {
       'name'=>$node->getValue(),
       'items'=>array()
     ];
-    
+
     foreach ($node->getChildren() as $child) {
       if ($item = $child->accept($this)) {
         $export->items[] = $item;
@@ -37,7 +37,9 @@ class TreeFileVisitor implements \Tree\Visitor\Visitor {
 
     if ($export->type === 'file') {
       $withFile = $this->options['withFile'];
-      $withFile($node, $export);
+      if (!$withFile($node, $export)) {
+          return FALSE;
+      }
     } elseif ($export->type === 'directory' && count($export->items) == 0) { // dont export empty directories
       return FALSE;
     }

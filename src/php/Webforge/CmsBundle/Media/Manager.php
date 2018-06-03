@@ -2,6 +2,7 @@
 
 namespace Webforge\CmsBundle\Media;
 
+use Gaufrette\Exception\FileNotFound;
 use URLify;
 use Gaufrette\Filesystem;
 use Webforge\Gaufrette\Index;
@@ -178,7 +179,11 @@ class Manager {
 
     $treeOptions = [
       'withFile'=>function(FileNode $node, \stdClass $export) use ($that, $options) {
-        return $that->serializeFile($node->getMediaKey(), $export, $options);
+        try {
+            return $that->serializeFile($node->getMediaKey(), $export, $options);
+        } catch (FileNotFoundException $e) {
+            return FALSE;
+        }
       }
     ];
 
