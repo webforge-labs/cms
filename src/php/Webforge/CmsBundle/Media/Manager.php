@@ -180,9 +180,10 @@ class Manager {
     $treeOptions = [
       'withFile'=>function(FileNode $node, \stdClass $export) use ($that, $options) {
         try {
-            return $that->serializeFile($node->getMediaKey(), $export, $options);
+            $that->serializeFile($node->getMediaKey(), $export, $options);
+            return true;
         } catch (FileNotFoundException $e) {
-            return FALSE;
+            return false;
         }
       }
     ];
