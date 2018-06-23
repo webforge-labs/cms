@@ -1,22 +1,22 @@
 <div class="panel-group" id="drop-contents" role="tablist" aria-multiselectable="true">
 
-  {% for label, group in sidebar.groups %}
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="drop-contents-group-{{loop.index}}-heading">
-      <h4 class="panel-title">
-        <a role="button" data-toggle="collapse" data-parent="#drop-contents" href="#drop-contents-group-{{loop.index}}" aria-expanded="true" aria-controls="collapseOne">
-          {{label}}
-        </a>
-      </h4>
-    </div>
-    <div id="drop-contents-group-{{loop.index}}" class="panel-collapse collapse {% if sidebar.allOpen is defined and sidebar.allOpen or loop.index == sidebar.activeGroup %}in{%endif%}" role="tabpanel" aria-labelledby="drop-contents-group-{{loop.index}}-heading">
-      <ul class="list-group">
-      {% for link in group %}
-        <li class="list-group-item"><a href="#" data-bind='cmsTab: {{link.tab|json_encode}}'>{{link.label}}</a></li>
-      {% endfor %}
-      </ul>
-    </div>
-  </div>
-  {% endfor %}
+    {% for label, group in sidebar.groups %}
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="drop-contents-group-{{ loop.index }}-heading">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#drop-contents" href="#drop-contents-group-{{ loop.index }}" aria-expanded="true" aria-controls="collapseOne">
+                        {{ label }}
+                    </a>
+                </h4>
+            </div>
+            <div id="drop-contents-group-{{ loop.index }}" class="panel-collapse collapse {% if sidebar.allOpen is defined and sidebar.allOpen or loop.index == sidebar.activeGroup %}in{% endif %}" role="tabpanel" aria-labelledby="drop-contents-group-{{ loop.index }}-heading">
+                <ul class="list-group">
+                    {% for link in group %}
+                        {% include 'WebforgeCmsBundle:default:navbar-link.html.twig' with { liClass: 'list-group-item'} %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endfor %}
 
 </div>

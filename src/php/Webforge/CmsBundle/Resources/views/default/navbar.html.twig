@@ -21,7 +21,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" {% if loop.index == sidebar.activeGroup %} data-open-on-navbar-expand="true"{%endif%}>{{label}} <b class="caret"></b></a>
           <ul class="dropdown-menu">
           {% for link in group %}
-            <li><a href="#" data-bind='cmsTab: {{link.tab|json_encode}}, cmsTabCloseNav: true'>{{link.label}}</a></li>
+            {% include 'WebforgeCmsBundle:default:navbar-link.html.twig' with { extraBind: ', cmsTabCloseNav: true' } %}
           {% endfor %}
           </ul>
         </li>

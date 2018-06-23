@@ -1,0 +1,5 @@
+{% if link.external is defined %}
+    <li class="{{ liClass|default('') }}"><a target="_blank" href="{{ link.external }}">{{ link.label }}</a></li>
+{% else %}
+    <li class="{{ liClass|default('') }}"><a href="#" data-bind='cmsTab: {{ link.tab|json_encode }}{{ extraBind|default("") }}'>{{ link.label }}</a></li>
+{% endif %}
