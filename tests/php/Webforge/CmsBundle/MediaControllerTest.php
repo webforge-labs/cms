@@ -2,6 +2,7 @@
 
 namespace Webforge\CmsBundle;
 
+use Gaufrette\Filesystem;
 use Symfony\Component\Process\Process;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Webforge\CmsBundle\Media\Manager;
@@ -110,7 +111,7 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase
     {
         $client = $this->setupEmpty();
 
-        $this->storeFiles($client, [
+        list($key1, $oldKey) = $this->storeFiles($client, [
             'folder/tapire.png' => 'tapire.png',
             'folder/mini-single.png' => 'tapire.png'
         ]);
@@ -137,6 +138,9 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase
             file_get_contents($uploadUrl) === file_get_contents($manager->getStreamUrl($binary)),
             'the file should be overwritten from the uploaded dropbox url contents (contents do not equal from streams)'
         );
+
+        $this->assertNotEquals($oldKey, $binary->getMediaFileKey(), 'the key should have changed, because thumbnails caching should reset');
+        $this->assertFalse($this->getFilesystem($client)->has($oldKey), 'the old image file should be deleted');
     }
 
     public function testThatImagesWithBadNamesWillBeUrlified()
@@ -463,7 +467,7 @@ JSON
         $GLOBALS['env']['root']->sub('files/cache/imagine-meta')->delete();
     }
 
-    protected function getFilesystem($client)
+    protected function getFilesystem($client) : Filesystem
     {
         return $client->getContainer()->get('knp_gaufrette.filesystem_map')->get('cms_media');
     }

@@ -78,11 +78,25 @@ class Manager
     {
         try {
             $entity = $this->findFileByPath($this->getNormalizedPath($path, $name));
-
-            // overwrite data in physical storage
-            $this->filesystem->write($entity->getMediaFileKey(), $contents, true);
-
             $wasUpdated = true;
+
+            // we need to use a new media key, because the file content has changed and so it should not be cached inoorrectly
+            // however we can keep the entity and its saved relationships
+            // this is problematic for mechanisms that work with the key!
+            $oldKey = $entity->getMediaFileKey();
+
+            $path = $this->normalizePath($path);
+            $name = $this->normalizeFilename($name);
+
+            $entity->setMediaFileKey($newKey = $this->createMediaKey($path, $name, $contents));
+
+            $this->filesystem->write($newKey, $contents);
+
+            $this->updateIndexFile($entity, $path, $name, $oldKey);
+
+            // delete the old file, we dont need it anymore
+            $this->filesystem->delete($oldKey);
+
 
             return $entity;
         } catch (\LogicException $e) {
@@ -107,6 +121,16 @@ class Manager
             $alreadyExists->mediaKey = $e->mediaKey;
             throw $alreadyExists;
         }
+
+        $this->treeModified = $tree;
+    }
+
+    protected function updateIndexFile(MediaFileEntityInterface $entity, $path, $name, $oldKey)
+    {
+        $tree = $this->storage->loadTree();
+
+        $tree->removeNodeByKey($oldKey);
+        $tree->addNode($path, $name, $entity->getMediaFileKey());
 
         $this->treeModified = $tree;
     }
