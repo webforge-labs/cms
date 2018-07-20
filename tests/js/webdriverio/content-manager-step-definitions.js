@@ -1,7 +1,7 @@
 module.exports = function() {
 
   this.World.prototype.openContentManagerMenu = function() {
-    this.context.css('.btn:contains("Inhalt hinzufügen")').waitForVisible().click()
+    this.context.css('.btn:contains("Inhalt hinzufügen")').waitForVisible(3000).click()
     
     return this.context.css('.btn-group:has(.btn:contains("Inhalt hinzufügen"))').waitForExist()
       .css('.dropdown-menu').waitForVisible(100);
