@@ -9,8 +9,11 @@
     that.processing = ko.observable(false);
     that.isLoading = ko.observable(false);
     that.accept = ko.observable(params.accept);
+    that.manager = ko.observable(params.manager);
 
     that.chooseFiles = function() {
+      if (!that.manager()) return;
+
       require(['cms/modules/main'], function(main) {
         main.openFileManager({
           success: function(files) {

@@ -115,7 +115,8 @@
           name: "{{name}}",
           model: $data,
           generateUploadPath: $data.generateUploadPath,
-          accept: "{{options.accept|default("*/*")}}"
+          accept: "{{options.accept|default("*/*")}}",
+          manager: {% if options.manager is not defined or options.manager == true %}true{% else %}false{% endif %}
         }}'>
     </div>
   </div>
