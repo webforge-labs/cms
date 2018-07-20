@@ -81,7 +81,7 @@ class Tree {
     $node = $this->root->accept(new NodeFinderVisitor($path));
 
     if (!$node) {
-      throw new \LogicException('Node with path: "'.$path.'" is not existing and cannot be renamed.');
+      throw new \LogicException('Node with path: "'.$path.'" is not existing.');
     }
 
     return $node;

@@ -20,6 +20,10 @@ npm test
 
 A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsoring a free Live account, that allows us to test on Iphones and other devices.
 
+## BC Breaks for 2.1.x
+
+- files uploaded to the media controller will overwrite existing files (but warnings will still be generated)
+
 ## Upgrade to 2.0.x
 
 []Read Upgrading to 2.0](docs/upgrading-to-2.0.x.md)
