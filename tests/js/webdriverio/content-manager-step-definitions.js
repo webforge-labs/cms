@@ -1,7 +1,7 @@
 module.exports = function() {
 
   this.World.prototype.openContentManagerMenu = function() {
-    this.context.css('.btn:contains("Inhalt hinzufügen")').waitForVisible(3000).click()
+    this.context.css('.btn:contains("Inhalt hinzufügen")').waitForVisible(12000).click()
     
     return this.context.css('.btn-group:has(.btn:contains("Inhalt hinzufügen"))').waitForExist()
       .css('.dropdown-menu').waitForVisible(100);
@@ -80,7 +80,7 @@ module.exports = function() {
 
   this.When(/^I write "([^"]*)" into the textfield from block (\d+)$/, function (text, number) {
     this.cmPanel(number)
-      .css('.form-group input').exists().get().setValue(text);
+      .css('.form-group input').waitForExist().get().setValue(text);
   });
 
   this.Then(/^the content\-stream contains a block (\d+) with question "([^"]*)" and answer "([^"]*)"$/, function (number, questionContent, answerContent) {
