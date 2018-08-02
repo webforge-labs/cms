@@ -13,16 +13,22 @@
   <!--/ko-->
   <progress class="uk-progress" value="0" max="100" hidden style="width: 100%"></progress>
 
-  <div class="upload-well uk-placeholder uk-text-center">
+  <div class="upload-well uk-placeholder uk-text-center hidden-xs">
     <p>
-      <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-      <span class="uk-text-middle">Lade Bilder direkt hoch, indem Du sie hierher ziehst</span><br/>
       <span uk-form-custom>
           <input type="file" data-bind="attr: {'accept': accept }" multiple>
-          <a class="btn btn-info btn-xs" href="#">oder von deinem Gerät auswählst</a>
+          <a class="btn btn-info" href="#"><i class="fa fa-cloud-upload" aria-hidden="true"></i> Lade Bilder von deinem Gerät hoch</a><br>
+          <span class="uk-text-middle">oder ziehe sie hierher</span><br/>
       </span>
     </p>
     <p data-bind="if: manager" class="text-smaller m-t-2">Die Bilder werden in den Ordner <samp data-bind="text: uploadPath()"></samp> gespeichert.</p>
+  </div>
+
+  <div class="visible-xs">
+    <span uk-form-custom>
+      <input type="file" data-bind="attr: {'accept': accept }" multiple>
+      <a class="btn btn-info btn-lg" href="#"><i class="fa fa-cloud-upload" aria-hidden="true"></i> Bilder hinzufügen</a>
+    </span>
   </div>
 
   <!-- ko if: manager -->

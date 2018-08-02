@@ -27,7 +27,14 @@ define(['jquery', 'knockout', './MainModel', 'amplify', './ko-bindings/cms-tab',
 
 
       $.notifyDefaults({
-        offset: 60,
+        offset: {
+          x: 0,
+          y: 60
+        },
+        placement: {
+          from: 'top',
+          align: 'center'
+        },
         spacing: 60,
         z_index: 2000 // bootstrap-modal is like 1050
       });
