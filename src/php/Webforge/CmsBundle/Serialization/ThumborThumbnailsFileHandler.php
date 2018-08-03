@@ -2,118 +2,167 @@
 
 namespace Webforge\CmsBundle\Serialization;
 
+use Gaufrette\Stream;
+use Psr\Log\LoggerInterface;
 use Webforge\CmsBundle\Media\FileInterface;
+use Webforge\CmsBundle\Media\Manager;
 use Webforge\CmsBundle\Model\MediaFileEntityInterface;
 use RuntimeException;
 use stdClass;
+use Webforge\Gaufrette\File;
 
-class ThumborThumbnailsFileHandler implements MediaFileHandlerInterface {
+class ThumborThumbnailsFileHandler implements MediaFileHandlerInterface
+{
 
-  protected $transformations;
-  protected $transformer;
-  private $enabled;
+    protected $transformations;
+    protected $transformer;
 
-  public function __construct($transformations, $transformer, $filesystem) {
-    $this->transformer = $transformer;
-    $this->transformations = $transformations;
-    $this->enabled = count($this->transformations) > 0;
-    $this->filesystem = $filesystem;
-  }
+    private $enabled;
 
-  public function serializeToFile(FileInterface $mediaFile, MediaFileEntityInterface $entity, stdClass $file, Array $options) {
-    if ($this->enabled && $mediaFile->isImage()) {
+    /**
+     * @var Manager
+     */
+    private $manager;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
-      if (!isset($file->thumbnails)) {
-        $file->thumbnails = [];
-      } else {
-        $file->thumbnails = (array) $file->thumbnails;
-      }
+    public function __construct($transformations, $transformer, $filesystem, LoggerInterface $logger)
+    {
+        $this->transformer = $transformer;
+        $this->transformations = $transformations;
+        $this->enabled = count($this->transformations) > 0;
+        $this->logger = $logger;
+    }
 
-      foreach ($this->transformations as $name => $transformation) {
-        if ($options && $options['filters'] && isset($options['filters']['thumbnails']) && is_array($options['filters']['thumbnails'])) {
-            if (!in_array($name, $options['filters']['thumbnails'])) {
-                continue;
+    public function serializeToFile(
+        FileInterface $mediaFile,
+        MediaFileEntityInterface $entity,
+        stdClass $file,
+        Array $options
+    ) {
+        if ($this->enabled && $mediaFile->isImage()) {
+
+            if (!isset($file->thumbnails)) {
+                $file->thumbnails = [];
+            } else {
+                $file->thumbnails = (array)$file->thumbnails;
+            }
+
+            foreach ($this->transformations as $name => $transformation) {
+                if ($options && $options['filters'] && isset($options['filters']['thumbnails']) && is_array($options['filters']['thumbnails'])) {
+                    if (!in_array($name, $options['filters']['thumbnails'])) {
+                        continue;
+                    }
+                }
+
+                $meta = new stdClass;
+                $builder = $this->transformer->transform($file->url, $name);
+
+                if (array_key_exists('metadata_only', $transformation) && $transformation['metadata_only']) {
+                    $metadataUrl = (string)$builder->build();
+
+                    // build the real url without metadata
+                    $builder->metadataOnly(false);
+                    $meta->url = (string)$builder->build();
+
+                    $this->fetchAndMergeMetadata($metadataUrl, $entity, 'thumbor.'.$name, $meta, $file);
+                } else {
+                    $meta->url = (string)$builder->build();
+                }
+
+                $meta->name = $name;
+
+                $file->thumbnails[$name] = $meta;
             }
         }
+    }
 
-        $meta = new stdClass;
-        $builder = $this->transformer->transform($file->url, $name);
+    public function fetchAndMergeMetadata(
+        $url,
+        MediaFileEntityInterface $entity,
+        $cacheKey,
+        stdClass $thumbnailMeta,
+        stdClass $file
+    ) {
+        $metadata = $entity->getMediaMetadata($cacheKey);
 
-        if (array_key_exists('metadata_only', $transformation) && $transformation['metadata_only']) {
-          $metadataUrl = (string) $builder->build();
+        if (!$metadata) {
 
-          // build the real url without metadata
-          $builder->metadataOnly(false);
-          $meta->url = (string) $builder->build();
+            /* this does not work right now 100%, because: https://github.com/thumbor/thumbor/issues/949 
+            
+            heres the thing:
+            if one would upload an image where the camera is hold in portrait mode, the camera will write the file in landscape mode anyway
+            but put a orientation (right top) into the exif metadata
+            
+            windows10 (even explorer preview), irfanview, macs they all will display the image upwards
+            
+            php getimagesizefromstring will return the real format (not the rotated) which is width>>height
+            (we got that wrong all the time)
 
-          $this->fetchAndMergeMetadata($metadataUrl, $entity, 'thumbor.'.$name, $meta, $file);
-        } else {
-          $meta->url = (string) $builder->build();
+            when the image is passed through thumbor (even with no filters applied) it will get rotated according the exif tag. so then the real image is portrait
+            of course this applies to any thumbnail, too
+
+            but this is exactly what thumbor gets wrong, the 'source' tag in thumbor is correct
+            but the target tag width and height should be switched (because thumbor has rotated the thumbnail physically)
+
+            for a workaround we have to read the exif data here, to determine if target needs to be rotated
+            according to: https://cdn.ich-will-ein-pony.de/EXIF_Orientations.jpg
+
+            */
+            $context = stream_context_create([
+                'http' => [
+                    'method' => 'GET',
+                    'header' => "Accept: application/json\r\n"
+                ]
+            ]);
+            $metadata = json_decode(file_get_contents($url, false, $context))->thumbor;
+
+            $streamUrl = $this->manager->getStreamUrl($entity);
+            $exif = exif_read_data($streamUrl);
+
+            if ($exif) {
+                // it maybe twisted because thumbor did not normalized with exif rotation for the thumbnail when providing metadata (see github issue)
+                $orientation = isset($exif['Orientation']) ? (int) $exif['Orientation'] : 1;
+
+                if ($orientation >= 5 && $orientation <= 8) {
+                    // this is the gretchen-question: should this be flipped, or not? the "original" is in physical form landscape, but would be shown twisted
+                    /*
+                    $metadata->source = (object)[
+                        'width' => $metadata->source->height,
+                        'height' => $metadata->source->width
+                    ];
+                    */
+
+                    $metadata->target = (object)[
+                        'width' => $metadata->target->height,
+                        'height' => $metadata->target->width
+                    ];
+                }
+            }
+
+            $entity->setMediaMetadata($cacheKey, $metadata);
         }
 
-        $meta->name = $name;
+        $thumbnailMeta->width = $metadata->target->width;
+        $thumbnailMeta->height = $metadata->target->height;
+        $thumbnailMeta->isPortrait = $isPortrait = ($metadata->target->height > $metadata->target->width);
+        $thumbnailMeta->isLandscape = $metadata->target->width > $metadata->target->height;
+        $thumbnailMeta->orientation = $isPortrait ? 'portrait' : 'landscape'; // square === landscape
 
-        $file->thumbnails[$name] = $meta;
-      }
-    }
-  }
-
-  public function fetchAndMergeMetadata($url, MediaFileEntityInterface $entity, $cacheKey, stdClass $thumbnailMeta, stdClass $file) {
-    $metadata = $entity->getMediaMetadata($cacheKey);
-
-    if (!$metadata) {
-
-      /* this does not work right now, because: https://github.com/thumbor/thumbor/issues/949 
-      $context = stream_context_create([
-        'http'=>[
-          'method'=> 'GET',
-          'header'=>"Accept: application/json\r\n"
-        ]
-      ]);
-      $metadata = json_decode(file_get_contents($url, false, $context))->thumbor;
-      */
-      $metadata = new \stdClass;
-
-      $physicalFile = $this->filesystem->get($file->key);
-      $size = getimagesizefromstring($physicalFile->getContent());
-
-      if ($size) {
-        $metadata->source = (object) [
-          'width'=>$size[0],
-          'height'=>$size[1]
-        ];
-      }
-
-      $context = stream_context_create([
-        'http'=>[
-          'method'=> 'GET'
-        ]
-      ]);
-
-      $size = getimagesizefromstring(file_get_contents($thumbnailMeta->url, false, $context));
-
-      if (!$size) {
-        throw new \Exception('cannot getimagesizefromstring for url: '.$thumbnailMeta->url);
-      }
-
-      $metadata->target = (object) [
-        'width'=>$size[0],
-        'height'=>$size[1]
-      ];
-
-      $entity->setMediaMetadata($cacheKey, $metadata);
+        $file->width = $metadata->source->width;
+        $file->height = $metadata->source->height;
+        $file->isPortrait = $isPortrait = ($metadata->source->height > $metadata->source->width);
+        $file->isLandscape = $metadata->source->width > $metadata->target->height;
+        $file->orientation = $isPortrait ? 'portrait' : 'landscape'; // square === landscape
     }
 
-    $thumbnailMeta->width = $metadata->target->width;
-    $thumbnailMeta->height = $metadata->target->height;
-    $thumbnailMeta->isPortrait = $isPortrait = ($metadata->target->height > $metadata->target->width);
-    $thumbnailMeta->isLandscape = $metadata->target->width > $metadata->target->height;
-    $thumbnailMeta->orientation = $isPortrait ? 'portrait' : 'landscape'; // square === landscape
-
-    $file->width = $metadata->source->width;
-    $file->height = $metadata->source->height;
-    $file->isPortrait = $isPortrait = ($metadata->source->height > $metadata->source->width);
-    $file->isLandscape = $metadata->source->width > $metadata->target->height;
-    $file->orientation = $isPortrait ? 'portrait' : 'landscape'; // square === landscape
-  }
+    /**
+     * @param Manager $manager
+     */
+    public function setManager(Manager $manager): void
+    {
+        $this->manager = $manager;
+    }
 }
