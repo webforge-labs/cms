@@ -11,10 +11,12 @@ services:
   php:
     volumes:
       - ./:/app
-      - ./.bash_history:/root/.bash_history
 
     extra_hosts:
       - "cms.local:${DOCKER_HOSTIP}"
+
+    environment:
+      - "HISTFILE=/app/files/.bash_history"
 
   mysqldb:
     #note: mysql 5.7 has longer usernames (32 instead of 16)!

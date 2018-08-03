@@ -6,6 +6,17 @@ parameters:
     thumbor_server: 'http://docker-host:8000'
     thumbor_secret: gJ5n38f7o0TilkkmMTEB
 
+    mailer_transport: smtp
+    mailer_host: localhost
+    mailer_user: 'cms@ps-webforge.com'
+    mailer_password: none
+
+    database_host: mysqldb
+    database_name: cms
+    database_user: cms
+    database_password: cmspw
+    database_port: 3306
+
 framework:
     router:
         resource: "%kernel.project_dir%/etc/symfony/routing_dev.yml"

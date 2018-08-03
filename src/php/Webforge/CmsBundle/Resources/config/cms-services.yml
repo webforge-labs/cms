@@ -30,7 +30,9 @@ services:
     arguments:
       - '%phumbor.transformations%'
       - '@phumbor.url.transformer'
-      - '@webforge.media.filesystem'
+      - '@logger'
+    calls:
+      - ["setManager", ['@webforge.media.manager']]
 
 
   webforge.cache.images_cache_warmer:
