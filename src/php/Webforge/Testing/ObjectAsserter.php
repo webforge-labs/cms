@@ -3,192 +3,216 @@
 namespace Webforge\Testing;
 
 use Closure;
+use PHPUnit\Framework\Constraint\Constraint;
+use PHPUnit_Framework_Constraint;
 
-class ObjectAsserter {
+class ObjectAsserter
+{
 
-  protected $test;
-  protected $object;
+    protected $test;
+    protected $object;
 
-  protected $context;
+    protected $context;
 
-  protected $path;
+    protected $path;
 
-  public function __construct($object, \PHPUnit_Framework_TestCase $test, ObjectAsserter $context = NULL, Array $path = NULL) {
-    $this->test = $test;
+    public function __construct($object, $test, ObjectAsserter $context = null, Array $path = null)
+    {
+        $this->test = $test;
 
-    $this->object = $object;
+        $this->object = $object;
 
-    if (!$context) {
-      $this->context = $this;
-      $this->path = array('$root');
-      
-      $this->test->assertThat(
-        $this->object,
-        $test->logicalOr(
-          $test->isType('object'),
-          $test->isType('array')
-        ),
-        $this->msg('The given root object should be an object or an array')
-     );
+        if (!$context) {
+            $this->context = $this;
+            $this->path = array('$root');
 
-    } else {
-      $this->path = $path;
-      $this->context = $context;
-    }
-  }
+            $this->test->assertThat(
+                $this->object,
+                $test->logicalOr(
+                    $test->isType('object'),
+                    $test->isType('array')
+                ),
+                $this->msg('The given root object should be an object or an array')
+            );
 
-  /**
-   * Asserts that the object has a property with $name
-   * 
-   * (regardless if it is empty or has some value)
-   * @param string $name of the property
-   * @param mixed $constraint use a phpunit constraint to check against the value of the property. If this is a string equalTo() is assumed
-   */
-  public function property($name, $constraint = NULL) {
-    $this->isObject();
-    $propertyPath = $this->addPath('.'.$name);
-    $this->test->assertObjectHasAttribute($name, $this->object, $this->msg('property: %s does not exist', implode('', $propertyPath))); // or: property $this->path() does not have property: $name
-    
-    $asserter = new ObjectAsserter($this->object->$name, $this->test, $this, $propertyPath);
-
-    if (isset($constraint)) {
-      $asserter->is($constraint);
+        } else {
+            $this->path = $path;
+            $this->context = $context;
+        }
     }
 
-    return $asserter;
-  }
+    /**
+     * Asserts that the object has a property with $name
+     *
+     * (regardless if it is empty or has some value)
+     * @param string $name of the property
+     * @param mixed $constraint use a phpunit constraint to check against the value of the property. If this is a string equalTo() is assumed
+     */
+    public function property($name, $constraint = null)
+    {
+        $this->isObject();
+        $propertyPath = $this->addPath('.'.$name);
+        $this->test->assertObjectHasAttribute($name, $this->object, $this->msg('property: %s does not exist',
+            implode('', $propertyPath))); // or: property $this->path() does not have property: $name
 
-  /**
-   * @param mixed $constraint use a phpunit constraint to check against the value of the property. If this is a string equalTo() is assumed
-   */
-  public function is($constraint) {
-    if (!$this->isConstraint($constraint)) {
-      $constraint = $this->test->equalTo($constraint);
+        $asserter = new ObjectAsserter($this->object->$name, $this->test, $this, $propertyPath);
+
+        if (isset($constraint)) {
+            $asserter->is($constraint);
+        }
+
+        return $asserter;
     }
 
-    $this->test->assertThat($this->object, $constraint, $this->msg('%s does not match', $this->path()));
-    return $this;
-  }
+    /**
+     * @param mixed $constraint use a phpunit constraint to check against the value of the property. If this is a string equalTo() is assumed
+     */
+    public function is($constraint)
+    {
+        if (!$this->isConstraint($constraint)) {
+            $constraint = $this->test->equalTo($constraint);
+        }
 
-  public function isNot($constraint) {
-    if (!$this->isConstraint($constraint)) {
-      $constraint = $this->test->equalTo($constraint);
+        $this->test->assertThat($this->object, $constraint, $this->msg('%s does not match', $this->path()));
+        return $this;
     }
 
-    return $this->is($this->test->logicalNot($constraint));
-  }
+    public function isNot($constraint)
+    {
+        if (!$this->isConstraint($constraint)) {
+            $constraint = $this->test->equalTo($constraint);
+        }
 
-  public function isNotEmpty() {
-    $this->test->assertNotEmpty($this->object, $this->msg('%s is not empty', $this->path()));
-
-    return $this;
-  }
-
-  public function contains($string) {
-    $this->test->assertContains($string, $this->object, $this->msg('%s does not match contains:', $this->path()));
-
-    return $this;
-  }
-
-  /**
-   * @param int|mixed $constraint
-   */
-  public function length($constraint) {
-    if (!$this->isConstraint($constraint)) {
-      $constraint = $this->test->equalTo($constraint);
+        return $this->is($this->test->logicalNot($constraint));
     }
 
-    $this->test->assertThat(count($this->object), $constraint, $this->msg('%s length does not match', $this->path()));
-    return $this;
-  }
+    public function isNotEmpty()
+    {
+        $this->test->assertNotEmpty($this->object, $this->msg('%s is not empty', $this->path()));
 
-  /**
-   * Asserts that the current array has an key $index
-   * 
-   * @param mixed $constraint use a phpunit constraint to check against the value of the property. If this is a string equalTo() is assumed
-   */
-  public function key($index, $constraint = NULL) {
-    $this->isArray();
-    $this->test->assertArrayHasKey($index, $this->object, $this->msg('%s does not have key %s', $this->path(), $index));
-
-    $keyPath = $this->addPath('['.$index.']');
-    $asserter = new ObjectAsserter($this->object[$index], $this->test, $this, $keyPath);
-
-    if ($constraint) {
-      $asserter->is($constraint);
+        return $this;
     }
 
-    return $asserter;
-  }
+    public function contains($string)
+    {
+        $this->test->assertContains($string, $this->object, $this->msg('%s does not match contains:', $this->path()));
 
-  /**
-   * Asserts that the current item is an array
-   * 
-   * the array can be empty
-   */
-  public function isArray() {
-    $this->test->assertInternalType('array', $this->object, $this->msg('%s is not an array', $this->path()));
-    return $this;
-  }
+        return $this;
+    }
 
-  /**
-   * Asserts that the current item is an object
-   * 
-   * the object can be empty
-   */
-  public function isObject() {
-    $this->test->assertInternalType('object', $this->object, $this->msg('%s is not an object', $this->path()));
-    return $this;
-  }
+    /**
+     * @param int|mixed $constraint
+     */
+    public function length($constraint)
+    {
+        if (!$this->isConstraint($constraint)) {
+            $constraint = $this->test->equalTo($constraint);
+        }
+
+        $this->test->assertThat(count($this->object), $constraint,
+            $this->msg('%s length does not match', $this->path()));
+        return $this;
+    }
+
+    /**
+     * Asserts that the current array has an key $index
+     *
+     * @param mixed $constraint use a phpunit constraint to check against the value of the property. If this is a string equalTo() is assumed
+     */
+    public function key($index, $constraint = null)
+    {
+        $this->isArray();
+        $this->test->assertArrayHasKey($index, $this->object,
+            $this->msg('%s does not have key %s', $this->path(), $index));
+
+        $keyPath = $this->addPath('['.$index.']');
+        $asserter = new ObjectAsserter($this->object[$index], $this->test, $this, $keyPath);
+
+        if ($constraint) {
+            $asserter->is($constraint);
+        }
+
+        return $asserter;
+    }
+
+    /**
+     * Asserts that the current item is an array
+     *
+     * the array can be empty
+     */
+    public function isArray()
+    {
+        $this->test->assertInternalType('array', $this->object, $this->msg('%s is not an array', $this->path()));
+        return $this;
+    }
+
+    /**
+     * Asserts that the current item is an object
+     *
+     * the object can be empty
+     */
+    public function isObject()
+    {
+        $this->test->assertInternalType('object', $this->object, $this->msg('%s is not an object', $this->path()));
+        return $this;
+    }
 
 
-  public function debug() {
-    var_dump($this->object);
-    return $this;
-  }
+    public function debug()
+    {
+        var_dump($this->object);
+        return $this;
+    }
 
-  /**
-   * Taps into the current chain without changing the context
-   * 
-   * $do = function($data, $objectAsserter)
-   * 
-   * do is called with first parameter the actual data of context and with second argument an objectAsserter in the current context 
-   */
-  public function tap(Closure $do) {
-    $do($this->get(), $this);
-    return $this;
-  }
+    /**
+     * Taps into the current chain without changing the context
+     *
+     * $do = function($data, $objectAsserter)
+     *
+     * do is called with first parameter the actual data of context and with second argument an objectAsserter in the current context
+     */
+    public function tap(Closure $do)
+    {
+        $do($this->get(), $this);
+        return $this;
+    }
 
-  /**
-   * @return mixed
-   */
-  public function get() {
-    return $this->object;
-  }
+    /**
+     * @return mixed
+     */
+    public function get()
+    {
+        return $this->object;
+    }
 
-  protected function addPath($item) {
-    return array_merge($this->path, array($item));
-  }
+    protected function addPath($item)
+    {
+        return array_merge($this->path, array($item));
+    }
 
-  /**
-   * Returns to the the last used property() or key() call
-   */
-  public function end() {
-    return $this->context;
-  }
+    /**
+     * Returns to the the last used property() or key() call
+     */
+    public function end()
+    {
+        return $this->context;
+    }
 
-  protected function path() {
-    return implode('', $this->path);
-  }
+    protected function path()
+    {
+        return implode('', $this->path);
+    }
 
-  protected function msg($msg, $arg1 = NULL, $arg2 = NULL) {
-    $args = func_get_args();
-    $msg = array_shift($args);
+    protected function msg($msg, $arg1 = null, $arg2 = null)
+    {
+        $args = func_get_args();
+        $msg = array_shift($args);
 
-    return vsprintf($msg, $args);
-  }
+        return vsprintf($msg, $args);
+    }
 
-  protected function isConstraint($constraint) {
-    return $constraint instanceof \PHPUnit_Framework_Constraint;
-  }
+    protected function isConstraint($constraint)
+    {
+        return $constraint instanceof PHPUnit_Framework_Constraint || $constraint instanceof Constraint;
+    }
 }

@@ -4,7 +4,7 @@ namespace Webforge\CmsBundle\Controller;
 
 use Psr\Container\NotFoundExceptionInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
@@ -19,8 +19,7 @@ class MediaController extends CommonController
 {
 
     /**
-     * @Route("/media")
-     * @Method("GET")
+     * @Route("/media", methods={"GET"})
      */
     public function indexAction(Request $request)
     {
@@ -32,8 +31,7 @@ class MediaController extends CommonController
     }
 
     /**
-     * @Route("/media/file-manager")
-     * @Method("GET")
+     * @Route("/media/file-manager", methods={"GET"})
      */
     public function fileManagerAction()
     {
@@ -48,8 +46,7 @@ class MediaController extends CommonController
     }
 
     /**
-     * @Route("/media/dropbox")
-     * @Method("POST")
+     * @Route("/media/dropbox", methods={"POST"})
      */
     public function uploadMediaFromDropboxAction(Request $request)
     {
@@ -62,7 +59,7 @@ class MediaController extends CommonController
         $warnings = array();
         $entities = [];
         foreach ($json->dropboxFiles as $dbFile) {
-            $wasUpdated = NULL;
+            $wasUpdated = null;
 
             $entities[] = $manager->addOrUpdateFile(
                 $folder = $json->path,
@@ -92,8 +89,7 @@ class MediaController extends CommonController
     }
 
     /**
-     * @Route("/media/upload")
-     * @Method("POST")
+     * @Route("/media/upload", methods={"POST"})
      */
     public function uploadMediaFromAjaxAction(Request $request)
     {
@@ -150,8 +146,7 @@ class MediaController extends CommonController
     }
 
     /**
-     * @Route("/media")
-     * @Method("DELETE")
+     * @Route("/media", methods={"DELETE"})
      */
     public function batchDeleteMediaAction(Request $request)
     {
@@ -172,10 +167,10 @@ class MediaController extends CommonController
     }
 
     /**
-     * @Route("/media/move")
-     * @Method("POST")
+     * @Route("/media/move", methods={"POST"})
      */
-    public function moveFiles(Request $request) {
+    public function moveFiles(Request $request)
+    {
         $user = $this->getUser();
         $json = $this->retrieveJsonBody($request);
         $manager = $this->get('webforge.media.manager');
@@ -190,10 +185,10 @@ class MediaController extends CommonController
     }
 
     /**
-     * @Route("/media/rename")
-     * @Method("POST")
+     * @Route("/media/rename", methods={"POST"})
      */
-    public function renameFile(Request $request) {
+    public function renameFile(Request $request)
+    {
         $user = $this->getUser();
         $this->convertJsonToForm($request);
 
@@ -232,7 +227,8 @@ class MediaController extends CommonController
         );
     }
 
-    protected function warmupSerializationInBackground(MediaFileEntityInterface $entity) {
+    protected function warmupSerializationInBackground(MediaFileEntityInterface $entity)
+    {
         try {
             $dispatcher = $this->get('job_dispatcher');
 

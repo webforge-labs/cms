@@ -9,7 +9,7 @@
 namespace Webforge\Symfony;
 
 
-class DateTimeHandlerTest extends \PHPUnit_Framework_TestCase
+class DateTimeHandlerTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

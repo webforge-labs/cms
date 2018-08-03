@@ -2,10 +2,10 @@
 
 namespace Webforge\CmsBundle\Media;
 
-use Tree\Node\Node;
+use PHPUnit\Framework\TestCase;
 use Webforge\Common\ArrayUtil as A;
 
-class TreeTest extends \PHPUnit_Framework_TestCase {
+class TreeTest extends TestCase {
 
   public function setUp() {
     $builder = new \Tree\Builder\NodeBuilder;

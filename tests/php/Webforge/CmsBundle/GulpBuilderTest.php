@@ -2,9 +2,10 @@
 
 namespace Webforge\CmsBundle;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\Process;
 
-class GulpBuilderTest extends \PHPUnit_Framework_TestCase {
+class GulpBuilderTest extends TestCase {
 
   protected static $built = FALSE;
 
@@ -14,7 +15,7 @@ class GulpBuilderTest extends \PHPUnit_Framework_TestCase {
         return $this->markTestSkipped('this does not make sense in ci');
       }
 
-      $process = new Process('npm run build-dev');
+      $process = new Process('yarn run build-dev');
       $process->setWorkingDirectory($GLOBALS['env']['root']->wtsPath());
 
       $process->mustRun();

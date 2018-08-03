@@ -6,7 +6,7 @@ use Gaufrette\Adapter\InMemory;
 use Gaufrette\Filesystem;
 use Webforge\Testing\ObjectAsserter;
 
-class GaufretteIndexTest extends \PHPUnit_Framework_TestCase {
+class GaufretteIndexTest extends \PHPUnit\Framework\TestCase {
 
   public function setUp() {
     parent::setUp();

@@ -2,14 +2,11 @@
 
 namespace Webforge\CmsBundle\Serialization;
 
-use Gaufrette\Stream;
 use Psr\Log\LoggerInterface;
+use stdClass;
 use Webforge\CmsBundle\Media\FileInterface;
 use Webforge\CmsBundle\Media\Manager;
 use Webforge\CmsBundle\Model\MediaFileEntityInterface;
-use RuntimeException;
-use stdClass;
-use Webforge\Gaufrette\File;
 
 class ThumborThumbnailsFileHandler implements MediaFileHandlerInterface
 {
@@ -89,7 +86,7 @@ class ThumborThumbnailsFileHandler implements MediaFileHandlerInterface
         $metadata = $entity->getMediaMetadata($cacheKey);
 
         if (!$metadata) {
-
+            $this->logger->info('get metadata for file with thumbor-url: '.$url);
             /* this does not work right now 100%, because: https://github.com/thumbor/thumbor/issues/949 
             
             heres the thing:
@@ -120,9 +117,11 @@ class ThumborThumbnailsFileHandler implements MediaFileHandlerInterface
             $metadata = json_decode(file_get_contents($url, false, $context))->thumbor;
 
             $streamUrl = $this->manager->getStreamUrl($entity);
-            $exif = exif_read_data($streamUrl);
 
-            if ($exif) {
+            // this is shitty, but i dont want to register an error handler for that
+            $exif = @exif_read_data($streamUrl, 'IFD0');
+
+            if (is_array($exif)) {
                 // it maybe twisted because thumbor did not normalized with exif rotation for the thumbnail when providing metadata (see github issue)
                 $orientation = isset($exif['Orientation']) ? (int) $exif['Orientation'] : 1;
 
@@ -140,6 +139,8 @@ class ThumborThumbnailsFileHandler implements MediaFileHandlerInterface
                         'height' => $metadata->target->width
                     ];
                 }
+            } else {
+                $this->logger->warning('Cannot read exif data for image with key: '.$file->key.' creating thumbnail: '.$url.' this might be totally okay, because no rotation should be made');
             }
 
             $entity->setMediaMetadata($cacheKey, $metadata);

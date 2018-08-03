@@ -23,6 +23,7 @@ A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsori
 ## BC Breaks for 2.2.x
 
 - you need php 7.2 to install
+- update to Symfony 4.1
 
 ## BC Breaks for 2.1.x
 
@@ -30,7 +31,8 @@ A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsori
 
 ## Upgrade to 2.0.x
 
-[]Read Upgrading to 2.0](docs/upgrading-to-2.0.x.md)
+- [Read Upgrading to 2.0](docs/upgrading-to-2.0.x.md)
+- Update to Symfony 4.0
 
 ## BC Breaks for 1.15.x
 
