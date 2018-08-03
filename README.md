@@ -20,6 +20,10 @@ npm test
 
 A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsoring a free Live account, that allows us to test on Iphones and other devices.
 
+## BC Breaks for 2.2.x
+
+- you need php 7.2 to install
+
 ## BC Breaks for 2.1.x
 
 - files uploaded to the media controller will overwrite existing files (but warnings will still be generated)

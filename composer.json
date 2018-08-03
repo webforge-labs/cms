@@ -20,7 +20,7 @@
     },
     "prefer-stable": true,
     "require": {
-        "php": ">=7.1.0",
+        "php": ">=7.2.0",
 
         "symfony/symfony": "4.0.*",
         
@@ -63,7 +63,7 @@
         "symfony-app-dir": "app",
         "symfony-web-dir": "www",
         "branch-alias": {
-            "dev-master": "2.0.x-dev"
+            "dev-master": "2.2.x-dev"
         }
     }
 }
