@@ -2,9 +2,9 @@
 
 namespace Webforge\Testing;
 
+use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as SymfonyWebTestCase;
-use Symfony\Component\BrowserKit\Client;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Debug\Exception\FlattenException;
 use Webmozart\Json\JsonDecoder;
 
 class WebTestCase extends SymfonyWebTestCase
@@ -109,6 +109,7 @@ class WebTestCase extends SymfonyWebTestCase
         $server['HTTP_HOST'] = $context->getHost();
 
         $client->setServerParameters($server);
+        $client->enableProfiler();
 
         return $client;
     }
@@ -130,27 +131,37 @@ class WebTestCase extends SymfonyWebTestCase
          */
         $response = $client->getResponse();
 
+        $helpfulErrorMessage = sprintf(
+            "\n** Tested Request: %s\n\n",
+            $client->getRequest()
+        );
+
         if ($expectedStatusCode !== $response->getStatusCode()) {
-            /*
-            // Get a more useful error message, if available
-            if ($exception = $client->getContainer()->get('liip_functional_test.exception_listener')->getLastException()) {
-                $helpfulErrorMessage = $exception->getMessage();
-            } elseif (count($validationErrors = $client->getContainer()->get('liip_functional_test.validator')->getLastErrors())) {
-                $helpfulErrorMessage = "Unexpected validation errors:\n";
+            if (($profile = $client->getProfile()) && $profile->hasCollector('exception') && ($collector = $profile->getCollector('exception'))->hasException()) {
+                /** @var FlattenException $exception */
+                $exception = $collector->getException();
 
-                foreach ($validationErrors as $error) {
-                    $helpfulErrorMessage .= sprintf("+ %s: %s\n", $error->getPropertyPath(), $error->getMessage());
+                $trace = '';
+                foreach ($exception->getTrace() as $step) {
+                    // verbose mode:
+                    //$trace .= sprintf("\n  at %s->%s(%s)\n    (%s:%d)", $step['class'], $step['function'], json_encode($step['args']), $step['file'], $step['line']);
+                    // tiny mode:
+                    $trace .= sprintf("\n at %s:%d", $step['file'], $step['line']);
                 }
+
+                $helpfulErrorMessage .= sprintf(
+                    "** Exception %s was thrown with Message: '%s'.%s",
+                    $exception->getClass(),
+                    $exception->getMessage(),
+                    $trace
+                );
             } else {
-
-            */
-            $helpfulErrorMessage = sprintf(
-                "\n** Tested Request: %s\n\n** Tested Response:\n%s",
-                $client->getRequest(),
-                (string) $client->getResponse()
-            );
-
-            //file_put_contents(getcwd().'/last-exception.html', $client->getResponse());
+                $helpfulErrorMessage = sprintf(
+                    "** Tested Response:\n%s",
+                    $client->getRequest(),
+                    $client->getResponse()
+                );
+            }
         }
 
         self::assertEquals($expectedStatusCode, $response->getStatusCode(), $helpfulErrorMessage);
