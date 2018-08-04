@@ -11,3 +11,13 @@ exit
 curl -OL https://github.com/sensiolabs-de/deprecation-detector/releases/download/0.1.0-alpha4/deprecation-detector.phar
 php deprecation-detector.phar
 exit
+ln -s /app/vendor/bin/simple-phpunit phpunit
+phpunit 
+ls -la /app/vendor/bin/simple-phpunit 
+phpunit
+ls -la
+ls -la phpunit
+rm phpunit
+ln -s /app/vendor/bin/simple-phpunit /usr/local/sbin/phpunit
+exti
+exit

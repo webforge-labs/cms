@@ -35,8 +35,8 @@ COPY etc/php/*.ini /usr/local/etc/php/conf.d/
 
 COPY composer.* ./
 RUN composer install -o --prefer-dist --no-interaction \
-   && curl -L -o phpunit.phar https://phar.phpunit.de/phpunit-5.7.9.phar \
    && mkdir -p files/cache \
+   && ln -s /app/vendor/bin/simple-phpunit /usr/local/sbin/phpunit \
    && composer clear-cache
 
 ENV npm_config_devdir=/var/www/.node-builds
