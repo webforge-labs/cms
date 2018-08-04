@@ -54,6 +54,6 @@ COPY . ./
 # note: Resources/img/dummy will be used in tests! dont delete
 #rm -r Resources/js; \
 RUN rm -r Resources/fonts; \
-  mkdir -p /app/files/cache \
+  mkdir -p /app/files/cache && mkdir -p /app/files/media \
   && chown -R www-data.www-data /app/app /app/files /app/www \
   && chmod +x bin/cli.sh

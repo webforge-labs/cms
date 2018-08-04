@@ -22,6 +22,10 @@
         <const name="phpunit">true</const>
     </php>
 
+    <listeners>
+        <listener class="\Mockery\Adapter\Phpunit\TestListener"></listener>
+    </listeners>
+
     <filter>
         <whitelist>
             <directory suffix=".php">src/php</directory>

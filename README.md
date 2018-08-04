@@ -23,7 +23,9 @@ A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsori
 ## BC Breaks for 2.2.x
 
 - you need php 7.2 to install
-- update to Symfony 4.1
+- dependency symfony/symfony updated to 4.1
+- use phpunit 6.5.x
+- TestCaseTrait now uses the mockery trait, so you have to install mockery to 1.1.0 now 
 
 ## BC Breaks for 2.1.x
 
