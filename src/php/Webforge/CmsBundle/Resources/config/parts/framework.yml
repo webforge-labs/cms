@@ -19,3 +19,8 @@ framework:
         handler_id:  ~
     fragments:       ~
     http_method_override: true
+
+
+sensio_framework_extra:
+    router:
+        annotations: false

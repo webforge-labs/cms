@@ -2,28 +2,32 @@
 
 namespace Webforge\CmsBundle\Content;
 
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Webmozart\Json\JsonDecoder;
 
-class BlocksExtendingTest extends \Symfony\Bundle\FrameworkBundle\Test\KernelTestCase {
+class BlocksExtendingTest extends KernelTestCase
+{
+    use \Webforge\Testing\TestTrait;
 
-  use \Webforge\Testing\TestTrait;
+    private $blocks;
 
-  private $blocks, $container;
+    public function setUp()
+    {
+        parent::setUp();
 
-  public function setUp() {
-    parent::setUp();
-    $this->bootKernel();
+        if (!static::$container) {
+            static::bootKernel();
+        }
 
-    $this->container = self::$kernel->getContainer();
+        // depends on etc/cms/blocktypes.json
+        // depends on etc/symfony/parts/images.yml
+        $this->blocks = static::$container->get('webforge.content.blocks');
+        $this->mediaManager = static::$container->get('webforge.media.manager');
+    }
 
-    // depends on etc/cms/blocktypes.json
-    // depends on etc/symfony/parts/images.yml
-    $this->blocks = $this->container->get('webforge.content.blocks');
-    $this->mediaManager = $this->container->get('webforge.media.manager');
-  }
-
-  public function testItExtendsSimpleBlocksThatHaveMarkdown() {
-    $cs = $this->parseJSON('{
+    public function testItExtendsSimpleBlocksThatHaveMarkdown()
+    {
+        $cs = $this->parseJSON('{
     "blocks": [
       {
         "type": "intro",
@@ -40,21 +44,21 @@ class BlocksExtendingTest extends \Symfony\Bundle\FrameworkBundle\Test\KernelTes
     ]
     }');
 
-    $this->blocks->extendContentStream($cs, new \stdClass);
+        $this->blocks->extendContentStream($cs, new \stdClass);
 
-    $this->assertThatObject($cs)
-      ->property('blocks')->isArray()
-        ->key(0)
-          ->property('introHtml')->contains('<strong>verwöhnt</strong>')->end()
-        ->end()
+        $this->assertThatObject($cs)
+            ->property('blocks')->isArray()
+                ->key(0)
+                    ->property('introHtml')->contains('<strong>verwöhnt</strong>')->end()
+                ->end()
+                ->key(1)
+                    ->property('markdownHtml')->contains('<h1>Tu veux aller dehors?</h1>')->end()
+                ->end();
+    }
 
-        ->key(1)
-          ->property('markdownHtml')->contains('<h1>Tu veux aller dehors?</h1>')->end()
-        ->end();
-  }
-
-  public function testItExtendsBlocksWithCompoundProperties() {
-    $cs = $this->parseJSON('{
+    public function testItExtendsBlocksWithCompoundProperties()
+    {
+        $cs = $this->parseJSON('{
       "blocks": [
         {
           "type": "interview",
@@ -66,19 +70,20 @@ class BlocksExtendingTest extends \Symfony\Bundle\FrameworkBundle\Test\KernelTes
       ]
     }');
 
-    $this->blocks->extendContentStream($cs, new \stdClass);
+        $this->blocks->extendContentStream($cs, new \stdClass);
 
-    $this->assertThatObject($cs)
-      ->property('blocks')->isArray()
-        ->key(0)
-          ->property('answerHtml')->contains('<strong>Nichts</strong>')->end()
-          ->property('questionHtml')->contains('<h2>Was würdest Du in deinem Leben ändern?</h2>')->end()
-          ->property('questionText')->is($this->logicalNot($this->stringContains('<h2>')))->end()
-        ->end();
-  }
+        $this->assertThatObject($cs)
+            ->property('blocks')->isArray()
+            ->key(0)
+            ->property('answerHtml')->contains('<strong>Nichts</strong>')->end()
+            ->property('questionHtml')->contains('<h2>Was würdest Du in deinem Leben ändern?</h2>')->end()
+            ->property('questionText')->is($this->logicalNot($this->stringContains('<h2>')))->end()
+            ->end();
+    }
 
-  public function testItExtendsImagesWithFreshThumbnailAndUrlInformation() {
-    $cs = $this->parseJSON('{
+    public function testItExtendsImagesWithFreshThumbnailAndUrlInformation()
+    {
+        $cs = $this->parseJSON('{
       "blocks": [
         {
           "type": "section-leftimage",
@@ -124,46 +129,49 @@ class BlocksExtendingTest extends \Symfony\Bundle\FrameworkBundle\Test\KernelTes
       ]
     }');
 
-    // we need to create the file physically
-    try {
-      $this->mediaManager->beginTransaction();
-      $screenshot = $this->mediaManager->addFile('/_seiten/home', 'screenshot-demo.jpg', $this->getResourceImage('background.jpg')->getContents());
-      $mediaKey = $screenshot->getMediaFileKey();
-      $this->mediaManager->commitTransaction();
-    } catch (\ Webforge\CmsBundle\Media\FileAlreadyExistsException $e) {
-      $mediaKey = $e->mediaKey;
+        // we need to create the file physically
+        try {
+            $this->mediaManager->beginTransaction();
+            $screenshot = $this->mediaManager->addFile('/_seiten/home', 'screenshot-demo.jpg',
+                $this->getResourceImage('background.jpg')->getContents());
+            $mediaKey = $screenshot->getMediaFileKey();
+            $this->mediaManager->commitTransaction();
+        } catch (\ Webforge\CmsBundle\Media\FileAlreadyExistsException $e) {
+            $mediaKey = $e->mediaKey;
+        }
+
+        $cs->blocks[0]->screenshots[0]->key = $mediaKey;
+
+        $this->blocks->extendContentStream($cs, new \stdClass);
+
+        $this->assertThatObject($cs)
+            ->property('blocks')->isArray()
+                ->key(0)
+                    ->property('screenshots')->isArray()
+                        ->key(0)
+                            ->property('thumbnails')->isArray()// i think this is an array because of the stupid serializer, but okay
+                                ->key('sm')->end()
+                                ->key('gallery')->end()// this was NOT in the saved image thumbnails, but it IS defined in etc/symfony/parts/images.yml
+                                ->key('xs')
+                                    ->property('url')
+                                        ->is($this->logicalNot($this->stringContains('live.com')))
+                                        ->is($this->stringContains('screenshot-demo.jpg'))
+                                    ->end()
+                                ->end()
+                            ->end();
     }
 
-    $cs->blocks[0]->screenshots[0]->key = $mediaKey;
+    /**
+     * @return mixed
+     */
+    public function parseJSON($string)
+    {
+        $decoder = new JsonDecoder();
+        return $decoder->decode($string);
+    }
 
-    $this->blocks->extendContentStream($cs, new \stdClass);
-
-    $this->assertThatObject($cs)
-      ->property('blocks')->isArray()
-        ->key(0)
-          ->property('screenshots')->isArray()
-            ->key(0)
-              ->property('thumbnails')->isArray() // i think this is an array because of the stupid serializer, but okay
-                ->key('sm')->end()
-                ->key('gallery')->end() // this was NOT in the saved image thumbnails, but it IS defined in etc/symfony/parts/images.yml
-                ->key('xs')
-                  ->property('url')
-                    ->is($this->logicalNot($this->stringContains('live.com')))
-                    ->is($this->stringContains('screenshot-demo.jpg'))
-                  ->end()
-                ->end()
-              ->end();
-  }
-
-  /**
-   * @return mixed
-   */
-  public function parseJSON($string) {
-    $decoder = new JsonDecoder();
-    return $decoder->decode($string);
-  }
-
-  protected function getResourceImage($filename) {
-    return $GLOBALS['env']['root']->sub('Resources/img/')->getFile($filename);
-  }
+    protected function getResourceImage($filename)
+    {
+        return $GLOBALS['env']['root']->sub('Resources/img/')->getFile($filename);
+    }
 }

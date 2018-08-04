@@ -2,8 +2,7 @@
 
 namespace %project.bundle_namespace%\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Webforge\Common\DateTime\DateTime;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,8 +17,7 @@ use Webforge\Common\ArrayUtil as A;
 class CmsPostController extends \Webforge\CmsBundle\Controller\CommonController {
 
   /**
-   * @Route("/cms/posts/list", name="cms_posts_list")
-   * @Method("GET")
+   * @Route("/cms/posts/list", name="cms_posts_list", methods={"GET})
    */
   public function listAction() {
     $user = $this->getUser();
@@ -36,8 +34,7 @@ class CmsPostController extends \Webforge\CmsBundle\Controller\CommonController 
   }
 
   /**
-   * @Route("/cms/posts")
-   * @Method("GET")
+   * @Route("/cms/posts", methods={"GET"})
    */
   public function newFormAction() {
     $user = $this->getUser();
@@ -48,8 +45,7 @@ class CmsPostController extends \Webforge\CmsBundle\Controller\CommonController 
   }
 
   /**
-   * @Route("/cms/posts/{postId}")
-   * @Method("GET")
+   * @Route("/cms/posts/{postId}", methods={"GET"})
    */
   public function editFormAction($postId) {
     $user = $this->getUser();
@@ -76,8 +72,7 @@ class CmsPostController extends \Webforge\CmsBundle\Controller\CommonController 
   }
 
   /**
-   * @Route("/cms/posts")
-   * @Method("POST")
+   * @Route("/cms/posts", methods={"POST"})
    */
   public function createAction(Request $request) {
     $post = new Post();
@@ -88,8 +83,7 @@ class CmsPostController extends \Webforge\CmsBundle\Controller\CommonController 
   }
 
   /**
-   * @Route("/cms/posts/{postId}")
-   * @Method("PUT")
+   * @Route("/cms/posts/{postId}", methods={"PUT"})
    */
   public function putAction($postId, Request $request) {
     $post = $this->dc->getRepository('Post')->findOneBy(array('id'=>$postId));
@@ -235,8 +229,7 @@ class CmsPostController extends \Webforge\CmsBundle\Controller\CommonController 
   }
 
   /**
-   * @Route("/cms/posts/delete")
-   * @Method("POST")
+   * @Route("/cms/posts/delete", methods={"POST"})
    */
   public function deleteAction(Request $request) {
     $user = $this->getUser();

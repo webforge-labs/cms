@@ -2,17 +2,14 @@
 
 namespace Webforge\CmsBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Webforge\Doctrine\CMS\NavigationBridge as DoctrineBridge;
-use Webforge\Doctrine\CollectionSynchronizer;
 use stdClass;
 
 class PageController extends CommonController {
 
   /**
-   * @Route("/pages/list", name="pages_list")
-   * @Method("GET")
+   * @Route("/pages/list", name="pages_list", methods={"GET"})
    */
   public function pagesListAction() {
     $navigationRepository = $this->getRepository('NavigationNode');
@@ -26,8 +23,7 @@ class PageController extends CommonController {
   }
 
   /**
-   * @Route("/pages/list", name="save_pages_list")
-   * @Method("POST")
+   * @Route("/pages/list", name="save_pages_list", methods={"POST"})
    */
   public function postPagesAction(Request $request) {
     $navigation = $this->retrieveJsonBody($request)->navigation;

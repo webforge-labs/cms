@@ -2,17 +2,12 @@
 
 namespace %project.bundle_namespace%\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 class MainController extends \Webforge\CmsBundle\Controller\CommonController {
 
   /**
-   * @Route("/", name="home")
-   * @Method("GET")
+   * @Route("/", name="home", methods={"GET"})
    */
   public function homeAction() {
     $site = $this->get('site');

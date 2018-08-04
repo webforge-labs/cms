@@ -2,15 +2,13 @@
 
 namespace AppBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Webforge\CmsBundle\Controller\CommonController;
 
 class CmsTestController extends CommonController {
 
   /**
-   * @Route("/cms/", name="test_index")
-   * @Method("GET")
+   * @Route("/cms/", name="test_index", methods={"GET"})
    */
   public function indexAction() {
     return $this->render('WebforgeCmsBundle::base.html.twig', array(
@@ -67,8 +65,7 @@ class CmsTestController extends CommonController {
   }
 
   /**
-   * @Route("/cms/dashboard", name="test_dashboard")
-   * @Method("GET")
+   * @Route("/cms/dashboard", name="test_dashboard", methods={"GET"})
    */
   public function dashboardAction() {
     $user = $this->getUser();
@@ -85,16 +82,14 @@ class CmsTestController extends CommonController {
   }
 
   /**
-   * @Route("/cms/users/list", name="test_users_list")
-   * @Method("GET")
+   * @Route("/cms/users/list", name="test_users_list", methods={"GET"})
    */
   public function usersListAction() {
     return $this->render('WebforgeCmsBundle:test:users/list.html.twig', array());
   }
 
   /**
-   * @Route("/cms/pages/list", name="test_pages_list")
-   * @Method("GET")
+   * @Route("/cms/pages/list", name="test_pages_list", methods={"GET"})
    */
   public function pagesListAction() {
     $navigationRepository = $this->getRepository('NavigationNode');
@@ -108,16 +103,14 @@ class CmsTestController extends CommonController {
   }
 
   /**
-   * @Route("/prototypes/content-manager")
-   * @Method("GET")
+   * @Route("/prototypes/content-manager", methods={"GET"})
    */
   public function protoContentManagerAction() {
     return $this->render('AppBundle:test/prototypes:content-manager.html.twig', array());
   }
 
   /**
-   * @Route("/prototypes/file-manager")
-   * @Method("GET")
+   * @Route("/prototypes/file-manager", methods={"GET"})
    */
   public function protoFileManagerAction() {
     return $this->render('AppBundle:test/prototypes:file-manager.html.twig', array());

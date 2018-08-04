@@ -2,15 +2,12 @@
 
 namespace %project.bundle_namespace%\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 class CmsController extends \Webforge\CmsBundle\Controller\CommonController {
 
   /**
-   * @Route("/cms/", name="cms_home")
-   * @Method("GET")
+   * @Route("/cms/", name="cms_home", methods={"GET"})
    */
   public function indexAction() {
     return $this->render('WebforgeCmsBundle::base.html.twig', array(
@@ -59,8 +56,7 @@ class CmsController extends \Webforge\CmsBundle\Controller\CommonController {
   }
 
   /**
-   * @Route("/cms/dashboard", name="cms_dashboard")
-   * @Method("GET")
+   * @Route("/cms/dashboard", name="cms_dashboard", methods={"GET"})
    */
   public function dashboardAction() {
     $user = $this->getUser();

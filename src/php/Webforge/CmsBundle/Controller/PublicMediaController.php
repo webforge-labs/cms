@@ -2,19 +2,14 @@
 
 namespace Webforge\CmsBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\Validator\Constraints as Assert;
-use Webforge\Symfony\FormError;
 
 class PublicMediaController extends CommonController {
 
   /**
-   * @Route("/media/{key}/{name}", name="public_media_original")
-   * @Method("GET")
+   * @Route("/media/{key}/{name}", name="public_media_original", methods={"GET"})
    */
   public function downloadAction($key, $name) {
     $file = $this->get('webforge.media.filesystem')->get($key);
