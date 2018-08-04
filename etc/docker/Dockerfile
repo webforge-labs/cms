@@ -36,6 +36,7 @@ COPY etc/php/*.ini /usr/local/etc/php/conf.d/
 COPY composer.* ./
 RUN composer install -o --prefer-dist --no-interaction \
    && mkdir -p files/cache \
+   && (vendor/bin/simple-phpunit || true ) \
    && ln -s /app/vendor/bin/simple-phpunit /usr/local/sbin/phpunit \
    && composer clear-cache
 

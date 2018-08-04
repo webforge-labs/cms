@@ -21,3 +21,5 @@ rm phpunit
 ln -s /app/vendor/bin/simple-phpunit /usr/local/sbin/phpunit
 exti
 exit
+phpunit --help
+exit
