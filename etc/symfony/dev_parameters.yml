@@ -1,0 +1,12 @@
+# this file will be replaced with real parameters for staging and testing and "production"
+parameters:
+    mailer_transport: smtp
+    mailer_host: localhost
+    mailer_user: 'cms@ps-webforge.com'
+    mailer_password: none
+
+    database_host: mysqldb
+    database_name: cms
+    database_user: cms
+    database_password: cmspw
+    database_port: 3306

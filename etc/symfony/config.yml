@@ -1,4 +1,5 @@
 imports:
+    - { resource: dev_parameters.yml }
     - { resource: parameters.yml }
     - { resource: services.yml }
     - { resource: parts/monolog.yml }
