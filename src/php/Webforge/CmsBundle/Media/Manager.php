@@ -56,7 +56,7 @@ class Manager
         $mediaKey = $this->createMediaKey($path, $name, $contents);
 
         // write data to physical storage
-        $this->filesystem->write($mediaKey, $contents);
+        $this->savePhysicalFile($contents, $mediaKey);
 
         // write entity to single table
         $entity = $this->storage->persistFile($mediaKey, $path, $name);
@@ -90,13 +90,12 @@ class Manager
 
             $entity->setMediaFileKey($newKey = $this->createMediaKey($path, $name, $contents));
 
-            $this->filesystem->write($newKey, $contents);
+            $this->savePhysicalFile($contents, $newKey);
 
             $this->updateIndexFile($entity, $path, $name, $oldKey);
 
-            // delete the old file, we dont need it anymore
+            // delete the old file only, if it's not used in another binary (@TODO we need that, if we change the hashing to sha1
             $this->filesystem->delete($oldKey);
-
 
             return $entity;
         } catch (\LogicException $e) {
@@ -305,6 +304,8 @@ class Manager
 
     protected function createMediaKey($path, $name, $contents)
     {
+        //return sha1($contents); this works okayish, but we cannot delete physical files then and more then
+        //one entity might have the same physical files, i have to think about that first
         return Uuid::uuid4()->toString();
     }
 
@@ -320,5 +321,18 @@ class Manager
     protected function normalizePath($path): string
     {
         return trim($path, '/').'/';  // store without leadingslash but with trailingslash
+    }
+
+    /**
+     * @param $contents
+     * @param $key
+     */
+    protected function savePhysicalFile($contents, $key): void
+    {
+        try {
+            $this->filesystem->write($key, $contents);
+        } catch (\Gaufrette\Exception\FileAlreadyExists $e) {
+            // we hope our hashing has found a real-duplicate image here, so we connect 2 binaries with one physical key file
+        }
     }
 }

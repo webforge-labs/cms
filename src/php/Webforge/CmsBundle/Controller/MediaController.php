@@ -18,7 +18,7 @@ class MediaController extends CommonController
 {
 
     /**
-     * @Route("/media", methods={"GET"})
+     * @Route("/media", methods={"GET"}, defaults={"_format": "json"})
      */
     public function indexAction(Request $request)
     {
@@ -45,7 +45,7 @@ class MediaController extends CommonController
     }
 
     /**
-     * @Route("/media/dropbox", methods={"POST"})
+     * @Route("/media/dropbox", methods={"POST"}, defaults={"_format": "json"})
      */
     public function uploadMediaFromDropboxAction(Request $request)
     {
@@ -88,7 +88,7 @@ class MediaController extends CommonController
     }
 
     /**
-     * @Route("/media/upload", methods={"POST"})
+     * @Route("/media/upload", methods={"POST"}, defaults={"_format": "json"})
      */
     public function uploadMediaFromAjaxAction(Request $request)
     {
@@ -184,7 +184,7 @@ class MediaController extends CommonController
     }
 
     /**
-     * @Route("/media/rename", methods={"POST"})
+     * @Route("/media/rename", methods={"POST"}, defaults={"_format": "json"})
      */
     public function renameFile(Request $request)
     {

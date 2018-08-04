@@ -3,7 +3,6 @@
 namespace Webforge\CmsBundle;
 
 use Gaufrette\Filesystem;
-use Symfony\Component\Process\Process;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Webforge\CmsBundle\Media\Manager;
 
@@ -106,7 +105,7 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase
         $this->assertDatabaseBinaries($client, []);
     }
 
-    public function testExistingImagesWillBeOverwritten_AndNoticed()
+    public function testExistingImagesWillBeOverwritten_AndNoticed_whenUploadedPerDropbox()
     {
         $client = $this->setupEmpty();
 
@@ -311,15 +310,17 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase
     public function testUploadingAlreadyExistingFilesConventional()
     {
         $client = $this->setUpEmpty();
-        $json = $this->getDropboxFiles();
-        $this->sendJsonRequest($client, 'POST', '/cms/media/dropbox', $json);
+
+        $keys = $this->storeFiles($client, [
+            '/2016-03-27/DSC03281.JPG' => 'background.jpg'
+        ]);
+
 
         $file = $this->getResourceImage('mini-single.png');
         $photo = new UploadedFile(
-            (string)$file,
+            (string) $file,
             'DSC03281.JPG',
-            'image/jpeg',
-            123
+            'image/jpeg'
         );
 
         $client->request(
@@ -447,27 +448,9 @@ JSON
     {
         $filesystem = $client->getContainer()->get('knp_gaufrette.filesystem_map')->get('cms_media');
 
-        $dirs = array();
         foreach ($filesystem->keys() as $key) {
-            if (!$filesystem->isDirectory($key)) {
-                $filesystem->delete($key);
-            } else {
-                $dirs[] = $key;
-            }
-        }
-
-        // order longest to first
-        usort($dirs, function ($a, $b) {
-            return strlen($b) - strlen($a);
-        });
-
-        foreach ($dirs as $key) {
             $filesystem->delete($key);
         }
-
-        // clearing the thumbnails cache is important: otherwise we'll get the "no meta cache key"
-        $GLOBALS['env']['root']->sub('www/images/cache/')->delete();
-        $GLOBALS['env']['root']->sub('files/cache/imagine-meta')->delete();
     }
 
     protected function getFilesystem($client) : Filesystem
