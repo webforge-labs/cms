@@ -162,9 +162,8 @@ class WebTestCase extends SymfonyWebTestCase
                     $trace
                 );
             } else {
-                $helpfulErrorMessage = sprintf(
-                    "** Tested Response:\n%s",
-                    $client->getRequest(),
+                $helpfulErrorMessage .= sprintf(
+                    "** Response:\n%s",
                     $client->getResponse()
                 );
             }
