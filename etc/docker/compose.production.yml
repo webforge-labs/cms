@@ -25,6 +25,7 @@ services:
 
     environment:
       - IS_CI=1
+      - "SYMFONY_DEPRECATIONS_HELPER=disabled"
 
     extra_hosts:
       - "mysqldb:172.23.0.1"

@@ -17,7 +17,6 @@ services:
 
     environment:
       - "HISTFILE=/app/files/.bash_history"
-      - "SYMFONY_DEPRECATIONS_HELPER=disabled"
 
   mysqldb:
     #note: mysql 5.7 has longer usernames (32 instead of 16)!
