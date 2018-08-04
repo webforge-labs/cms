@@ -2,23 +2,26 @@
 
 namespace Webforge\CmsBundle\Media;
 
-abstract class Item {
+abstract class Item
+{
+    public $name;
+    public $type;
 
-  public $name;
-  public $type;
+    public function __construct($name, $type)
+    {
+        $this->name = $name;
+        $this->type = $type;
+    }
 
-  public function __construct($name, $type) {
-    $this->name = $name;
-    $this->type = $type;
-  }
+    abstract public function export(array $options);
 
-  abstract public function export(array $options);
+    public function getName()
+    {
+        return $this->name;
+    }
 
-  public function getName() {
-    return $this->name;
-  }
-
-  public function getType() {
-    return $this->type;
-  }
+    public function getType()
+    {
+        return $this->type;
+    }
 }

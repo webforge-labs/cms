@@ -8,16 +8,16 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class WebforgeUserExtension extends Extension implements PrependExtensionInterface
 {
-
-    public function load(array $configs, ContainerBuilder $container) {
+    public function load(array $configs, ContainerBuilder $container)
+    {
     }
 
     public function prepend(ContainerBuilder $container)
-       {
-           $container->prependExtensionConfig('twig', array(
+    {
+        $container->prependExtensionConfig('twig', array(
                'paths' => array(
                    __DIR__.'/../Resources/views' => 'FOSUser',
                ),
            ));
-       }
+    }
 }

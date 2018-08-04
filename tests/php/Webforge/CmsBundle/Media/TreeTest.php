@@ -7,7 +7,6 @@ use Webforge\Common\ArrayUtil as A;
 
 class TreeTest extends TestCase
 {
-
     public function setUp()
     {
         $builder = new \Tree\Builder\NodeBuilder;
@@ -150,10 +149,15 @@ class TreeTest extends TestCase
 
         $this->assertNotEmpty($this->find('/travel/usa/new-york'), 'new-york should be integrated while moving');
         $this->assertNotEmpty($this->find('/travel/usa/wyoming'), 'wyoming should be integrated into travel/usa/');
-        $this->assertNotEmpty($this->find('/travel/usa/wyoming/east'),
-            'east should integrated into travel/usa/ through integrating wyoming');
-        $this->assertEquals(['usa', 'marocco'], A::pluck($travel->getChildren(), 'getValue'),
-            'marocco and usa should be the only child-nodes from travel');
+        $this->assertNotEmpty(
+            $this->find('/travel/usa/wyoming/east'),
+            'east should integrated into travel/usa/ through integrating wyoming'
+        );
+        $this->assertEquals(
+            ['usa', 'marocco'],
+            A::pluck($travel->getChildren(), 'getValue'),
+            'marocco and usa should be the only child-nodes from travel'
+        );
     }
 
     /**
@@ -180,7 +184,8 @@ class TreeTest extends TestCase
         $tree = new Tree($builder->getNode());
         $tree->moveNode('/wrong/minis', '/');
 
-        $this->assertEquals(<<<'TREE'
+        $this->assertEquals(
+            <<<'TREE'
 
 root
  minis

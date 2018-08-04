@@ -8,7 +8,6 @@ use PHPUnit_Framework_Constraint;
 
 class ObjectAsserter
 {
-
     protected $test;
     protected $object;
 
@@ -16,7 +15,7 @@ class ObjectAsserter
 
     protected $path;
 
-    public function __construct($object, $test, ObjectAsserter $context = null, Array $path = null)
+    public function __construct($object, $test, ObjectAsserter $context = null, array $path = null)
     {
         $this->test = $test;
 
@@ -34,7 +33,6 @@ class ObjectAsserter
                 ),
                 $this->msg('The given root object should be an object or an array')
             );
-
         } else {
             $this->path = $path;
             $this->context = $context;
@@ -52,8 +50,10 @@ class ObjectAsserter
     {
         $this->isObject();
         $propertyPath = $this->addPath('.'.$name);
-        $this->test->assertObjectHasAttribute($name, $this->object, $this->msg('property: %s does not exist',
-            implode('', $propertyPath))); // or: property $this->path() does not have property: $name
+        $this->test->assertObjectHasAttribute($name, $this->object, $this->msg(
+            'property: %s does not exist',
+            implode('', $propertyPath)
+        )); // or: property $this->path() does not have property: $name
 
         $asserter = new ObjectAsserter($this->object->$name, $this->test, $this, $propertyPath);
 
@@ -109,8 +109,11 @@ class ObjectAsserter
             $constraint = $this->test->equalTo($constraint);
         }
 
-        $this->test->assertThat(count($this->object), $constraint,
-            $this->msg('%s length does not match', $this->path()));
+        $this->test->assertThat(
+            count($this->object),
+            $constraint,
+            $this->msg('%s length does not match', $this->path())
+        );
         return $this;
     }
 
@@ -122,8 +125,11 @@ class ObjectAsserter
     public function key($index, $constraint = null)
     {
         $this->isArray();
-        $this->test->assertArrayHasKey($index, $this->object,
-            $this->msg('%s does not have key %s', $this->path(), $index));
+        $this->test->assertArrayHasKey(
+            $index,
+            $this->object,
+            $this->msg('%s does not have key %s', $this->path(), $index)
+        );
 
         $keyPath = $this->addPath('['.$index.']');
         $asserter = new ObjectAsserter($this->object[$index], $this->test, $this, $keyPath);

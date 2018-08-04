@@ -2,15 +2,16 @@
 
 namespace Webforge\Doctrine\Test\Entities;
 
-use Doctrine\ORM\Mapping AS ORM;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Compiled Entity for Webforge\Doctrine\Test\Entities\Tag
- * 
+ *
  * To change table name or entity repository edit the Webforge\Doctrine\Test\Entities\Tag class.
  * @ORM\MappedSuperclass
  */
-abstract class CompiledTag {
+abstract class CompiledTag
+{
   
   /**
    * id
@@ -19,46 +20,51 @@ abstract class CompiledTag {
    * @ORM\Column(type="integer")
    * @ORM\GeneratedValue
    */
-  protected $id;
+    protected $id;
   
-  /**
-   * label
-   * @var string
-   * @ORM\Column
-   */
-  protected $label;
+    /**
+     * label
+     * @var string
+     * @ORM\Column
+     */
+    protected $label;
   
-  public function __construct($label) {
-    $this->label = $label;
-  }
+    public function __construct($label)
+    {
+        $this->label = $label;
+    }
   
-  /**
-   * @return integer
-   */
-  public function getId() {
-    return $this->id;
-  }
+    /**
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
   
-  /**
-   * @param integer $id
-   */
-  public function setId($id) {
-    $this->id = $id;
-    return $this;
-  }
+    /**
+     * @param integer $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
   
-  /**
-   * @return string
-   */
-  public function getLabel() {
-    return $this->label;
-  }
+    /**
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
   
-  /**
-   * @param string $label
-   */
-  public function setLabel($label) {
-    $this->label = $label;
-    return $this;
-  }
+    /**
+     * @param string $label
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+        return $this;
+    }
 }

@@ -11,7 +11,6 @@ use Webforge\Gaufrette\Index;
 
 class Manager
 {
-
     private $serializeHandlers;
     private $treeModified = false;
 
@@ -20,13 +19,14 @@ class Manager
 
     private $router;
 
-    private $streamWrapperProtocol, $streamWrapperDomain;
+    private $streamWrapperProtocol;
+    private $streamWrapperDomain;
 
     public function __construct(
         Filesystem $filesystem,
         Index $gaufretteIndex,
         PersistentStorage $storage,
-        Array $serializeHandlers,
+        array $serializeHandlers,
         $router,
         $streamWrapperProtocol,
         $streamWrapperDomain
@@ -115,7 +115,9 @@ class Manager
         } catch (\LogicException $e) {
             $fullPath = $path.$name;
             $alreadyExists = new FileAlreadyExistsException(
-                sprintf('File "%s" does already exist and will not be overriden', $fullPath), 0, $e
+                sprintf('File "%s" does already exist and will not be overriden', $fullPath),
+                0,
+                $e
             );
             $alreadyExists->path = $fullPath;
             $alreadyExists->mediaKey = $e->mediaKey;
@@ -168,14 +170,18 @@ class Manager
      */
     public function getStreamUrl(MediaFileEntityInterface $entity)
     {
-        return sprintf('%s://%s/%s', $this->streamWrapperProtocol, $this->streamWrapperDomain,
-            $entity->getMediaFileKey());
+        return sprintf(
+            '%s://%s/%s',
+            $this->streamWrapperProtocol,
+            $this->streamWrapperDomain,
+            $entity->getMediaFileKey()
+        );
     }
 
     /**
      * @return Webforge\CmsBundle\Model\MediaFileEntityInterface[]
      */
-    public function findFiles(Array $keys)
+    public function findFiles(array $keys)
     {
         return $this->storage->loadFiles($keys);
     }
@@ -212,7 +218,7 @@ class Manager
         $this->treeModified = $tree;
     }
 
-    public function serializeFile($mediaKey, \stdClass $file, Array $options = array())
+    public function serializeFile($mediaKey, \stdClass $file, array $options = array())
     {
         $entity = $this->storage->loadFile($mediaKey);
 
@@ -223,14 +229,17 @@ class Manager
         return $this->serializeEntity($entity, $file, $options);
     }
 
-    public function serializeEntity(MediaFileEntityInterface $entity, \stdClass $file, Array $options = array())
+    public function serializeEntity(MediaFileEntityInterface $entity, \stdClass $file, array $options = array())
     {
         $mediaKey = $entity->getMediaFileKey();
 
         // those properties will be defined for non existing files
         $file->key = $mediaKey;
-        $file->url = $this->router->generate('public_media_original',
-            array('key' => $mediaKey, 'name' => $entity->getMediaName()), UrlGeneratorInterface::ABSOLUTE_URL);
+        $file->url = $this->router->generate(
+            'public_media_original',
+            array('key' => $mediaKey, 'name' => $entity->getMediaName()),
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
         $file->name = $entity->getMediaName();
 
         try {
@@ -250,7 +259,7 @@ class Manager
         }
     }
 
-    public function asTree(Array $options = array())
+    public function asTree(array $options = array())
     {
         $that = $this;
 

@@ -132,8 +132,11 @@ class BlocksExtendingTest extends KernelTestCase
         // we need to create the file physically
         try {
             $this->mediaManager->beginTransaction();
-            $screenshot = $this->mediaManager->addFile('/_seiten/home', 'screenshot-demo.jpg',
-                $this->getResourceImage('background.jpg')->getContents());
+            $screenshot = $this->mediaManager->addFile(
+                '/_seiten/home',
+                'screenshot-demo.jpg',
+                $this->getResourceImage('background.jpg')->getContents()
+            );
             $mediaKey = $screenshot->getMediaFileKey();
             $this->mediaManager->commitTransaction();
         } catch (\ Webforge\CmsBundle\Media\FileAlreadyExistsException $e) {

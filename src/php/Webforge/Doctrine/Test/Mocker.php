@@ -5,33 +5,36 @@ namespace Webforge\Doctrine\Test;
 use Doctrine\ORM\EntityManager;
 use Mockery as m;
 
-class Mocker {
+class Mocker
+{
+    protected $test;
 
-  protected $test;
-
-  public function __construct(\PHPUnit_Framework_TestCase $testCase) {
-    $this->test = $testCase;
-  }
-
-  /**
-   * Creates an dumb EntityManager for testing purposes.
-   *
-   * @return Doctrine\ORM\EntityManager
-   */
-  public function createEntityManager(Array $connectionConfig = array()) {
-    $em = m::mock('Doctrine\ORM\EntityManager');
-    $connection = m::mock('Doctrine\DBAL\Connection');
-
-    if (isset($connectionConfig['database'])) {
-      $connection->shouldReceive('getDatabase')->byDefault()->andReturn($connectionConfig['database']);
+    public function __construct(\PHPUnit_Framework_TestCase $testCase)
+    {
+        $this->test = $testCase;
     }
 
-    $em->shouldReceive('getConnection')->byDefault()->andReturn($connection);
+    /**
+     * Creates an dumb EntityManager for testing purposes.
+     *
+     * @return Doctrine\ORM\EntityManager
+     */
+    public function createEntityManager(array $connectionConfig = array())
+    {
+        $em = m::mock('Doctrine\ORM\EntityManager');
+        $connection = m::mock('Doctrine\DBAL\Connection');
 
-    return $em;
-  }
+        if (isset($connectionConfig['database'])) {
+            $connection->shouldReceive('getDatabase')->byDefault()->andReturn($connectionConfig['database']);
+        }
 
-  public function createSchemaTool(EntityManager $em) {
-    return $this->test->getMockBuilder('Doctrine\ORM\Tools\SchemaTool')->disableOriginalConstructor()->getMock();
-  }
+        $em->shouldReceive('getConnection')->byDefault()->andReturn($connection);
+
+        return $em;
+    }
+
+    public function createSchemaTool(EntityManager $em)
+    {
+        return $this->test->getMockBuilder('Doctrine\ORM\Tools\SchemaTool')->disableOriginalConstructor()->getMock();
+    }
 }

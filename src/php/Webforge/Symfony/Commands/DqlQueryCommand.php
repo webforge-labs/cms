@@ -10,11 +10,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Webmozart\Json\JsonDecoder;
 
-class DqlQueryCommand extends Command {
-
+class DqlQueryCommand extends Command
+{
     protected $doctrine;
 
-    public function __construct($doctrine) {
+    public function __construct($doctrine)
+    {
         parent::__construct();
         $this->doctrine = $doctrine;
     }
@@ -31,24 +32,33 @@ class DqlQueryCommand extends Command {
             new InputArgument('dql', InputArgument::REQUIRED, 'The DQL to execute.'),
             new InputArgument('parameters', InputArgument::OPTIONAL, 'The parameters for the dql encoded as JSON.'),
             new InputOption(
-                'base64', null, InputOption::VALUE_NONE,
+                'base64',
+                null,
+                InputOption::VALUE_NONE,
                 'If set the params will be expected in base64 encoded json.'
             ),
             new InputOption(
-                'manager', 'em', InputOption::VALUE_REQUIRED,
+                'manager',
+                'em',
+                InputOption::VALUE_REQUIRED,
                 'The name of the entityManager to use.',
                 'default'
             ),
             new InputOption(
-                'first-result', null, InputOption::VALUE_REQUIRED,
+                'first-result',
+                null,
+                InputOption::VALUE_REQUIRED,
                 'The first result in the result set.'
             ),
             new InputOption(
-                'max-result', null, InputOption::VALUE_REQUIRED,
+                'max-result',
+                null,
+                InputOption::VALUE_REQUIRED,
                 'The maximum number of results in the result set.'
             )
         ))
-        ->setHelp(<<<EOT
+        ->setHelp(
+            <<<EOT
 Executes arbitrary DQL directly from the command line.
 EOT
         );
@@ -68,7 +78,7 @@ EOT
         $query = $em->createQuery($dql);
 
         if (($firstResult = $input->getOption('first-result')) !== null) {
-            if ( ! is_numeric($firstResult)) {
+            if (! is_numeric($firstResult)) {
                 throw new \LogicException("Option 'first-result' must contains an integer value");
             }
 
@@ -76,7 +86,7 @@ EOT
         }
 
         if (($maxResult = $input->getOption('max-result')) !== null) {
-            if ( ! is_numeric($maxResult)) {
+            if (! is_numeric($maxResult)) {
                 throw new \LogicException("Option 'max-result' must contains an integer value");
             }
 

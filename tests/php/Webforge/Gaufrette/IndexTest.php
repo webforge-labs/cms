@@ -6,11 +6,12 @@ use Gaufrette\Adapter\InMemory;
 use Gaufrette\Filesystem;
 use Webforge\Testing\ObjectAsserter;
 
-class GaufretteIndexTest extends \PHPUnit\Framework\TestCase {
-
-  public function setUp() {
-    parent::setUp();
-    $adapter = new InMemory(
+class GaufretteIndexTest extends \PHPUnit\Framework\TestCase
+{
+    public function setUp()
+    {
+        parent::setUp();
+        $adapter = new InMemory(
       array(
         '2016-04-13/file1.jpg' => 'content from file1.jpg',
         '2016-04-13/file2.jpg' => 'content',
@@ -20,20 +21,21 @@ class GaufretteIndexTest extends \PHPUnit\Framework\TestCase {
       )
     );
 
-    $filesystem = new Filesystem($adapter);
-    $this->index = new Index($filesystem);
-  }
+        $filesystem = new Filesystem($adapter);
+        $this->index = new Index($filesystem);
+    }
 
-  public function testGettingAsTree() {
-    $options = [
-      'withFile'=>function(File $gFile, \stdClass $file) {
-        $file->myCustomPath = $gFile->getRelativePath();
+    public function testGettingAsTree()
+    {
+        $options = [
+      'withFile'=>function (File $gFile, \stdClass $file) {
+          $file->myCustomPath = $gFile->getRelativePath();
       }
     ];
 
-    $object = new ObjectAsserter($this->index->asTree($options), $this);
+        $object = new ObjectAsserter($this->index->asTree($options), $this);
 
-    $object->property('name')->end()
+        $object->property('name')->end()
       ->property('type', 'ROOT')->end()
       ->property('items')->isArray()->length(3)
         ->key(0)
@@ -86,14 +88,15 @@ class GaufretteIndexTest extends \PHPUnit\Framework\TestCase {
           ->property('type', 'file')->end()
         ->end()
      ;
-  }
+    }
 
-  public function testGettingAsSingleFileFromTree() {
-    $gFile = $this->index->getFile('backup/2016-04-13/set2/trees.png');
+    public function testGettingAsSingleFileFromTree()
+    {
+        $gFile = $this->index->getFile('backup/2016-04-13/set2/trees.png');
 
-    $this->assertInstanceOf(File::CLASS, $gFile);
-    $this->assertEquals('/backup/2016-04-13/set2/trees.png', $gFile->getRelativePath());
-    $this->assertEquals('set2', $gFile->directory->getName());
-    $this->assertEquals('2016-04-13', $gFile->directory->parent->getName());
-  }
+        $this->assertInstanceOf(File::class, $gFile);
+        $this->assertEquals('/backup/2016-04-13/set2/trees.png', $gFile->getRelativePath());
+        $this->assertEquals('set2', $gFile->directory->getName());
+        $this->assertEquals('2016-04-13', $gFile->directory->parent->getName());
+    }
 }

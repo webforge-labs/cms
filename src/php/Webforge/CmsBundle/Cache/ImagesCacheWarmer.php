@@ -4,19 +4,22 @@ namespace Webforge\CmsBundle\Cache;
 
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
-class ImagesCacheWarmer implements CacheWarmerInterface {
+class ImagesCacheWarmer implements CacheWarmerInterface
+{
+    protected $manager;
 
-  protected $manager;
+    public function __construct($manager)
+    {
+        $this->manager = $manager;
+    }
 
-  public function __construct($manager) {
-    $this->manager = $manager;
-  }
+    public function warmUp($cacheDir)
+    {
+        $this->manager->asTree();
+    }
 
-  public function warmUp($cacheDir) {
-    $this->manager->asTree();
-  }
-
-  public function isOptional() {
-    return true;
-  }
+    public function isOptional()
+    {
+        return true;
+    }
 }

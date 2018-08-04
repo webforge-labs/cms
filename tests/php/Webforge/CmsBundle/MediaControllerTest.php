@@ -9,7 +9,6 @@ use Webforge\CmsBundle\Media\Manager;
 
 class MediaControllerTest extends \Webforge\Testing\WebTestCase
 {
-
     use \Webforge\Testing\TestTrait;
 
     protected function setupEmpty()
@@ -411,7 +410,8 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase
     {
         // normally link is something like: https://dl.dropboxusercontent.com/1/view/hhkjprs3c7kxk98/Theo%20Family/2016-04-07%20Besuch%20Judith%2C%20Martin%20und%20Marlene/DSC03281.JPG
         // we fake it here to a local url
-        $json = $this->parseJSON(<<<'JSON'
+        $json = $this->parseJSON(
+            <<<'JSON'
 {
   "dropboxFiles": [
     {
@@ -429,8 +429,11 @@ class MediaControllerTest extends \Webforge\Testing\WebTestCase
 JSON
         );
 
-        $json->dropboxFiles[0]->link = str_replace('%hostUrl%', getenv('SYMFONY_BASEURL'),
-            $json->dropboxFiles[0]->link);
+        $json->dropboxFiles[0]->link = str_replace(
+            '%hostUrl%',
+            getenv('SYMFONY_BASEURL'),
+            $json->dropboxFiles[0]->link
+        );
 
         return $json;
     }
@@ -472,7 +475,7 @@ JSON
         return $client->getContainer()->get('knp_gaufrette.filesystem_map')->get('cms_media');
     }
 
-    protected function storeFiles($client, Array $files)
+    protected function storeFiles($client, array $files)
     {
 
         // this is a shortcut to insert binaries, we could query the mediaController dropboxUpload everytime (or use another web request here, or use fixtures) which would be cleaner

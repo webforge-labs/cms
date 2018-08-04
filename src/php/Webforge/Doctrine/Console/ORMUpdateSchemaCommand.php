@@ -8,12 +8,13 @@ use Webforge\Console\CommandOutput;
 use Webforge\Console\CommandInteraction;
 use Webforge\Common\System\System;
 
-class ORMUpdateSchemaCommand extends AbstractDoctrineCommand {
+class ORMUpdateSchemaCommand extends AbstractDoctrineCommand
+{
+    protected $name = 'orm:update-schema';
 
-  protected $name = 'orm:update-schema';
-
-  protected function configure() {
-    $this
+    protected function configure()
+    {
+        $this
       ->setName('orm:update-schema')
       ->setDescription(
         'Updates the database schema to match the current mapping metadata.'
@@ -26,29 +27,30 @@ class ORMUpdateSchemaCommand extends AbstractDoctrineCommand {
         'Updates the database schema to match the current mapping metadata.'
     );
 
-    parent::configure();
-  }
+        parent::configure();
+    }
   
-  public function doExecute(CommandInput $input, CommandOutput $output, CommandInteraction $interact, System $system) {
-    $force = !$input->getFlag('dry-run') ? Util::FORCE : NULL;
-    $con = $input->getValue('con');
+    public function doExecute(CommandInput $input, CommandOutput $output, CommandInteraction $interact, System $system)
+    {
+        $force = !$input->getFlag('dry-run') ? Util::FORCE : null;
+        $con = $input->getValue('con');
 
-    $util = $this->dcc->getUtil();
-    $em = $this->dcc->getEntityManager($con);
-    $database = $em->getConnection()->getDatabase();
+        $util = $this->dcc->getUtil();
+        $em = $this->dcc->getEntityManager($con);
+        $database = $em->getConnection()->getDatabase();
 
-    if ($force == Util::FORCE) {
-      $output->warn(sprintf('Updating schema (forced) for con: %s connected with: %s', $con, $database));
-    } else {
-      $output->msg(sprintf('Printing update schema SQL for con: %s connected with: %s', $con, $database));
+        if ($force == Util::FORCE) {
+            $output->warn(sprintf('Updating schema (forced) for con: %s connected with: %s', $con, $database));
+        } else {
+            $output->msg(sprintf('Printing update schema SQL for con: %s connected with: %s', $con, $database));
+        }
+    
+        $output->msg($log = $util->updateSchema($con, $force, "\n"));
+    
+        if ($force !== Util::FORCE && empty($log)) {
+            $output->msg('nothing to do');
+        }
+    
+        return 0;
     }
-    
-    $output->msg($log = $util->updateSchema($con, $force, "\n"));
-    
-    if ($force !== Util::FORCE && empty($log)) {
-      $output->msg('nothing to do');
-    }
-    
-    return 0;
-  }
 }

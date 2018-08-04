@@ -10,7 +10,6 @@ use Webforge\Testing\ObjectAsserter;
 
 class MediaFileSerializationTest extends \Webforge\Testing\WebTestCase
 {
-
     use \Webforge\Testing\TestTrait;
 
     protected function setupEmpty()
@@ -29,7 +28,6 @@ class MediaFileSerializationTest extends \Webforge\Testing\WebTestCase
 
     public function testSerializeAndUnseralizeTheNodeBuilder()
     {
-
         $builder = new \Tree\Builder\NodeBuilder;
 
         $builder

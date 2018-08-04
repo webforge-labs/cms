@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class TemplatesTest extends \Webforge\Testing\WebTestCase
 {
-
     use \Webforge\Testing\TestTrait;
 
     protected function setUp()

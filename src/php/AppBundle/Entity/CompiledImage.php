@@ -2,16 +2,17 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\ORM\Mapping AS ORM;
-use JMS\Serializer\Annotation AS Serializer;
+use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Compiled Entity for AppBundle\Entity\Image
- * 
+ *
  * To change table name or entity repository edit the AppBundle\Entity\Image class.
  * @ORM\MappedSuperclass
  */
-abstract class CompiledImage {
+abstract class CompiledImage
+{
   
   /**
    * id
@@ -22,50 +23,54 @@ abstract class CompiledImage {
    * @Serializer\Expose
    * @Serializer\Type("integer")
    */
-  protected $id;
+    protected $id;
   
-  /**
-   * binary
-   * @var AppBundle\Entity\Binary
-   * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Binary")
-   * @ORM\JoinColumn(nullable=false)
-   * @Serializer\Expose
-   * @Serializer\Type("AppBundle\Entity\Binary")
-   * @Serializer\Inline
-   */
-  protected $binary;
+    /**
+     * binary
+     * @var AppBundle\Entity\Binary
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Binary")
+     * @ORM\JoinColumn(nullable=false)
+     * @Serializer\Expose
+     * @Serializer\Type("AppBundle\Entity\Binary")
+     * @Serializer\Inline
+     */
+    protected $binary;
   
-  public function __construct() {
-
-  }
+    public function __construct()
+    {
+    }
   
-  /**
-   * @return integer
-   */
-  public function getId() {
-    return $this->id;
-  }
+    /**
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
   
-  /**
-   * @param integer $id
-   */
-  public function setId($id) {
-    $this->id = $id;
-    return $this;
-  }
+    /**
+     * @param integer $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
   
-  /**
-   * @return AppBundle\Entity\Binary
-   */
-  public function getBinary() {
-    return $this->binary;
-  }
+    /**
+     * @return AppBundle\Entity\Binary
+     */
+    public function getBinary()
+    {
+        return $this->binary;
+    }
   
-  /**
-   * @param AppBundle\Entity\Binary $binary
-   */
-  public function setBinary(Binary $binary) {
-    $this->binary = $binary;
-    return $this;
-  }
+    /**
+     * @param AppBundle\Entity\Binary $binary
+     */
+    public function setBinary(Binary $binary)
+    {
+        $this->binary = $binary;
+        return $this;
+    }
 }

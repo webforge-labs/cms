@@ -9,7 +9,6 @@ use Webmozart\Json\JsonDecoder;
 
 class WebTestCase extends SymfonyWebTestCase
 {
-
     protected $credentials = array(
         'petra' => array(
             'username' => 'petra.platzhalter@ps-webforge.net',
@@ -17,7 +16,7 @@ class WebTestCase extends SymfonyWebTestCase
         )
     );
 
-    protected function loadAliceFixtures(Array $names, $client, $con = 'default', $purge = true)
+    protected function loadAliceFixtures(array $names, $client, $con = 'default', $purge = true)
     {
         $dir = $GLOBALS['env']['root']->sub('tests/files/alice/');
 
@@ -29,8 +28,12 @@ class WebTestCase extends SymfonyWebTestCase
         $objectManager = $client->getContainer()->get(sprintf('doctrine.orm.%s_entity_manager', $con));
         $aliceManager = $client->getContainer()->get('webforge_symfony_alice_manager');
 
-        $aliceManager->loadFixtures($files, $objectManager,
-            $output = new \Symfony\Component\Console\Output\BufferedOutput(), $purge);
+        $aliceManager->loadFixtures(
+            $files,
+            $objectManager,
+            $output = new \Symfony\Component\Console\Output\BufferedOutput(),
+            $purge
+        );
     }
 
     protected function sendJsonRequest(Client $client, $method, $url, $json = null)

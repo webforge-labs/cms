@@ -5,28 +5,30 @@ namespace AppBundle\Twig;
 use Twig_Extension;
 use Twig_Extension_GlobalsInterface;
 
-class GlobalVariablesExtension extends Twig_Extension implements Twig_Extension_GlobalsInterface {
+class GlobalVariablesExtension extends Twig_Extension implements Twig_Extension_GlobalsInterface
+{
+    public function getGlobals()
+    {
+        $globals = [
+            'frontendDebug' => true,
 
-  public function getGlobals() {
-    $globals = [
-      'frontendDebug'=>true,
+            'cms' => [
+                'title' => 'Webforge Test-CMS',
+                'xsTitle' => 'Test CMS',
+                'version' => 'dev',
 
-      'cms'=>[
-        'title'=>'Webforge Test-CMS',
-        'xsTitle'=>'Test CMS',
-        'version'=>'dev',
+                'site' => [
+                    'title' => 'zur Webseite',
+                    'url' => '/'
+                ]
+            ]
+        ];
 
-        'site'=>[
-          'title'=>'zur Webseite',
-          'url'=>'/'
-        ]
-      ]
-    ];
+        return $globals;
+    }
 
-    return $globals;
-  }
-
-  public function getName() {
-    return 'appbundle_global_variables_extension';
-  }
+    public function getName()
+    {
+        return 'appbundle_global_variables_extension';
+    }
 }

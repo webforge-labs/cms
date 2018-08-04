@@ -2,6 +2,6 @@
 
 namespace Webforge\Doctrine\Exceptions;
 
-class EntityNotFoundException extends Exception {
-
+class EntityNotFoundException extends Exception
+{
 }

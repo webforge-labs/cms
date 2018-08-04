@@ -2,16 +2,17 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\ORM\Mapping AS ORM;
-use JMS\Serializer\Annotation AS Serializer;
+use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Compiled Entity for AppBundle\Entity\Binary
- * 
+ *
  * To change table name or entity repository edit the AppBundle\Entity\Binary class.
  * @ORM\MappedSuperclass
  */
-abstract class CompiledBinary {
+abstract class CompiledBinary
+{
   
   /**
    * id
@@ -22,96 +23,104 @@ abstract class CompiledBinary {
    * @Serializer\Expose
    * @Serializer\Type("integer")
    */
-  protected $id;
+    protected $id;
   
-  /**
-   * mediaFileKey
-   * @var string
-   * @ORM\Column
-   * @Serializer\Expose
-   * @Serializer\Type("string")
-   */
-  protected $mediaFileKey;
+    /**
+     * mediaFileKey
+     * @var string
+     * @ORM\Column
+     * @Serializer\Expose
+     * @Serializer\Type("string")
+     */
+    protected $mediaFileKey;
   
-  /**
-   * mediaName
-   * @var string
-   * @ORM\Column
-   * @Serializer\Expose
-   * @Serializer\Type("string")
-   */
-  protected $mediaName;
+    /**
+     * mediaName
+     * @var string
+     * @ORM\Column
+     * @Serializer\Expose
+     * @Serializer\Type("string")
+     */
+    protected $mediaName;
   
-  /**
-   * mediaMeta
-   * @var object
-   * @ORM\Column(type="object", nullable=true)
-   * @Serializer\Expose
-   * @Serializer\Type("")
-   */
-  protected $mediaMeta;
+    /**
+     * mediaMeta
+     * @var object
+     * @ORM\Column(type="object", nullable=true)
+     * @Serializer\Expose
+     * @Serializer\Type("")
+     */
+    protected $mediaMeta;
   
-  public function __construct() {
-
-  }
+    public function __construct()
+    {
+    }
   
-  /**
-   * @return integer
-   */
-  public function getId() {
-    return $this->id;
-  }
+    /**
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
   
-  /**
-   * @param integer $id
-   */
-  public function setId($id) {
-    $this->id = $id;
-    return $this;
-  }
+    /**
+     * @param integer $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
   
-  /**
-   * @return string
-   */
-  public function getMediaFileKey() {
-    return $this->mediaFileKey;
-  }
+    /**
+     * @return string
+     */
+    public function getMediaFileKey()
+    {
+        return $this->mediaFileKey;
+    }
   
-  /**
-   * @param string $mediaFileKey
-   */
-  public function setMediaFileKey($mediaFileKey) {
-    $this->mediaFileKey = $mediaFileKey;
-    return $this;
-  }
+    /**
+     * @param string $mediaFileKey
+     */
+    public function setMediaFileKey($mediaFileKey)
+    {
+        $this->mediaFileKey = $mediaFileKey;
+        return $this;
+    }
   
-  /**
-   * @return string
-   */
-  public function getMediaName() {
-    return $this->mediaName;
-  }
+    /**
+     * @return string
+     */
+    public function getMediaName()
+    {
+        return $this->mediaName;
+    }
   
-  /**
-   * @param string $mediaName
-   */
-  public function setMediaName($mediaName) {
-    $this->mediaName = $mediaName;
-    return $this;
-  }
+    /**
+     * @param string $mediaName
+     */
+    public function setMediaName($mediaName)
+    {
+        $this->mediaName = $mediaName;
+        return $this;
+    }
   
-  /**
-   * @return object
-   */
-  public function getMediaMeta() {
-    return $this->mediaMeta;
-  }
+    /**
+     * @return object
+     */
+    public function getMediaMeta()
+    {
+        return $this->mediaMeta;
+    }
   
-  /**
-   * @param object $mediaMeta
-   */
-  public function setMediaMeta(\stdClass $mediaMeta = NULL) {
-    $this->mediaMeta = $mediaMeta;
-    return $this;
-  }
+    /**
+     * @param object $mediaMeta
+     */
+    public function setMediaMeta(\stdClass $mediaMeta = null)
+    {
+        $this->mediaMeta = $mediaMeta;
+        return $this;
+    }
 }

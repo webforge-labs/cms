@@ -2,15 +2,17 @@
 
 namespace Webforge\Doctrine\Fixtures;
 
-class AliceEntitiesProvider {
+class AliceEntitiesProvider
+{
+    private $dc;
 
-  private $dc;
-
-  public function __construct($dc) {
-    $this->dc = $dc;
-  }
+    public function __construct($dc)
+    {
+        $this->dc = $dc;
+    }
   
-  public function hydrate($entityName, $criterias) {
-    return $this->dc->hydrate($entityName, $criterias);
-  }
+    public function hydrate($entityName, $criterias)
+    {
+        return $this->dc->hydrate($entityName, $criterias);
+    }
 }

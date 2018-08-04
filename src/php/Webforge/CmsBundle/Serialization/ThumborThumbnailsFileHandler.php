@@ -10,7 +10,6 @@ use Webforge\CmsBundle\Model\MediaFileEntityInterface;
 
 class ThumborThumbnailsFileHandler implements MediaFileHandlerInterface
 {
-
     protected $transformations;
     protected $transformer;
 
@@ -37,10 +36,9 @@ class ThumborThumbnailsFileHandler implements MediaFileHandlerInterface
         FileInterface $mediaFile,
         MediaFileEntityInterface $entity,
         stdClass $file,
-        Array $options
+        array $options
     ) {
         if ($this->enabled && $mediaFile->isImage()) {
-
             if (!isset($file->thumbnails)) {
                 $file->thumbnails = [];
             } else {
@@ -87,14 +85,14 @@ class ThumborThumbnailsFileHandler implements MediaFileHandlerInterface
 
         if (!$metadata) {
             $this->logger->info('get metadata for file with thumbor-url: '.$url);
-            /* this does not work right now 100%, because: https://github.com/thumbor/thumbor/issues/949 
-            
+            /* this does not work right now 100%, because: https://github.com/thumbor/thumbor/issues/949
+
             heres the thing:
             if one would upload an image where the camera is hold in portrait mode, the camera will write the file in landscape mode anyway
             but put a orientation (right top) into the exif metadata
-            
+
             windows10 (even explorer preview), irfanview, macs they all will display the image upwards
-            
+
             php getimagesizefromstring will return the real format (not the rotated) which is width>>height
             (we got that wrong all the time)
 
@@ -123,7 +121,7 @@ class ThumborThumbnailsFileHandler implements MediaFileHandlerInterface
 
             if (is_array($exif)) {
                 // it maybe twisted because thumbor did not normalized with exif rotation for the thumbnail when providing metadata (see github issue)
-                $orientation = isset($exif['Orientation']) ? (int) $exif['Orientation'] : 1;
+                $orientation = isset($exif['Orientation']) ? (int)$exif['Orientation'] : 1;
 
                 if ($orientation >= 5 && $orientation <= 8) {
                     // this is the gretchen-question: should this be flipped, or not? the "original" is in physical form landscape, but would be shown twisted

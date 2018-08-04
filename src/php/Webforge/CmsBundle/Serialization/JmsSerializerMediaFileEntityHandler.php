@@ -14,7 +14,6 @@ use Webforge\CmsBundle\Model\MediaFileEntityInterface;
 
 class JmsSerializerMediaFileEntityHandler
 {
-
     private $manager;
 
     public function __construct(MediaManager $manager)
@@ -38,7 +37,6 @@ class JmsSerializerMediaFileEntityHandler
             $this->manager->serializeEntity($binary, $file);
 
             $file->isExisting = true;
-
         } catch (\Webforge\CmsBundle\Media\FileNotFoundException $e) {
             $file->isExisting = false;
         }

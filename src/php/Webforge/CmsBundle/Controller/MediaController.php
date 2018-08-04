@@ -37,7 +37,7 @@ class MediaController extends CommonController
         return $this->render("WebforgeCmsBundle:components:file-manager-tab.html.twig", array());
     }
 
-    protected function getIndex(Array $options = array())
+    protected function getIndex(array $options = array())
     {
         $manager = $this->get('webforge.media.manager');
 
@@ -196,8 +196,12 @@ class MediaController extends CommonController
             'path' => null
         ];
 
-        $form = $this->get('form.factory')->createNamedBuilder(null, FormType::class, $json,
-            array('csrf_protection' => false))
+        $form = $this->get('form.factory')->createNamedBuilder(
+            null,
+            FormType::class,
+            $json,
+            array('csrf_protection' => false)
+        )
             ->add('name', TextType::class, array(
                 'constraints' => array(new Assert\NotBlank())
             ))
@@ -232,7 +236,6 @@ class MediaController extends CommonController
             $dispatcher = $this->get('job_dispatcher');
 
             $dispatcher->dispatchCliCommand('cms:warmup-media-file', [$entity->getMediaFileKey()]);
-
         } catch (NotFoundExceptionInterface $e) {
             print 'Not possible to warmup media file in background because no service "job_dispatcher" is registered';
         }

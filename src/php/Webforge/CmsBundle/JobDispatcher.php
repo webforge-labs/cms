@@ -32,7 +32,7 @@ class JobDispatcher
      */
     protected $logger;
 
-    public function __construct($cli, $symfonyEnv, LoggerInterface $logger, Array $env)
+    public function __construct($cli, $symfonyEnv, LoggerInterface $logger, array $env)
     {
         $this->cli = $cli ?: '/app/bin/cli.sh';
         $this->symfonyEnv = $symfonyEnv;
@@ -40,18 +40,25 @@ class JobDispatcher
         $this->logger = $logger;
     }
 
-    public function dispatchCliCommand($commandName, Array $args): int {
-        $cliCommand = sprintf('%s %s --env=%s -v %s', $this->cli, $commandName, $this->symfonyEnv, $cliArgs = implode(' ', $args));
+    public function dispatchCliCommand($commandName, array $args): int
+    {
+        $cliCommand = sprintf(
+            '%s %s --env=%s -v %s',
+            $this->cli,
+            $commandName,
+            $this->symfonyEnv,
+            $cliArgs = implode(' ', $args)
+        );
 
         $this->logger->info('Dispatch CLI job: '.$this->cli.' '.$commandName.' '.$cliArgs);
 
         $command = sprintf('{ %s 2>&1 & }; pid=$!; echo $pid;', $cliCommand);
-        $process = new Process($command, NULL, $this->env);
+        $process = new Process($command, null, $this->env);
 
         $process->mustRun();
 
         // get the background pid, not the foreground pit
-        $pid = (int) $process->getOutput();
+        $pid = (int)$process->getOutput();
 
         if ($pid <= 0) {
             throw new \RuntimeException('Cannot start background process. An unusual pid is returned: '.$process->getOutput().' '.$process->getErrorOutput());

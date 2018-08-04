@@ -2,15 +2,17 @@
 
 namespace Webforge\CmsBundle\Content;
 
-class BlockType {
+class BlockType
+{
+    private $properties;
 
-  private $properties;
+    public function __construct($name, array $properties)
+    {
+        $this->properties = $properties;
+    }
 
-  public function __construct($name, Array $properties) {
-    $this->properties = $properties;
-  }
-
-  public function getProperties() {
-    return $this->properties;
-  }
+    public function getProperties()
+    {
+        return $this->properties;
+    }
 }

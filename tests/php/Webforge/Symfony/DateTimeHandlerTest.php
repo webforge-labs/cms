@@ -8,7 +8,6 @@
 
 namespace Webforge\Symfony;
 
-
 class DateTimeHandlerTest extends \PHPUnit\Framework\TestCase
 {
 
@@ -29,5 +28,4 @@ class DateTimeHandlerTest extends \PHPUnit\Framework\TestCase
             //['2009-06-30T18:30:00+02:00', '30.06.2009 18:30:00'] // how would we treat this?
         ];
     }
-
 }

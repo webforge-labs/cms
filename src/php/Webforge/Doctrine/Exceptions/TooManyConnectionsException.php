@@ -2,6 +2,6 @@
 
 namespace Webforge\Doctrine\Exceptions;
 
-class TooManyConnectionsException extends Exception {
-
+class TooManyConnectionsException extends Exception
+{
 }

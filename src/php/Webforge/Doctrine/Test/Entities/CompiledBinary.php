@@ -2,15 +2,16 @@
 
 namespace Webforge\Doctrine\Test\Entities;
 
-use Doctrine\ORM\Mapping AS ORM;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Compiled Entity for Webforge\Doctrine\Test\Entities\Binary
- * 
+ *
  * To change table name or entity repository edit the Webforge\Doctrine\Test\Entities\Binary class.
  * @ORM\MappedSuperclass
  */
-abstract class CompiledBinary {
+abstract class CompiledBinary
+{
   
   /**
    * id
@@ -19,46 +20,51 @@ abstract class CompiledBinary {
    * @ORM\Column(type="integer")
    * @ORM\GeneratedValue
    */
-  protected $id;
+    protected $id;
   
-  /**
-   * path
-   * @var string
-   * @ORM\Column
-   */
-  protected $path;
+    /**
+     * path
+     * @var string
+     * @ORM\Column
+     */
+    protected $path;
   
-  public function __construct($path) {
-    $this->path = $path;
-  }
+    public function __construct($path)
+    {
+        $this->path = $path;
+    }
   
-  /**
-   * @return integer
-   */
-  public function getId() {
-    return $this->id;
-  }
+    /**
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
   
-  /**
-   * @param integer $id
-   */
-  public function setId($id) {
-    $this->id = $id;
-    return $this;
-  }
+    /**
+     * @param integer $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
   
-  /**
-   * @return string
-   */
-  public function getPath() {
-    return $this->path;
-  }
+    /**
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
   
-  /**
-   * @param string $path
-   */
-  public function setPath($path) {
-    $this->path = $path;
-    return $this;
-  }
+    /**
+     * @param string $path
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+        return $this;
+    }
 }

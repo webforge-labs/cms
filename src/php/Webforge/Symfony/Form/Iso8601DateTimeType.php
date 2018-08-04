@@ -13,7 +13,6 @@ use Symfony\Component\Form\CallbackTransformer;
 
 class Iso8601DateTimeType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         if ($options['mapped']) {
@@ -39,10 +38,12 @@ class Iso8601DateTimeType extends AbstractType
                         if (is_string($formValue)) {
                             try {
                                 return DateTimeHandler::parse($formValue);
-
                             } catch (Webforge\Common\DateTime\ParsingException $e) {
-                                throw new TransformationFailedException('Cannot convert data: "'.$formValue.'" to Webforge DateTime object: '.$e->getMessage(),
-                                    0, $e);
+                                throw new TransformationFailedException(
+                                    'Cannot convert data: "'.$formValue.'" to Webforge DateTime object: '.$e->getMessage(),
+                                    0,
+                                    $e
+                                );
                             }
                         }
                     }

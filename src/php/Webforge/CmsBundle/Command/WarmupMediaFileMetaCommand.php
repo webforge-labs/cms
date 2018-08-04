@@ -23,7 +23,8 @@ class WarmupMediaFileMetaCommand extends ContainerAwareCommand
             ->setDescription('Runs a serializiation for a specific file to create thumbnails and other meta.')
             ->setDefinition(array(
                 new InputArgument(
-                    'mediaKey', InputArgument::REQUIRED,
+                    'mediaKey',
+                    InputArgument::REQUIRED,
                     'unique media key of the entity'
                 )
             ));
