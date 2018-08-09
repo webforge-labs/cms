@@ -62,8 +62,3 @@ knp_gaufrette:
       adapter: local_files
 ```
 
-### Imagine
-
-liip imagine bundle has to be configured (see prepend-configuration.yml)
-
-
