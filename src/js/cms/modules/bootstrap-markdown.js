@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap-markdown'], function(jQuery, bootstrapMarkdown) {
+define(['jquery', 'bootstrap-markdown'], function($, bootstrapMarkdown) {
   /**
    * German translation for bootstrap-markdown
    * Tobias Nitsche <tobias-nitsche@gmx.net>
