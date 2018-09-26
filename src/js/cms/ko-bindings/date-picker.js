@@ -29,6 +29,8 @@ define(['knockout', 'cms/modules/moment', 'cms/modules/bootstrap-datepicker', 'j
         format: "dd.mm.yyyy",
         calendarWeeks: false,
         autoclose: true,
+        immediateUpdates: false,
+        keyboardNavigation: false,
         templates: {
           leftArrow: '<i class="fa fa-caret-left"></i>',
           rightArrow: '<i class="fa fa-caret-right"></i>'

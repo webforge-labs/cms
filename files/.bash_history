@@ -23,3 +23,5 @@ exti
 exit
 phpunit --help
 exit
+php app/console doctrine:schema:update --force
+exit
