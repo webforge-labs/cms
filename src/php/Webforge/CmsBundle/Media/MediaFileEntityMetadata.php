@@ -8,11 +8,11 @@ trait MediaFileEntityMetadata
 {
     public function setMediaMetadata($key, stdClass $meta)
     {
-        if (!$this->mediaMeta instanceof stdClass) {
-            $this->mediaMeta = new stdClass;
-        }
+        // create a clone of the existing to make doctrine detect the change
+        $mediaMeta = ($this->mediaMeta instanceof \stdClass) ? clone $this->mediaMeta : new \stdClass;
+        $mediaMeta->{$key} = $meta;
 
-        $this->mediaMeta->{$key} = $meta;
+        $this->mediaMeta = $mediaMeta;
     }
 
     public function getMediaMetadata($key)
@@ -23,4 +23,5 @@ trait MediaFileEntityMetadata
 
         return null;
     }
+
 }
