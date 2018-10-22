@@ -22,11 +22,16 @@ class MediaController extends CommonController
      */
     public function indexAction(Request $request)
     {
-        return new JsonResponse(
+        $response = new JsonResponse(
             $this->getIndex([
                 'filters' => $request->query->all()
             ])
         );
+
+        // binary metadata might be created, that needs to be persisted
+        $this->em->flush();
+
+        return $response;
     }
 
     /**

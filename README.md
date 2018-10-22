@@ -20,6 +20,10 @@ npm test
 
 A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsoring a free Live account, that allows us to test on Iphones and other devices.
 
+## BC Breaks for 2.3.x
+
+- after serialization there will be no automatic flush (after each binary serialization) as before - this was slow as hell. You have call em->flush yourself
+
 ## BC Breaks for 2.2.x
 
 - you need php 7.2 to install

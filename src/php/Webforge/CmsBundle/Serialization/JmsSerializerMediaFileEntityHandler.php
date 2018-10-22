@@ -44,10 +44,4 @@ class JmsSerializerMediaFileEntityHandler
         // we return an array here, because otherwise @inline in serializer will not work
         return (array)$file;
     }
-
-    public function onPostSerialize()
-    {
-        // this is flushing way to often, maybe we can simplify that
-        $this->manager->afterSerialization();
-    }
 }
