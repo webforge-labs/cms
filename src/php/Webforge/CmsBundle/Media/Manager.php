@@ -11,6 +11,8 @@ use Webforge\Gaufrette\Index;
 
 class Manager
 {
+    const EVENT_FILE_WARMUP = 'webforge.media.file-warmup';
+
     private $serializeHandlers;
     private $treeModified = false;
 
@@ -78,6 +80,10 @@ class Manager
     {
         try {
             $entity = $this->findFileByPath($this->getNormalizedPath($path, $name));
+            if ($entity === NULL) {
+                throw new \Exception('The entity was found by path: '.$path.'//'.$name.' (e.g. is in media tree), but not existing anymore in entities (thats strange)');
+            }
+
             $wasUpdated = true;
 
             // we need to use a new media key, because the file content has changed and so it should not be cached inoorrectly

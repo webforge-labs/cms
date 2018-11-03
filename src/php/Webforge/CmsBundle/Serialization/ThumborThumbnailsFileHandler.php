@@ -2,6 +2,10 @@
 
 namespace Webforge\CmsBundle\Serialization;
 
+use lsolesen\pel\PelDataWindow;
+use lsolesen\pel\PelJpeg;
+use lsolesen\pel\PelTag;
+use lsolesen\pel\PelTiff;
 use Psr\Log\LoggerInterface;
 use stdClass;
 use Webforge\CmsBundle\Media\FileInterface;
