@@ -23,6 +23,8 @@ A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsori
 ## BC Breaks for 2.3.x
 
 - after serialization there will be no automatic flush (after each binary serialization) as before - this was slow as hell. You have call em->flush yourself
+- exif is now read with lsolesen/pel, not with php native anymore. This might have more or less failing cases for you
+- original image metadata (allthough with rotation-exif-data) wont be automatically rotated, because the physical file is not rotated as well, but thumbnails-meta will be rotated and images are physically rotated
 
 ## BC Breaks for 2.2.x
 
