@@ -102,6 +102,12 @@ services:
       -  { name: console.command }
 
   webforge_warmup_media_file_command:
-    class: \Webforge\CmsBundle\Command\WarmupMediaFileMetaCommand
+    class: Webforge\CmsBundle\Command\WarmupMediaFileMetaCommand
     tags:
       -  { name: console.command }
+
+  Webforge\CmsBundle\Serialization\ThumborThumbnailsFileHandler:
+    alias: 'webforge.serialization.thumbor_thumbnails_file_handler'
+
+  Webforge\CmsBundle\Media\Manager:
+    alias: 'webforge.media.manager'
