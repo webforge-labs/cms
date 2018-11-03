@@ -42,7 +42,8 @@
         "ramsey/uuid": "^3.5",
         "nicmart/tree": "^0.2.7",
         "doctrine/orm": "^2.6",
-        "vlucas/phpdotenv": "^2.2"
+        "vlucas/phpdotenv": "^2.2",
+        "lsolesen/pel": "^0.9.6"
     },
     "require-dev": {
         "webforge/testdata-repository": "0.2.2-alpha",

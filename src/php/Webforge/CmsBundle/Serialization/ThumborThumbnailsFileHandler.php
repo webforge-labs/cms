@@ -116,8 +116,7 @@ class ThumborThumbnailsFileHandler implements MediaFileHandlerInterface
 
             $streamUrl = $this->manager->getStreamUrl($entity);
 
-            // this is shitty, but i dont want to register an error handler for that
-            $exif = @exif_read_data($streamUrl, 'IFD0');
+            $exif = $this->readExifData($streamUrl, 'IFD0');
 
             if (is_array($exif)) {
                 // it maybe twisted because thumbor did not normalized with exif rotation for the thumbnail when providing metadata (see github issue)
@@ -163,5 +162,36 @@ class ThumborThumbnailsFileHandler implements MediaFileHandlerInterface
     public function setManager(Manager $manager): void
     {
         $this->manager = $manager;
+    }
+
+    protected function readExifData($streamUrl, $section)
+    {
+        if ($section !== 'IFD0') {
+            throw new \InvalidArgumentException('I cannot do something else');
+        }
+
+        //$exif = @exif_read_data($streamUrl, 'IFD0');
+        $data = new PelDataWindow(file_get_contents($streamUrl));
+
+        if (PelJpeg::isValid($data)) {
+            $img = new PelJpeg();
+            $img->load($data);
+
+            $app1 = $img->getExif();
+            if ($app1 == null) {
+                return false;
+            }
+
+            $tiff = $app1->getTiff();
+        } elseif (PelTiff::isValid($data)) {
+            $tiff = new PelTiff($data);
+        } else {
+            return false;
+        }
+
+        $ifd0 = $tiff->getIfd();
+        if ($entry = $ifd0->getEntry(PelTag::ORIENTATION)) {
+            return ['Orientation'=>$entry->getValue()];
+        }
     }
 }
