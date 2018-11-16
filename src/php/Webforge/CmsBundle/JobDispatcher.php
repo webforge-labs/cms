@@ -35,6 +35,8 @@ class JobDispatcher
     public function __construct($cli, $symfonyEnv, LoggerInterface $logger, array $env)
     {
         $this->cli = $cli ?: '/app/bin/cli.sh';
+        $this->logs = '/app/files/logs';
+        $this->logfile = $this->logs.'/jobs.log';
         $this->symfonyEnv = $symfonyEnv;
         $this->env = $env;
         $this->logger = $logger;
@@ -52,7 +54,8 @@ class JobDispatcher
 
         $this->logger->info('Dispatch CLI job: '.$this->cli.' '.$commandName.' '.$cliArgs);
 
-        $command = sprintf('{ %s 2>&1 & }; pid=$!; echo $pid;', $cliCommand);
+
+        $command = sprintf('{ %s >> %s 2>&1 & }; pid=$!; echo $pid;', $cliCommand, $this->logfile);
         $process = new Process($command, null, $this->env);
 
         $process->mustRun();

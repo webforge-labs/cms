@@ -69,7 +69,6 @@ class WarmupMediaFileMetaCommand extends ContainerAwareCommand
 
         foreach ($file->thumbnails as $name => $thumbnail) {
             // "create" the thumbnail for all the variants, we have
-            var_dump($thumbnail->url);
             file_get_contents($thumbnail->url, false, $context);
         }
 
