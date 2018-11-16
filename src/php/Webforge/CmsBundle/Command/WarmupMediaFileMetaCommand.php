@@ -59,10 +59,21 @@ class WarmupMediaFileMetaCommand extends ContainerAwareCommand
         list ($binary) = $this->mediaManager->findFiles([$mediaKey]);
 
         $file = new \stdClass;
-        $this->mediaManager->serializeEntity($binary, $file);
+        $this->mediaManager->serializeEntity($binary, $file); // this will get meta for some
+
+        $context = stream_context_create([
+            'http' => [
+                'method' => 'GET'
+            ]
+        ]);
+
+        foreach ($file->thumbnails as $name => $thumbnail) {
+            // "create" the thumbnail for all the variants, we have
+            var_dump($thumbnail->url);
+            file_get_contents($thumbnail->url, false, $context);
+        }
 
         $event = new GenericEvent($binary);
-
         $this->eventManager->dispatch(Manager::EVENT_FILE_WARMUP, $event);
 
         $this->mediaManager->afterSerialization();

@@ -3,6 +3,7 @@
 namespace Webforge\CmsBundle\Serialization;
 
 use lsolesen\pel\PelDataWindow;
+use lsolesen\pel\PelException;
 use lsolesen\pel\PelJpeg;
 use lsolesen\pel\PelTag;
 use lsolesen\pel\PelTiff;
@@ -141,7 +142,7 @@ class ThumborThumbnailsFileHandler implements MediaFileHandlerInterface
                     ];
                 }
             } else {
-                $this->logger->warning('Cannot read exif data for image with key: '.$file->key.' creating thumbnail: '.$url.' this might be totally okay, because no rotation should be made');
+                $this->logger->warning('Cannot read exif data for image with key: '.$file->key.'. This might be totally okay, because no rotation should be made - or image has simply no exif attached (png, etc). creating thumbnail: '.$url);
             }
 
             $entity->setMediaMetadata($cacheKey, $metadata);
@@ -174,28 +175,32 @@ class ThumborThumbnailsFileHandler implements MediaFileHandlerInterface
             throw new \InvalidArgumentException('I cannot do something else');
         }
 
-        //$exif = @exif_read_data($streamUrl, 'IFD0');
-        $data = new PelDataWindow(file_get_contents($streamUrl));
+        try {
+            $data = new PelDataWindow(file_get_contents($streamUrl));
 
-        if (PelJpeg::isValid($data)) {
-            $img = new PelJpeg();
-            $img->load($data);
+            if (PelJpeg::isValid($data)) {
+                $img = new PelJpeg();
+                $img->load($data);
 
-            $app1 = $img->getExif();
-            if ($app1 == null) {
+                $app1 = $img->getExif();
+                if ($app1 == null) {
+                    return false;
+                }
+
+                $tiff = $app1->getTiff();
+            } elseif (PelTiff::isValid($data)) {
+                $tiff = new PelTiff($data);
+            } else {
                 return false;
             }
 
-            $tiff = $app1->getTiff();
-        } elseif (PelTiff::isValid($data)) {
-            $tiff = new PelTiff($data);
-        } else {
+            $ifd0 = $tiff->getIfd();
+            if ($entry = $ifd0->getEntry(PelTag::ORIENTATION)) {
+                return ['Orientation'=>$entry->getValue()];
+            }
+        } catch (PelException $e) {
+            $this->logger->critical('error while reading exif: '.$e->getMessage());
             return false;
-        }
-
-        $ifd0 = $tiff->getIfd();
-        if ($entry = $ifd0->getEntry(PelTag::ORIENTATION)) {
-            return ['Orientation'=>$entry->getValue()];
         }
     }
 }
