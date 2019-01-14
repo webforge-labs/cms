@@ -175,6 +175,18 @@ class ThumborThumbnailsFileHandler implements MediaFileHandlerInterface
             throw new \InvalidArgumentException('I cannot do something else');
         }
 
+        // try php first, because Pel has memory leaks .. jay ...
+        $exif1 = null;
+        try {
+            $exif1 = @exif_read_data($streamUrl, $section);
+        } catch (\ErrorException $e) {
+        }
+        if (is_array($exif1)) {
+          return $exif1;
+        }
+
+
+
         try {
             $data = new PelDataWindow(file_get_contents($streamUrl));
 
