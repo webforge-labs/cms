@@ -39,7 +39,7 @@ class MediaController extends CommonController
      */
     public function fileManagerAction()
     {
-        return $this->render("WebforgeCmsBundle:components:file-manager-tab.html.twig", array());
+        return $this->render("@WebforgeCms/components/file-manager-tab.html.twig", array());
     }
 
     protected function getIndex(array $options = array())

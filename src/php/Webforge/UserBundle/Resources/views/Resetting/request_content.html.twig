@@ -1,6 +1,6 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
-{% include 'WebforgeUserBundle:Resetting:request_header.html.twig' %}
+{% include '@WebforgeUser/Resetting/request_header.html.twig' %}
 
 <form action="{{ path('fos_user_resetting_send_email') }}" method="post" class="fos_user_resetting_request">
 

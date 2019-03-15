@@ -1,21 +1,21 @@
-{% include 'WebforgeCmsBundle:default:head.html.twig' %}
+{% include '@WebforgeCms/default/head.html.twig' %}
   <body role="document">
-    {%include 'WebforgeCmsBundle:default:navbar.html.twig' %}
+    {%include '@WebforgeCms/default/navbar.html.twig' %}
 
     <div class="container-fluid invisible" id="content-container" data-bind="invisible: loading">
       <div class="row">
         <div class="col-sm-9" data-bind="with: tabs">
-          {%include 'WebforgeCmsBundle:default:tabs.html.twig' %}
+          {%include '@WebforgeCms/default/tabs.html.twig' %}
         </div>
         <div class="hidden-xs col-sm-3" role="sidebar">
-          {%include 'WebforgeCmsBundle:default:sidebar.html.twig' %}
+          {%include '@WebforgeCms/default/sidebar.html.twig' %}
         </div>
       </div>
     </div>
 
     {% block body %}{% endblock %}
 
-    {% include 'WebforgeCmsBundle:components:file-manager-modal.html.twig' %}
+    {% include '@WebforgeCms/components/file-manager-modal.html.twig' %}
 
     <div id="responsive-detector">
       <span data-breakpoint="xs" class="visible-xs"></span>
@@ -32,4 +32,4 @@
       });
     </script>
 
-{%include 'WebforgeCmsBundle:default:foot.html.twig' %}
+{%include '@WebforgeCms/default/foot.html.twig' %}

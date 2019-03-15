@@ -12,7 +12,7 @@
             <div id="drop-contents-group-{{ loop.index }}" class="panel-collapse collapse {% if sidebar.allOpen is defined and sidebar.allOpen or loop.index == sidebar.activeGroup %}in{% endif %}" role="tabpanel" aria-labelledby="drop-contents-group-{{ loop.index }}-heading">
                 <ul class="list-group">
                     {% for link in group %}
-                        {% include 'WebforgeCmsBundle:default:navbar-link.html.twig' with { liClass: 'list-group-item'} %}
+                        {% include '@WebforgeCms/default/navbar-link.html.twig' with { liClass: 'list-group-item'} %}
                     {% endfor %}
                 </ul>
             </div>

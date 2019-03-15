@@ -20,24 +20,13 @@
   "prefer-stable": true,
   "require": {
     "php": ">=7.2.0",
-    "symfony/symfony": "4.1.*",
-    "doctrine/doctrine-bundle": "^1.8.1",
     "knplabs/knp-gaufrette-bundle": "~0.5",
     "knplabs/knp-markdown-bundle": "^1.7",
-    "friendsofsymfony/user-bundle": "^2.1.2",
-    "symfony/swiftmailer-bundle": "^3.1",
-    "symfony/monolog-bundle": "^3.1",
-    "sensio/framework-extra-bundle": "^5.1.5",
-    "jms/serializer-bundle": "^2.3.1",
-    "liip/functional-test-bundle": "^2.0@alpha",
-    "jbouzekri/phumbor-bundle": "^1.2",
     "webforge/utils": "~1.1.0@stable",
     "webmozart/json": "^1.1",
     "jbroadway/urlify": "^1.0",
     "ramsey/uuid": "^3.5",
     "nicmart/tree": "^0.2.7",
-    "doctrine/orm": "^2.6",
-    "vlucas/phpdotenv": "^2.2",
     "lsolesen/pel": "^0.9.6"
   },
   "require-dev": {
@@ -47,8 +36,14 @@
     "doctrine/data-fixtures": "^1.3",
     "mockery/mockery": "~1.1.0"
   },
-  "suggests": {
-    "mockery/mockery": "to write better expectations in tests"
+  "suggest": {
+    "mockery/mockery": "to write better expectations in tests",
+    "sensio/framework-extra-bundle": "soft dep",
+    "jbouzekri/phumbor-bundle": "soft dep",
+    "jms/serializer-bundle": "soft dep",
+    "friendsofsymfony/user-bundle": "soft dep",
+    "symfony/templating": "soft dep",
+    "symfony/orm-pack": "soft dep"
   },
   "license": "MIT",
   "authors": [
@@ -62,7 +57,7 @@
     "symfony-app-dir": "app",
     "symfony-web-dir": "www",
     "branch-alias": {
-      "dev-master": "2.3.x-dev"
+      "dev-master": "3.0.x-dev"
     }
   }
 }

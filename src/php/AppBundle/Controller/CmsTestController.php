@@ -13,7 +13,7 @@ class CmsTestController extends CommonController
      */
     public function indexAction()
     {
-        return $this->render('WebforgeCmsBundle::base.html.twig', array(
+        return $this->render('@WebforgeCms/base.html.twig', array(
             'data' => '{}',
 
             'user' => array(
@@ -89,22 +89,7 @@ class CmsTestController extends CommonController
      */
     public function usersListAction()
     {
-        return $this->render('WebforgeCmsBundle:test:users/list.html.twig', array());
-    }
-
-    /**
-     * @Route("/cms/pages/list", name="test_pages_list", methods={"GET"})
-     */
-    public function pagesListAction()
-    {
-        $navigationRepository = $this->getRepository('NavigationNode');
-
-        $data = array('navigation' => $navigationRepository->getRootNode()->exportWithChildren());
-
-        return $this->render('WebforgeCmsBundle:test:navigation-nodes/list.html.twig', array(
-            'tabId' => 'pages-list',
-            'data' => json_encode($data, JSON_PRETTY_PRINT)
-        ));
+        return $this->render('@WebforgeCms/test/users/list.html.twig', array());
     }
 
     /**

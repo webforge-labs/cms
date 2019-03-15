@@ -15,7 +15,7 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment, options) {
   var cmsDir = require('path').resolve(__dirname, '..', '..');
 
   // we pass "our" require here on purpose (but i have forgotten why)
-  this.jsBuilder = new WebforgeBuilder(gulp, { root: rootDir, dest: "www/assets", moduleSearchPaths: [cmsDir] }, require);
+  this.jsBuilder = new WebforgeBuilder(gulp, { root: rootDir, dest: "public/assets", moduleSearchPaths: [cmsDir] }, require);
 
   this.autoprefixer = {};
   this.jsNamespaces = [];

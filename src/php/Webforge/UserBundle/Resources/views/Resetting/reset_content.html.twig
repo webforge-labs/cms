@@ -1,6 +1,6 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
-{% include 'WebforgeUserBundle:Resetting:reset_header.html.twig' %}
+{% include '@WebforgeUser/Resetting/reset_header.html.twig' %}
 
 {{ form_start(form, { 'action': path('fos_user_resetting_reset', {'token': token}), 'attr': { 'class': 'fos_user_resetting_reset' } }) }}
     {{ form_widget(form) }}

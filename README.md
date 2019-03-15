@@ -20,6 +20,13 @@ npm test
 
 A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsoring a free Live account, that allows us to test on Iphones and other devices.
 
+## BC Breaks for 3.0.x
+
+- symfony/symfony is now longer a dependency. You have to use symfony/flex and configure EVERYTHING on your own. (prepend config is no longer used)
+- the public folder is now www (not public)
+- 
+
+
 ## BC Breaks for 2.3.x
 
 - after serialization there will be no automatic flush (after each binary serialization) as before - this was slow as hell. You have call em->flush yourself

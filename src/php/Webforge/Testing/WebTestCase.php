@@ -19,13 +19,13 @@ class WebTestCase extends SymfonyWebTestCase
         )
     );
 
-    protected function loadAliceFixtures(array $names, $client, $con = 'default', $purge = true)
+    protected function loadAliceFixtures(array $names, Client $client, $con = 'default', $purge = true)
     {
-        $dir = $GLOBALS['env']['root']->sub('tests/files/alice/');
+        $dir = $client->getContainer()->getParameter('kernel.project_dir').'/tests/files/alice';
 
         $files = array();
         foreach ($names as $name) {
-            $files[] = $dir->getFile($name.'.yml');
+            $files[] = $dir.'/'.$name.'.yml';
         }
 
         $objectManager = $client->getContainer()->get(sprintf('doctrine.orm.%s_entity_manager', $con));
