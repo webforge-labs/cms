@@ -2,7 +2,7 @@
   listen       80  default_server;
   error_log /var/log/nginx/error.log;
   access_log /var/log/nginx/access.log;
-  root /app/www;
+  root /app/public;
   client_max_body_size 20M;
 
   location / {

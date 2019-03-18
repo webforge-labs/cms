@@ -1,12 +1,11 @@
 composer.phar
 /vendor/
-/www/assets
+/public/assets
 /node_modules
 /files/cache/*
 /files/logs
 /etc/symfony/parameters.yml
 /files/media
-/www/images/cache
 /.screenshots
 /.env
 /package-lock.json

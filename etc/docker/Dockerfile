@@ -43,7 +43,7 @@ RUN composer install -o --prefer-dist --no-interaction \
 ENV npm_config_devdir=/var/www/.node-builds
 
 # assets and node_modules build with node
-COPY --from=nodebuild /app/www/assets www/assets/
+COPY --from=nodebuild /app/public/assets public/assets/
 COPY --from=nodebuild /app/node_modules node_modules/
 COPY --from=nodebuild /var/www/.node-builds /var/www/.node-builds
 
@@ -55,5 +55,5 @@ COPY . ./
 #rm -r Resources/js; \
 RUN rm -r Resources/fonts; \
   mkdir -p /app/files/cache && mkdir -p /app/files/media \
-  && chown -R www-data.www-data /app/app /app/files /app/www \
+  && chown -R www-data.www-data /app/app /app/files /app/public \
   && chmod +x bin/cli.sh

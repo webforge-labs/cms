@@ -3,7 +3,7 @@ version: '3'
 services:
   web:
     volumes:
-      - ./www:/app/www
+      - ./public:/app/public
       - ./etc/docker/nginx-site.dev.conf:/etc/nginx/conf.d/01-site.conf
       # live loading from jsa
       - ./src:/app/src
