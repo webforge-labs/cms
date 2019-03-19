@@ -157,7 +157,7 @@ class ThumborThumbnailsFileHandler implements MediaFileHandlerInterface
         $file->width = $metadata->source->width;
         $file->height = $metadata->source->height;
         $file->isPortrait = $isPortrait = ($metadata->source->height > $metadata->source->width);
-        $file->isLandscape = $metadata->source->width > $metadata->target->height;
+        $file->isLandscape = $metadata->source->width > $metadata->source->height;
         $file->orientation = $isPortrait ? 'portrait' : 'landscape'; // square === landscape
     }
 

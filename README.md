@@ -24,7 +24,9 @@ A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsori
 
 - symfony/symfony is now longer a dependency. You have to use symfony/flex and configure EVERYTHING on your own. (prepend config is no longer used)
 - the public folder is now www (not public)
-- 
+- construct CommonController with em and dc
+- Symfony\Kernel was removed
+- CommonController is now an Symfony-AbstractController and therefore has narrower dependency injection: You need to refactor your controller code 
 
 
 ## BC Breaks for 2.3.x

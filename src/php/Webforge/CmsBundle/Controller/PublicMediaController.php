@@ -2,6 +2,7 @@
 
 namespace Webforge\CmsBundle\Controller;
 
+use Gaufrette\Filesystem;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -15,9 +16,9 @@ class PublicMediaController extends CommonController
      * @param $name
      * @return Response
      */
-    public function downloadAction($key, $name)
+    public function downloadAction($key, $name, Filesystem $mediaFileSystem)
     {
-        $file = $this->get('webforge.media.filesystem')->get($key);
+        $file = $mediaFileSystem->get($key);
 
         $response = new Response($file->getContent());
 

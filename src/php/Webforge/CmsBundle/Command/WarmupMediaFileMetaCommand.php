@@ -3,6 +3,7 @@
 namespace Webforge\CmsBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,7 +13,7 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\Finder\Finder;
 use Webforge\CmsBundle\Media\Manager;
 
-class WarmupMediaFileMetaCommand extends ContainerAwareCommand
+class WarmupMediaFileMetaCommand extends Command
 {
 
     /**
@@ -72,9 +73,13 @@ class WarmupMediaFileMetaCommand extends ContainerAwareCommand
             file_get_contents($thumbnail->url, false, $context);
         }
 
+        // we need to flush first, because events might query the db with serialized data
+        $this->mediaManager->afterSerialization();
+
         $event = new GenericEvent($binary);
         $this->eventManager->dispatch(Manager::EVENT_FILE_WARMUP, $event);
 
+        // flush afterwards to persist changes from the event
         $this->mediaManager->afterSerialization();
 
         return 0;

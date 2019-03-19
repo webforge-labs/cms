@@ -3,6 +3,8 @@
 namespace Webforge\CmsBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Webforge\Common\ClassUtil;
@@ -12,7 +14,7 @@ use Webmozart\Json\JsonDecoder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-class CommonController extends Controller
+class CommonController extends AbstractController
 {
 
     /**
@@ -25,14 +27,10 @@ class CommonController extends Controller
      */
     protected $dc;
 
-    public function setContainer(ContainerInterface $container = null)
+    public function __construct(EntityManagerInterface $em, Entities $dc)
     {
-        parent::setContainer($container);
-
-        if ($container) {
-            $this->em = $container->get('doctrine.orm.entity_manager');
-            $this->dc = $container->get('dc');
-        }
+        $this->em = $em;
+        $this->dc = $dc;
     }
 
     protected function getEntityFQN($name)

@@ -10,7 +10,7 @@ use Symfony\Component\Process\Process;
  *
  * @package Webforge\CmsBundle
  */
-class JobDispatcher
+class JobDispatcher implements JobDispatcherInterface
 {
     /**
      * @var string absolute path to the cli command (accepts cli command name and symfony command line arguments)

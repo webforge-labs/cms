@@ -2,6 +2,7 @@
 
 namespace Webforge\CmsBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -10,12 +11,30 @@ use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
+use Webforge\CmsBundle\JobDispatcherInterface;
 use Webforge\CmsBundle\Media\Manager;
 use Webforge\CmsBundle\Model\MediaFileEntityInterface;
+use Webforge\Doctrine\Entities;
 use Webforge\Symfony\FormError;
 
 class MediaController extends CommonController
 {
+    /**
+     * @var Manager
+     */
+    private $mediaManager;
+
+    /**
+     * @var JobDispatcherInterface
+     */
+    private $jobDispatcher;
+
+    public function __construct(EntityManagerInterface $em, Entities $dc, Manager $mediaManager, JobDispatcherInterface $jobDispatcher)
+    {
+        parent::__construct($em, $dc);
+        $this->mediaManager = $mediaManager;
+        $this->jobDispatcher = $jobDispatcher;
+    }
 
     /**
      * @Route("/media", methods={"GET"}, defaults={"_format": "json"})
@@ -44,9 +63,7 @@ class MediaController extends CommonController
 
     protected function getIndex(array $options = array())
     {
-        $manager = $this->get('webforge.media.manager');
-
-        return $manager->asTree($options);
+        return $this->mediaManager->asTree($options);
     }
 
     /**
@@ -54,10 +71,9 @@ class MediaController extends CommonController
      */
     public function uploadMediaFromDropboxAction(Request $request)
     {
-        $user = $this->getUser();
         $json = $this->retrieveJsonBody($request);
         /** @var Manager $manager */
-        $manager = $this->get('webforge.media.manager');
+        $manager = $this->mediaManager;
 
         $manager->beginTransaction();
         $warnings = array();
@@ -97,9 +113,8 @@ class MediaController extends CommonController
      */
     public function uploadMediaFromAjaxAction(Request $request)
     {
-        $user = $this->getUser();
         /** @var Manager $manager */
-        $manager = $this->get('webforge.media.manager');
+        $manager = $this->mediaManager;
 
         $options = ['filters' => $request->query->all()];
 
@@ -154,10 +169,9 @@ class MediaController extends CommonController
      */
     public function batchDeleteMediaAction(Request $request)
     {
-        $user = $this->getUser();
         $json = $this->retrieveJsonBody($request);
 
-        $manager = $this->get('webforge.media.manager');
+        $manager = $this->mediaManager;
 
         $manager->beginTransaction();
 
@@ -175,9 +189,8 @@ class MediaController extends CommonController
      */
     public function moveFiles(Request $request)
     {
-        $user = $this->getUser();
         $json = $this->retrieveJsonBody($request);
-        $manager = $this->get('webforge.media.manager');
+        $manager = $this->mediaManager;
 
         $manager->beginTransaction();
         foreach ($json->sources as $path) {
@@ -193,7 +206,6 @@ class MediaController extends CommonController
      */
     public function renameFile(Request $request)
     {
-        $user = $this->getUser();
         $this->convertJsonToForm($request);
 
         $json = (object)[
@@ -218,7 +230,7 @@ class MediaController extends CommonController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $manager = $this->get('webforge.media.manager');
+            $manager = $this->mediaManager;
 
             $manager->beginTransaction();
             $manager->renameByPath($json->path, $json->name);
@@ -237,12 +249,6 @@ class MediaController extends CommonController
 
     protected function warmupSerializationInBackground(MediaFileEntityInterface $entity)
     {
-        try {
-            $dispatcher = $this->get('job_dispatcher');
-
-            $dispatcher->dispatchCliCommand('cms:warmup-media-file', [$entity->getMediaFileKey()]);
-        } catch (NotFoundExceptionInterface $e) {
-            print 'Not possible to warmup media file in background because no service "job_dispatcher" is registered';
-        }
+        $this->jobDispatcher->dispatchCliCommand('cms:warmup-media-file', [$entity->getMediaFileKey()]);
     }
 }

@@ -7,9 +7,19 @@ services:
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
     public: true
 
+
   dc:
     class: Webforge\Doctrine\Entities
     arguments: ["@doctrine.orm.entity_manager", "%entities_namespace%"]
+
+  Webforge\Doctrine\Entities:
+    alias: 'dc'
+
+  Webforge\CmsBundle\Controller\PublicMediaController:
+    tags: ['controller.service_arguments']
+
+  Webforge\CmsBundle\Controller\MediaController:
+    tags: ['controller.service_arguments']
 
   webforge.serialization.jms_serializer_media_file_entity_handler:
     class:      Webforge\CmsBundle\Serialization\JmsSerializerMediaFileEntityHandler
@@ -48,6 +58,7 @@ services:
     class: Gaufrette\Filesystem
     factory: 'knp_gaufrette.filesystem_map:get'
     arguments: ['%webforge_media_filesystem_domain%']
+  Gaufrette\Filesystem: { alias: webforge.media.filesystem }
 
   webforge.gaufrette_index:
     class: Webforge\Gaufrette\Index
