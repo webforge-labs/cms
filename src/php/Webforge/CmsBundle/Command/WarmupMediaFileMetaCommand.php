@@ -57,7 +57,15 @@ class WarmupMediaFileMetaCommand extends Command
     {
         $mediaKey = $input->getArgument('mediaKey');
 
-        list ($binary) = $this->mediaManager->findFiles([$mediaKey]);
+        $binaries = $this->mediaManager->findFiles([$mediaKey]);
+
+        if (count($binaries) === 0) {
+            throw new \InvalidArgumentException(
+                sprintf('The binary with mediaKey %s cannot be found', $mediaKey)
+            );
+        }
+
+        $binary = $binaries[0];
 
         $file = new \stdClass;
         $this->mediaManager->serializeEntity($binary, $file); // this will get meta for some
