@@ -18,10 +18,6 @@ module.exports = function() {
 
     if (!password) password = 'secret';
 
-    // wait for loading
-    browser.waitForVisible('body', 5000);
-
-    // then check for form
     if (browser.isExisting('[role="login-form"]')) {
       browser.setValue('[name="_username"]', email);
       browser.setValue('[name="_password"]', password);
@@ -29,13 +25,6 @@ module.exports = function() {
     }
 
     browser.waitForVisible('#content-container', 5000);
-
-    // retry if bla ...
-    if (browser.isExisting('[role="login-form"]')) {
-        browser.setValue('[name="_username"]', email);
-        browser.setValue('[name="_password"]', password);
-        browser.click('button*=Anmelden');
-    }
   });
 
   this.Then(/^I see "([^"]*)" as loggedin user$/, function (name) {
