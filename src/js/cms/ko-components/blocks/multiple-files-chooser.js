@@ -19,6 +19,7 @@ define(['knockout', 'cms/ko-components/multiple-files-chooser', 'lodash'], funct
 
       componentParams.name = params.propertyName;
       componentParams.model = params.block;
+      componentParams.manager = true;
 
       return new filesChooser.viewModel(componentParams); // extends the files-chooser component
     }
