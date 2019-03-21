@@ -2,15 +2,26 @@
 
 namespace Webforge\CmsBundle\Content;
 
+use Psr\Log\LoggerInterface;
+use Webforge\CmsBundle\Media\Manager;
+
 class CommonBlockExtender implements BlockExtender
 {
     protected $markdowner;
-    protected $mediaManager;
+    /**
+     * @var Manager
+     */
+    private $mediaManager;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
-    public function __construct($markdowner, $mediaManager)
+    public function __construct($markdowner, Manager $mediaManager, LoggerInterface $logger)
     {
         $this->markdowner = $markdowner;
         $this->mediaManager = $mediaManager;
+        $this->logger = $logger;
     }
 
     public function extend(array &$blocks, \stdClass $context)
@@ -35,8 +46,12 @@ class CommonBlockExtender implements BlockExtender
                     $refreshedFiles = array();
                     foreach ($value as $fileSpec) {
                         // we will overwrite a lot from $fileSpec here, regenerating thumbnail-informations, etc
-                        $this->mediaManager->serializeFile($fileSpec->key, $fileSpec);
-                        $refreshedFiles[] = $fileSpec;
+                        try {
+                            $this->mediaManager->serializeFile($fileSpec->key, $fileSpec);
+                            $refreshedFiles[] = $fileSpec;
+                        } catch (\Webforge\CmsBundle\Media\MediaEntityNotFoundException $e) {
+                            $this->logger->warning('Entity with key: '.$fileSpec->key.' was not found. Referenced in content block in property: '.$property->name.'. Will remove this reference.');
+                        }
                     }
                     // replace with fresh serialized
                     $block->{$property->name} = $refreshedFiles;

@@ -228,7 +228,7 @@ class Manager
         $entity = $this->storage->loadFile($mediaKey);
 
         if (!$entity) {
-            throw new \RuntimeException(sprintf('Entity not found with mediaKey: "%s"', $mediaKey));
+            throw new MediaEntityNotFoundException(sprintf('Entity not found with mediaKey: "%s"', $mediaKey));
         }
 
         return $this->serializeEntity($entity, $file, $options);
