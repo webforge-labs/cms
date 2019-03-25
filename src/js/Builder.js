@@ -32,9 +32,6 @@ module.exports = function(gulp, rootDir, rootRequire, isDevelopment, options) {
       },
       {
         name: "cms/login"
-      },
-      {
-        name: "cms/navigation"
       }
     ]
   };
