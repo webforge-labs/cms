@@ -9,7 +9,8 @@ define(['superagent', 'jquery', 'lodash', 'bluebird'], function(request, $, _, P
       }
 
       var req = request(method, url)
-        .accept(accept || 'json');
+        .accept(accept || 'json')
+        .set('X-Requested-With', 'XMLHttpRequest') // send to symfony
 
       if (withRequest) {
         withRequest(req);
