@@ -26,7 +26,8 @@ A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsori
 - the public folder is now www (not public)
 - construct CommonController with em and dc
 - Symfony\Kernel was removed
-- CommonController is now an Symfony-AbstractController and therefore has narrower dependency injection: You need to refactor your controller code 
+- CommonController is now an Symfony-AbstractController and therefore has narrower dependency injection: You need to refactor your controller code
+- [Read Upgrading to 3.0](docs/upgrading-to-3.0.x.md)
 
 
 ## BC Breaks for 2.3.x
