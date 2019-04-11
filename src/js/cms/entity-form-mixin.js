@@ -54,6 +54,8 @@ define(['require', 'knockout', 'knockout-mapping', 'jquery', './form-mixin', 'cm
               type: 'success'
             });
           }
+
+          return response;
         }, function(err) {
           // the error is displayed in formMixin, we won't have to do something else
         })
