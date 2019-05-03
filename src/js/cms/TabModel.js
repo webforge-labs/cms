@@ -35,7 +35,22 @@ define(['knockout', 'knockout-mapping', 'jquery', 'cms/modules/translator', 'amp
     };
 
     this.contentLoadingError = function(response) {
-      that.contents('<div class="alert alert-danger" role="alert"><strong>'+translator.trans('errors.ohcrap', undefined, 'cms')+'</strong> '+translator.trans('errors.tabload', undefined, 'cms')+'</div>');
+      var errorTitle = translator.trans('errors.ohcrap', undefined, 'cms'), errorBody;
+
+      if (response.type === "application/problem+json") {
+        var body = JSON.parse(response.text)
+        errorBody = body.detail;
+
+        if (response.statusCode === 401) {
+          errorBody += '<br><br><a class="btn btn-warning" href="/cms">Du kannst dich hier wieder einloggen.</a>';
+          errorTitle = 'Oups';
+        }
+
+      } else {
+        errorBody = translator.trans('errors.tabload', undefined, 'cms');
+      }
+
+      that.contents('<div class="alert alert-danger" role="alert"><strong>'+errorTitle+'</strong> '+errorBody+'</div>');
       that.hasError(true);
       that.wasLoaded(true);
     };

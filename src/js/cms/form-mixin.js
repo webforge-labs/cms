@@ -32,6 +32,7 @@ define(['knockout', 'knockout-mapping', 'jquery', 'lodash', 'cms/TabModel', 'boo
             var res = err.response;
             err.html = '';
 
+
             // 400 error
             if (res.body && res.body.validation && res.body.validation.errors) {
               _.each(res.body.validation.errors, function(error, i) {
@@ -41,6 +42,17 @@ define(['knockout', 'knockout-mapping', 'jquery', 'lodash', 'cms/TabModel', 'boo
                 }
                 err.html += error.message+"</p>";
               });
+
+            // api problem-bundle exceptions
+            } else if (res.type === "application/problem+json") {
+              var body = JSON.parse(res.text)
+
+              err.html = body.detail;
+
+              if (res.statusCode === 401) {
+                  err.html += '<br><br><a class="btn btn-warning" target="_blank" href="/cms">Zum Einloggen im neuen Browsertab.</a>';
+              }
+
 
             // 500 error and others
             } else if (res.html) {
