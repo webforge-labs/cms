@@ -20,6 +20,12 @@ npm test
 
 A big thank you to [BrowserStack.com](https://www.browserstack.com) for sponsoring a free Live account, that allows us to test on Iphones and other devices.
 
+## changelog
+
+## BC Breaks 3.1.x
+
+- added resetMediaMetadata to MediaFileEntityInterface. If you are using the MediaFileEntityMetadata-Trait you're all good
+
 ## BC Breaks for 3.0.x
 
 - symfony/symfony is now longer a dependency. You have to use symfony/flex and configure EVERYTHING on your own. (prepend config is no longer used)

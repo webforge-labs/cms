@@ -95,6 +95,8 @@ class Manager
             $name = $this->normalizeFilename($name);
 
             $entity->setMediaFileKey($newKey = $this->createMediaKey($path, $name, $contents));
+            // we got a new filekey (to get fresh data from thumbor - which caches by the key), but we still have to reset this, so we will query thumbor:
+            $entity->resetMediaMetadata();
 
             $this->savePhysicalFile($contents, $newKey);
 

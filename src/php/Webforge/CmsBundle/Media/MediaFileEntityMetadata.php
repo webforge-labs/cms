@@ -6,6 +6,8 @@ use stdClass;
 
 trait MediaFileEntityMetadata
 {
+
+
     public function setMediaMetadata($key, stdClass $meta)
     {
         // create a clone of the existing to make doctrine detect the change
@@ -24,4 +26,8 @@ trait MediaFileEntityMetadata
         return null;
     }
 
+    public function resetMediaMetadata()
+    {
+        $this->mediaMeta = NULL;
+    }
 }

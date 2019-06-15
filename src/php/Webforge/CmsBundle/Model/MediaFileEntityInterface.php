@@ -28,6 +28,8 @@ interface MediaFileEntityInterface
      */
     public function setMediaMetadata($key, \stdClass $meta);
 
+    public function resetMediaMetadata();
+
     /**
      * Returns media meta stored under specific key
      * @param  string $key the key under which you have stored media data with setMediaMeta
