@@ -22,15 +22,11 @@ class DateType extends \Doctrine\DBAL\Types\DateType
         return $val;
     }
   
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
-        return sprintf(
-        "%s COMMENT '%s' ",
-      parent::getSQLDeclaration($fieldDeclaration, $platform),
-      $platform->getDoctrineTypeComment($this)
-    );
+        return true;
     }
-  
+
     public function getName()
     {
         return 'WebforgeDate';

@@ -2,6 +2,7 @@
 
 namespace Webforge\Doctrine\Types;
 
+use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Webforge\Common\DateTime\DateTime;
@@ -21,16 +22,12 @@ class DateTimeType extends \Doctrine\DBAL\Types\DateTimeType
     
         return $val;
     }
-  
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+
+    public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
-        return sprintf(
-        "%s COMMENT '%s' ",
-      parent::getSQLDeclaration($fieldDeclaration, $platform),
-      $platform->getDoctrineTypeComment($this)
-    );
+        return true;
     }
-  
+
     public function getName()
     {
         return 'WebforgeDateTime';
