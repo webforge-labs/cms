@@ -10,14 +10,18 @@ class WebforgeUserExtension extends Extension implements PrependExtensionInterfa
 {
     public function load(array $configs, ContainerBuilder $container)
     {
+        //$loader = $container->getDefinition('twig.loader.filesystem');
+        //$loader->addMethodCall('addPath', [__DIR__.'/../Resources/views','FOSUser'])
+
     }
 
     public function prepend(ContainerBuilder $container)
     {
         $container->prependExtensionConfig('twig', array(
-               'paths' => array(
-                   __DIR__.'/../Resources/views' => 'FOSUser',
-               ),
-           ));
+            'paths' => array(
+                'templates/bundles/FOSUserBundle/' => 'FOSUser',
+                __DIR__ . '/../Resources/views' => 'FOSUser',
+            ),
+        ));
     }
 }
