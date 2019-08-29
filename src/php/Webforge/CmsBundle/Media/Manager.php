@@ -2,6 +2,7 @@
 
 namespace Webforge\CmsBundle\Media;
 
+use Gaufrette\Exception\FileNotFound;
 use Gaufrette\Filesystem;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -103,7 +104,12 @@ class Manager
             $this->updateIndexFile($entity, $path, $name, $oldKey);
 
             // delete the old file only, if it's not used in another binary (@TODO we need that, if we change the hashing to sha1
-            $this->filesystem->delete($oldKey);
+            try {
+                $this->filesystem->delete($oldKey);
+            } catch (FileNotFound $e) {
+                //$this->logger->warn('file was already physically absent')
+                // its okay, if its not found, because we want to delete it anyway
+            }
 
             return $entity;
         } catch (\LogicException $e) {
