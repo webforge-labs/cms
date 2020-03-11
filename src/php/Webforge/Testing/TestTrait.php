@@ -2,12 +2,8 @@
 
 namespace Webforge\Testing;
 
-use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-
 trait TestTrait
 {
-    use MockeryPHPUnitIntegration;
-
     /**
      * So wie assertEquals jedoch werden die arrays canonicalized (normalisiert, bzw sortiert)
      */

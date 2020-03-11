@@ -2,7 +2,6 @@
 
 namespace Webforge\Testing;
 
-use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as SymfonyWebTestCase;
 use Symfony\Component\Debug\Exception\FlattenException;
@@ -10,8 +9,6 @@ use Webmozart\Json\JsonDecoder;
 
 class WebTestCase extends SymfonyWebTestCase
 {
-    use MockeryPHPUnitIntegration;
-
     protected $credentials = array(
         'petra' => array(
             'username' => 'petra.platzhalter@ps-webforge.net',
