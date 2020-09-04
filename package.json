@@ -41,7 +41,7 @@
     "gulp-sourcemaps": "~2.2.0",
     "gulp-wait": "0.0.2",
     "hogan.js": "~3.0.2",
-    "jquery": "~2.1.4",
+    "jquery": "~3.5.0",
     "knockout": "~3.3.0",
     "knockout-collection": "~2.0.0",
     "knockout-dragdrop": "~2.4.4",
