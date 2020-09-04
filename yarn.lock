@@ -2913,9 +2913,9 @@ knockout-mapping@~2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/knockout-mapping/-/knockout-mapping-2.5.0.tgz#3121b43bb5801f7d7f2c5a909fdf367a41eab974"
 
-knockout@~3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/knockout/-/knockout-3.3.0.tgz#50502a4e2f1fe2bdfa0e52843cdfcbbd43bc374c"
+knockout@~3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/knockout/-/knockout-3.5.0.tgz#6d3e19bf53b1dc4d8de81c97a5ba9672443dc292"
 
 lazy-cache@^0.2.2, lazy-cache@^0.2.3, lazy-cache@^0.2.4:
   version "0.2.7"
